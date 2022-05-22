@@ -1,0 +1,66 @@
+from enum import Enum, auto
+
+class StringID(Enum):
+    """Enum of IDs of strings in UI"""
+    MAIN_TITLE = auto()
+
+    MAIN_MENU_FILE = auto()
+    MAIN_MENU_FILE_IMPORT_TEXT = auto()
+    MAIN_MENU_FILE_VIEW_WORD_LISTS = auto()
+    MAIN_MENU_FILE_EXIT = auto()
+
+    MAIN_MENU_TOOLS = auto()
+    MAIN_MENU_TOOLS_SETTINGS = auto()
+
+    SETTINGS_TITLE = auto()
+    SETTINGS_FILE = auto()
+    SETTINGS_FILE_CHANGE_WORKSPACE = auto()
+    SETTINGS_GUI = auto()
+    SETTINGS_GUI_THEME = auto()
+    SETTINGS_GUI_LANGUAGE = auto()
+
+    MAIN_MENU_HELP = auto()
+    MAIN_MENU_HELP_ABOUT = auto()
+
+    MAIN_MENU_HELP_ABOUT_TITLE = auto()
+    MAIN_MENU_HELP_ABOUT_INFO = auto()
+
+    TEXT_LIST_NAME = auto()
+    TEXT_LIST_DATE = auto()
+    TEXT_LIST_PERCENTAGE = auto()
+    TEXT_LIST_RIGHT_CLICK_COPY_PATH = auto()
+    TEXT_LIST_RIGHT_CLICK_DELETE = auto()
+
+    TEXT_TITLE = auto()
+    TEXT_ACTION_FRAME_ALL_WORDS = auto()
+    TEXT_ACTION_FRAME_KNOWN_WORDS = auto()
+    TEXT_ACTION_FRAME_UNKNOWN_WORDS = auto()
+    TEXT_WORDLIST_KNOWN_WORDS = auto()
+    TEXT_WORDLIST_UNKNOWN_WORDS = auto()
+    TEXT_WORDLIST_ALL_WORDS = auto()
+
+    TEXT_ANKI_PAGE_NOTE_TYPE = auto()
+    TEXT_ANKI_PAGE_DECK = auto()
+    TEXT_ANKI_PAGE_TAGS = auto()
+    TEXT_ANKI_PAGE_FIELDS_RETRIEVAL_FAILED_1 = auto()
+    TEXT_ANKI_PAGE_FIELDS_RETRIEVAL_FAILED_2 = auto()
+    TEXT_ANKI_ACTION_FRAME_RETURN = auto()
+    TEXT_ANKI_ACTION_FRAME_EXPORT = auto()
+    TEXT_ANKI_ACTION_FRAME_SEND = auto()
+
+    ACTION_FRAME_IMPORT_TEXT = auto()
+    ACTION_FRAME_VIEW_WORD_LISTS = auto()
+    ACTION_FRAME_VIEW_TEXT = auto()
+    ACTION_FRAME_DELETE_TEXT = auto()
+
+    WORD_LISTS_TITLE = auto()
+    WORD_LISTS_UNKNOWN_WORDS = auto()
+    WORD_LISTS_KNOWN_WORDS = auto()
+    WORD_LISTS_ADD = auto()
+    WORD_LISTS_DELETE = auto()
+    WORD_LISTS_CONFIRM = auto()
+
+    ADD_WORDS_TITLE = auto()
+    ADD_WORDS_UNKNOWN_WORDS = auto()
+    ADD_WORDS_KNOWN_WORDS = auto()
+    ADD_WORDS_CONFIRM = auto()
