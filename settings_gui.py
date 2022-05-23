@@ -3,6 +3,7 @@ from tkinter.ttk import Notebook
 
 from settings_gui_tab import GUITab
 from settings_file_tab import FileTab
+from settings_anki_tab import AnkiTab
 from language import get_ui_string, StringID as ID
 
 class SettingsWindow(tkinter.Toplevel):
@@ -68,6 +69,7 @@ class SettingsWindow(tkinter.Toplevel):
 
         file_frame = FileTab(notebook=notebook)
         GUI_frame = GUITab(notebook=notebook)
+        GUI_frame = AnkiTab(notebook=notebook)
 
         return notebook
 

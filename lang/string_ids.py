@@ -18,6 +18,12 @@ class StringID(Enum):
     SETTINGS_GUI = auto()
     SETTINGS_GUI_THEME = auto()
     SETTINGS_GUI_LANGUAGE = auto()
+    SETTINGS_ANKI = auto()
+    SETTINGS_ANKI_ENABLE_CONNECT = auto()
+    SETTINGS_ANKI_PREVIOUS_LINES = auto()
+    SETTINGS_ANKI_FOLLOWING_LINES = auto()
+    SETTINGS_ANKI_BOLD_WORDS = auto()
+    SETTINGS_ANKI_ITALIC_WORDS = auto()
 
     MAIN_MENU_HELP = auto()
     MAIN_MENU_HELP_ABOUT = auto()

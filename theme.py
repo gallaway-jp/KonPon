@@ -72,6 +72,10 @@ def set_dark_theme(parent : Misc) -> None:
         foreground="#EDEDED", background="#606060", borderwidth=1, focusthickness=3, justify=tkinter.CENTER)
     style.map('TButton', background=[('active',"#656565")])
 
+    #style.configure("TCheckbutton.label", foreground="#FFFFFF", background="#2F2F31")
+    style.configure("TCheckbutton", foreground="#FFFFFF", background="#2F2F31")
+    style.map('TCheckbutton', background=[('active',"#2F2F31")])
+
     style.configure("TEntry", foreground="#FEFEFE", fieldbackground="#3A3A3A")
     style.map('TEntry', foreground=[('readonly',"#FEFEFE")], fieldbackground=[('readonly',"#3A3A3A")])
 

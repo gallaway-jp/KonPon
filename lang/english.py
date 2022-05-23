@@ -19,6 +19,12 @@ ui_strings : Dict[ID, str] = {
     ID.SETTINGS_GUI : "GUI",
     ID.SETTINGS_GUI_THEME : "Theme",
     ID.SETTINGS_GUI_LANGUAGE : "Language",
+    ID.SETTINGS_ANKI : "Anki",
+    ID.SETTINGS_ANKI_ENABLE_CONNECT : "Enable Anki Connect Feature",
+    ID.SETTINGS_ANKI_PREVIOUS_LINES : "Number of lines before sentence to output",
+    ID.SETTINGS_ANKI_PREVIOUS_LINES : "Number of lines after sentence to output",
+    ID.SETTINGS_ANKI_BOLD_WORDS : "Bolden word",
+    ID.SETTINGS_ANKI_ITALIC_WORDS : "Italicize word",
 
     ID.MAIN_MENU_HELP : "Help",
     ID.MAIN_MENU_HELP_ABOUT : "About",

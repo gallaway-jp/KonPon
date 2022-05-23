@@ -19,6 +19,12 @@ ui_strings : Dict[ID, str] = {
     ID.SETTINGS_GUI : "GUI",
     ID.SETTINGS_GUI_THEME : "テーマ",
     ID.SETTINGS_GUI_LANGUAGE : "言語",
+    ID.SETTINGS_ANKI : "Anki",
+    ID.SETTINGS_ANKI_ENABLE_CONNECT : "Anki Connectの機能を有効にする",
+    ID.SETTINGS_ANKI_PREVIOUS_LINES : "文章の前にある行を出力する行数",
+    ID.SETTINGS_ANKI_PREVIOUS_LINES : "文章の後にある行を出力する行数",
+    ID.SETTINGS_ANKI_BOLD_WORDS : "言葉を太字にする",
+    ID.SETTINGS_ANKI_ITALIC_WORDS : "言葉を斜体にする",
 
     ID.MAIN_MENU_HELP : "ヘルプ",
     ID.MAIN_MENU_HELP_ABOUT : "アプリについて",
