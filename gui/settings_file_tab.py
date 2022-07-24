@@ -2,7 +2,7 @@ import tkinter
 from tkinter.ttk import Frame, Button, Entry, Notebook
 from language import get_ui_string, StringID as ID
 
-import openfile
+import util.openfile as openfile
 from theme import Space
 
 class FileTab(Frame):

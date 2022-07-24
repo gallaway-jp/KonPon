@@ -3,7 +3,7 @@ from tkinter import scrolledtext
 from tkinter.ttk import Frame
 
 from language import get_ui_string, StringID as ID
-from openfile import open_file_as_string
+from util.openfile import open_file_as_string
 from text_wordlists_gui import WordListsNotebook
 from text_gui_action_frame import TextActionFrame
 from text_gui_anki_page import AnkiPage

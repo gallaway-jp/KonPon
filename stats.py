@@ -1,6 +1,6 @@
 from pathlib import Path
 from ini import get_settings
-from openfile import write_lines, read_lines
+from util.openfile import write_lines, read_lines
 
 class Stats():
     def __init__(self):

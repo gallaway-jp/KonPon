@@ -2,14 +2,15 @@ from tkinter import Tk, messagebox
 from tkinter.ttk import Frame
 import tkinter
 
-from ini import save_settings
-from theme import Theme, get_current_theme, set_dark_theme
-from language import get_ui_string, StringID as ID
-from stats import Stats
+from context import save_settings
+from context import Stats
+from context import Theme, get_current_theme, set_dark_theme
+from context import get_ui_string, StringID as ID
+
 from gui_main_menu import MainMenu
 from gui_action_frame import ActionFrame
 from gui_list_treeview import TextList
-from openfile import create_word_files
+from util.openfile import create_word_files
 
 class KonPonGUI():
     def __init__(self):

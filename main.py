@@ -1,7 +1,8 @@
-from gui import start_gui
+#TODO Add code to run application from here, in the meantime run via gui.gui
+#import gui
 
 def main():
-    start_gui()
+    pass
 
 if __name__ == '__main__':
     main()

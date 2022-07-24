@@ -4,7 +4,7 @@ from datetime import datetime
 
 import fugashi
 
-from openfile import create_new_folder, copy_file, get_texts, open_text
+from util.openfile import create_new_folder, copy_file, get_texts, open_text
 from util.threading import work_multiple_return_values
 
 #word.feature is a namedtuple of form UnidicFeatures26(pos1, pos2, pos3, pos4, cType, 

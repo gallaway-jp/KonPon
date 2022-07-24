@@ -7,7 +7,7 @@ from language import get_ui_string, StringID as ID
 
 from stats import Stats
 from text_gui import TextDialog
-from openfile import delete_folder_with_items
+from util.openfile import delete_folder_with_items
 
 class TextList():
     def __init__(self, parent : tkinter.Misc, stats : Stats) -> None:
