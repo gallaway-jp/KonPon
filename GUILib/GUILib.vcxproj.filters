@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="guilib_global.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Util.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DragWidget.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AnkiCardEditor.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="MainWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Menubar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SettingsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ShortcutsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CentralWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextTree.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BottomMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WordlistsView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeleteWordlistDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EditWordlistDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Util.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DialogManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CustomCheckboxDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TextEdit.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WordView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CreateAnkiCardDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DragWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AnkiCardEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ListDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddNoteType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="MainWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="Menubar.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="SettingsDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ShortcutsDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CentralWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TextTree.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="BottomMenu.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TextView.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DeleteWordlistDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WordlistsView.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="EditWordlistDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WordView.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DialogManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CustomCheckboxDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TextEdit.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CreateAnkiCardDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ListDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AddNoteType.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtTranslation Include="Translation_ja.ts">
+      <Filter>Translation Files</Filter>
+    </QtTranslation>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="Resource.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+  </ItemGroup>
+</Project>
