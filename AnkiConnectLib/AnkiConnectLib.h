@@ -2,8 +2,14 @@
 
 #include "ankiconnectlib_global.h"
 
-#include <QString>
+#include "RequestManager.h"
+
+#include <vector>
+
 #include <QMap>
+#include <QObject>
+#include <QString>
+
 struct ANKICONNECTLIB_EXPORT NoteData
 {
 	QString deckName;
@@ -20,9 +26,12 @@ enum class CardTemplateFieldType
 	Both,
 };
 
-#include <vector>
-#include <QObject>
-#include "RequestManager.h"
+/*!
+	\class AnkiConnect
+
+	\brief The AnkiConnect class provides methods
+	to interact with the Anki API exposed by the AnkiConnect plugin.
+*/
 class ANKICONNECTLIB_EXPORT AnkiConnect : public QObject
 {
 	Q_OBJECT

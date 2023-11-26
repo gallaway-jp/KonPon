@@ -58,6 +58,12 @@ void AnkiConnect::Invoke(RequestManager* requestManager, const std::vector<std::
 	requestManager->POST("http://localhost:8765", FormatRequest(actions));
 }
 
+/*!
+  \fn void AnkiConnect::GetDeckNames(std::function<void(QStringList)>& slot)
+
+  Retrieves a list of decks stored in Anki
+  and returns it in the QStringList parameter of \a slot.
+*/
 void AnkiConnect::GetDeckNames(std::function<void(QStringList)>& slot)
 {
 	while (mGetDeckNamesConnect) {
@@ -97,6 +103,13 @@ void AnkiConnect::onGetDeckNamesResponse(QString data)
 	disconnect(mGetDeckNamesConnect);
 }
 
+/*!
+  \fn void AnkiConnect::createDeck(QString deckName, std::function<void(bool)>& slot)
+
+  Creates a new deck named \a deckName
+  and returns whether the deck was successfully created
+  in the bool parameter of \a slot.
+*/
 void AnkiConnect::createDeck(QString deckName, std::function<void(bool)>& slot)
 {
 	while (mCreateDeckConnect) {
@@ -132,6 +145,12 @@ void AnkiConnect::onCreateDeckResponse(QString data)
 	disconnect(mCreateDeckConnect);
 }
 
+/*!
+  \fn void AnkiConnect::getModelNames(std::function<void(QStringList)>& slot)
+
+  Retrieves a list of models stored in Anki
+  and returns it in the QStringList parameter of \a slot.
+*/
 void AnkiConnect::getModelNames(std::function<void(QStringList)>& slot)
 {
 	while (mGetModelNamesConnect) {
@@ -171,6 +190,12 @@ void AnkiConnect::onGetModelNamesResponse(QString data)
 	disconnect(mGetModelNamesConnect);
 }
 
+/*!
+  \fn void AnkiConnect::getModelFieldNames(std::function<void(QStringList)>& slot)
+
+  Retrieves a list of fields for the given \a modelName stored in Anki
+  and returns it in the QStringList parameter of \a slot.
+*/
 void AnkiConnect::getModelFieldNames(QString modelName, std::function<void(QStringList)>& slot)
 {
 	while (mGetModelFieldNamesConnect) {
@@ -211,6 +236,12 @@ void AnkiConnect::onGetModelFieldNamesResponse(QString data)
 	disconnect(mGetModelFieldNamesConnect);
 }
 
+/*!
+  \fn void AnkiConnect::getModelsFieldNames(std::function<void(QStringList)>& slot)
+
+  Retrieves a list of lists of fields for the given \a modelNames stored in Anki
+  and returns it in the QList<QStringList> parameter of \a slot.
+*/
 void AnkiConnect::getModelsFieldNames(QStringList modelNames, std::function<void(QList<QStringList>)>& slot)
 {
 	while (mGetModelsFieldNamesConnect) {
@@ -261,6 +292,18 @@ void AnkiConnect::onGetModelsFieldNamesResponse(QString data)
 	disconnect(mGetModelsFieldNamesConnect);
 }
 
+/*!
+  \fn void AnkiConnect::createModel(QString modelName, std::vector<std::pair<QString, CardTemplateFieldType>> fields, std::function<void(bool)>& slot)
+
+  Creates a new model named \a modelName with \a fields
+  and returns whether the model was successfully created
+  in the bool parameter of \a slot.
+
+  The \a fields parameter is a list of field names with each
+  field having a \c CardTemplateFieldType flag that describes
+  whether the field should be visible in the front of the card,
+  back of the card, both, or neither.
+*/
 void AnkiConnect::createModel(QString modelName, std::vector<std::pair<QString, CardTemplateFieldType>> fields, std::function<void(bool)>& slot)
 {
 	while (mCreateModelConnect) {
@@ -328,6 +371,13 @@ void AnkiConnect::onCreateModelResponse(QString data)
 	disconnect(mCreateModelConnect);
 }
 
+/*!
+  \fn void AnkiConnect::addNote(QString deckName, QString modelName, std::vector<std::pair<QString, QString>> fields, QStringList tags, std::function<void(bool)>& slot)
+
+  Creates a new note in \a deckName with \a fields from \a modelName and \a tags
+  and returns whether the note was successfully created
+  in the bool parameter of \a slot.
+*/
 void AnkiConnect::addNote(QString deckName, QString modelName, std::vector<std::pair<QString, QString>> fields, QStringList tags, std::function<void(bool)>& slot)
 {
 	addNotes({ { deckName, modelName, fields, tags } }, slot);

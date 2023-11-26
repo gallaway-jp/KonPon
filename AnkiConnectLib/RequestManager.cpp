@@ -1,6 +1,5 @@
 #include "RequestManager.h"
 
-
 ///
 /// RequestManager constructor
 ///
