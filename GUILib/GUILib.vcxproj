@@ -31,12 +31,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.6.1_msvc2019_64</QtInstall>
+    <QtInstall>6.6.1</QtInstall>
     <QtModules>core;gui;network;widgets;concurrent</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>6.5.2</QtInstall>
+    <QtInstall>6.6.1</QtInstall>
     <QtModules>core;gui;network;widgets;concurrent</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -69,7 +69,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)ParserLib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ParserLib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
     </ClCompile>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)x64\Release\;$(OutputPath)</AdditionalLibraryDirectories>
