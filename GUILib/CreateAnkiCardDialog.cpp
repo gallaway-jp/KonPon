@@ -14,7 +14,7 @@
 #include "AnkiCardEditor.h"
 
 CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji)
-	: QDialog(parent)
+	: QDialog(parent), mKana(kana), mKanji(kanji)
 {
 	setAcceptDrops(true);
 	QVBoxLayout* mainLayout = new QVBoxLayout(this);
@@ -27,10 +27,28 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	horizontalLayout->addLayout(wordDataLayout);
 
 	QLabel* kanaLabel = new QLabel(kana.c_str());
-	wordDataLayout->addRow(tr("Kana"), kanaLabel);
+	QPushButton* addKanaToFieldButton = new QPushButton(tr("Add to Field"));
+	connect(addKanaToFieldButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onAddKanaToFieldButtonClicked);
+	QWidget* kanaWidget = new QWidget();
+	QHBoxLayout* kanaLayout = new QHBoxLayout();
+	kanaLayout->addWidget(kanaLabel);
+	kanaLayout->addWidget(addKanaToFieldButton);
+	kanaWidget->setLayout(kanaLayout);
+
 	QLabel* kanjiLabel = new QLabel(kanji.c_str());
-	wordDataLayout->addRow(tr("Kanji"), kanjiLabel);
+	QPushButton* addKanjiToFieldButton = new QPushButton(tr("Add to Field"));
+	connect(addKanjiToFieldButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onAddKanjiToFieldButtonClicked);
+	QWidget* kanjiWidget = new QWidget();
+	QHBoxLayout* kanjiLayout = new QHBoxLayout();
+	kanjiLayout->addWidget(kanjiLabel);
+	kanjiLayout->addWidget(addKanjiToFieldButton);
+	kanjiWidget->setLayout(kanjiLayout);
+
+	wordDataLayout->addRow(tr("Kana"), kanaWidget);
+	wordDataLayout->addRow(tr("Kanji"), kanjiWidget);
+#if 0 //TODO Make word data draggable to each field
 	wordDataLayout->addWidget(new DragWidget());
+#endif
 
 	std::function<void(QStringList)> getDeckNamesSlot = [this](QStringList decks) { onGetDeckNames(decks); };
 	mAnkiConnect.GetDeckNames(getDeckNamesSlot);
@@ -54,8 +72,28 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 
 	connect(this, &CreateAnkiCardDialog::updateDeckNames, mAnkiCardEditor, &AnkiCardEditor::onUpdateDeckNames);
 	connect(this, &CreateAnkiCardDialog::updateNoteTypes, mAnkiCardEditor, &AnkiCardEditor::onUpdateNoteTypes);
+	connect(this, &CreateAnkiCardDialog::insertDataIntoField, mAnkiCardEditor, &AnkiCardEditor::onInsertDataIntoField);
 
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
+}
+
+#include "ListDialog.h"
+void CreateAnkiCardDialog::onAddKanaToFieldButtonClicked()
+{
+	ListDialog dialog = ListDialog(this, ListDialogType::ListDialogTypeSelectField, mAnkiCardEditor->getFields().keys());
+	dialog.exec();
+	if (!dialog.result.isEmpty() && !dialog.result[0].isEmpty()) {
+		emit insertDataIntoField(mKana.c_str(), dialog.result[0]);
+	}
+}
+
+void CreateAnkiCardDialog::onAddKanjiToFieldButtonClicked()
+{
+	ListDialog dialog = ListDialog(this, ListDialogType::ListDialogTypeSelectField, mAnkiCardEditor->getFields().keys());
+	dialog.exec();
+	if (!dialog.result.isEmpty() && !dialog.result[0].isEmpty()) {
+		emit insertDataIntoField(mKanji.c_str(), dialog.result[0]);
+	}
 }
 
 void CreateAnkiCardDialog::onSaveToLocalButtonClicked()

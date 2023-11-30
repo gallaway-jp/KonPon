@@ -9,7 +9,8 @@ enum class ListDialogType
 {
     ListDialogTypeDefault,
     ListDialogTypeNoteType,
-    ListDialogTypeDeck
+    ListDialogTypeDeck,
+    ListDialogTypeSelectField
 };
 
 class ListDialog :

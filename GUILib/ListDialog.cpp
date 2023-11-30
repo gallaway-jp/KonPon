@@ -26,13 +26,16 @@ ListDialog::ListDialog(QWidget* parent, ListDialogType listDialogType, const QSt
 
 	layout->addWidget(mListWidget);
 
-	QPushButton* createButton = new QPushButton(tr("Create"));
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Apply|QDialogButtonBox::Cancel, Qt::Horizontal);
 	layout->addWidget(buttonBox);
 	connect(buttonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &QDialog::accept);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
-	buttonBox->addButton(createButton, QDialogButtonBox::ActionRole);
-	connect(createButton, &QPushButton::clicked, this, &ListDialog::onCreateButtonClicked);
+	if (mListDialogType == ListDialogType::ListDialogTypeNoteType
+		|| mListDialogType == ListDialogType::ListDialogTypeDeck) {
+		QPushButton* createButton = new QPushButton(tr("Create"));
+		buttonBox->addButton(createButton, QDialogButtonBox::ActionRole);
+		connect(createButton, &QPushButton::clicked, this, &ListDialog::onCreateButtonClicked);
+	}
 }
 
 void ListDialog::accept()

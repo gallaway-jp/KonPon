@@ -364,3 +364,13 @@ void AnkiCardEditor::onUpdateNoteTypes(const QStringList& models, const QList<QS
 		++i;
 	}
 }
+
+void AnkiCardEditor::onInsertDataIntoField(const QString& data, const QString& field)
+{
+	qsizetype index = mNoteTypes[mCurrentNoteType].indexOf(field);
+	if (index == -1 || index >= fieldsLayout->rowCount()) {
+		return;
+	}
+	QTextEdit* fieldEdit = dynamic_cast<QTextEdit*>(fieldsLayout->itemAt(index, QFormLayout::FieldRole)->widget());
+	fieldEdit->insertPlainText(data);
+}

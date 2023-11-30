@@ -28,6 +28,7 @@ public:
 public slots:
     void onUpdateDeckNames(const QStringList& decks);
     void onUpdateNoteTypes(const QStringList& models, const QList<QStringList>& fieldsLists);
+    void onInsertDataIntoField(const QString& data, const QString& field);
 private:
     void setTextWidth();
     void createNoteDeckButtons();
