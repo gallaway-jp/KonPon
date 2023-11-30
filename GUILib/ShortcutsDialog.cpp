@@ -12,6 +12,7 @@ ShortcutsDialog::ShortcutsDialog(bool& keyboardShortcutsDialogOpened)
 
 	layout->addRow(tr("Import Text"), new QLabel("CTRL + O"));
 	layout->addRow(tr("Import Audio"), new QLabel("CTRL + A"));
+	layout->addRow(tr("Settings"), new QLabel("CTRL + T"));
 	layout->addRow(tr("Keyboard Shortcuts"), new QLabel("CTRL + K"));
 
 	this->layout()->setSizeConstraint(QLayout::SetFixedSize);

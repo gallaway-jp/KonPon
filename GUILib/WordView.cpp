@@ -45,15 +45,16 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 	layout->addRow(mShowMoreButton);
 	onToggledShowMore(false);
 
-	// TODO implement Copy Word Info behavior
 	mCopyButton = new QPushButton(tr("Copy Word Info"));
 	connect(mCopyButton, &QPushButton::clicked, this, &WordView::onCopyWordInfo);
 	layout->addRow(mCopyButton);
 
 	// TODO implement Create Anki Card behavior
-	QPushButton* createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
-	connect(createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
-	layout->addRow(createAnkiCardButton);
+	if (mSettings->mAnki.isAnkiConnectFeatureEnabled) {
+		QPushButton* createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
+		connect(createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
+		layout->addRow(createAnkiCardButton);
+	}
 }
 
 void WordView::setDialogProperties()

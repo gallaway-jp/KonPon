@@ -17,11 +17,14 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 {
 	mTabWidget = new QTabWidget;
 	mTabWidget->addTab(new GeneralTab(), tr("General"));
-	mTabWidget->addTab(new FileTab(settings), tr("File"));
+	FileTab* fileTab = new FileTab(settings);
+	mTabWidget->addTab(fileTab, tr("File"));
+	connect(fileTab, &FileTab::onChange, this, &SettingsDialog::onChange);
+
 	UITab* uiTab = new UITab;
 	mTabWidget->addTab(uiTab, tr("UI"));
 	connect(uiTab, &UITab::onChange, this, &SettingsDialog::onChange);
-	AnkiTab* ankiTab = new AnkiTab;
+	AnkiTab* ankiTab = new AnkiTab(settings);
 	mTabWidget->addTab(ankiTab, tr("Anki"));
 	connect(ankiTab, &AnkiTab::onChange, this, &SettingsDialog::onChange);
 
@@ -30,6 +33,9 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 	connect(mButtonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 	connect(mButtonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &SettingsDialog::apply);
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
+
+	connect(this, &SettingsDialog::applySettings, fileTab, &FileTab::onApplySettings);
+	connect(this, &SettingsDialog::applySettings, ankiTab, &AnkiTab::onApplySettings);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(mTabWidget);
@@ -43,7 +49,7 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 void SettingsDialog::accept()
 {
 	mSettingsDialogOpened = false;
-	//Do Settings
+	emit applySettings();
 	QDialog::accept();
 }
 
@@ -56,11 +62,11 @@ void SettingsDialog::reject()
 void SettingsDialog::apply()
 {
 	hasChanges = false;
+	emit applySettings();
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
-	//Do Settings
 }
 
-void SettingsDialog::onChange(int slot)
+void SettingsDialog::onChange()
 {
 	hasChanges = true;
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
@@ -71,25 +77,45 @@ GeneralTab::GeneralTab(QWidget* parent)
 {
 	QFormLayout* layout = new QFormLayout(this);
 	layout->setHorizontalSpacing(50);
-
-	layout->addRow(tr("Import Text"), new QLabel("CTRL + O"));
-	layout->addRow(tr("Import Audio"), new QLabel("CTRL + A"));
-	layout->addRow(tr("Keyboard Shortcuts"), new QLabel("CTRL + K"));
 }
 
 FileTab::FileTab(Settings* settings)
-	: QWidget(nullptr)
+	: QWidget(nullptr), mSettings(settings)
 {
-	QFormLayout* layout = new QFormLayout(this);
-	layout->setHorizontalSpacing(50);
 
-	layout->addRow(tr("Workspace"), new QLineEdit(settings->mFile.workspace));
+	QVBoxLayout* layout = new QVBoxLayout(this);
+	
+	QHBoxLayout* workspaceLayout = new QHBoxLayout();
+	mWorkspaceLineEdit = new QLineEdit(settings->mFile.workspace);
+	QPushButton* changeWorkspaceButton = new QPushButton(tr("Specify Workspace"));
+	connect(mWorkspaceLineEdit, &QLineEdit::textChanged, this, &FileTab::onChange);
+	connect(changeWorkspaceButton, &QPushButton::clicked, this, &FileTab::onChangeWorkspaceButtonClicked);
+	
+	workspaceLayout->addWidget(mWorkspaceLineEdit);
+	workspaceLayout->addWidget(changeWorkspaceButton);
+
+	layout->addLayout(workspaceLayout);	
+}
+
+#include <QFileDialog>
+void FileTab::onChangeWorkspaceButtonClicked()
+{
+	QFileDialog dialog;
+	QString directory = dialog.getExistingDirectory();
+	if (!directory.isEmpty()) {
+		mWorkspaceLineEdit->setText(directory);
+	}
+}
+
+void FileTab::onApplySettings()
+{
+	mSettings->mFile.setWorkspace(mWorkspaceLineEdit->text());
 }
 
 UITab::UITab(QWidget* parent)
 	: QWidget(parent)
 {
-	QFormLayout* layout = new QFormLayout(this);
+	/*QFormLayout* layout = new QFormLayout(this);
 	layout->setHorizontalSpacing(50);
 
 	QComboBox* themeCombo = new QComboBox;
@@ -115,19 +141,23 @@ UITab::UITab(QWidget* parent)
 
 	layout->addRow(tr("Theme"), themeCombo);
 	layout->addRow(tr("Language"), languageCombo);
-	layout->addRow(tr("Text Size"), textSizeCombo);
-
-	QT_TR_NOOP("");
+	layout->addRow(tr("Text Size"), textSizeCombo);*/
 }
 
-AnkiTab::AnkiTab(QWidget* parent)
-	: QWidget(parent)
+AnkiTab::AnkiTab(Settings* settings)
+	: QWidget(nullptr), mSettings(settings)
 {
 	QFormLayout* layout = new QFormLayout(this);
 	layout->setHorizontalSpacing(50);
 
 	mEnableAnkiConnectCheckbox = new QCheckBox(tr("Enable Anki Connect Feature"));
+	mEnableAnkiConnectCheckbox->setChecked(mSettings->mAnki.isAnkiConnectFeatureEnabled);
 	connect(mEnableAnkiConnectCheckbox, &QCheckBox::stateChanged, this, &AnkiTab::onChange);
 
 	layout->addRow(mEnableAnkiConnectCheckbox);
+}
+
+void AnkiTab::onApplySettings()
+{
+	mSettings->mAnki.setEnableAnkiConnectFeature(mEnableAnkiConnectCheckbox->isChecked());
 }

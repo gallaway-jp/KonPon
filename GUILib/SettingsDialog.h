@@ -5,6 +5,8 @@ class QString;
 class QTabWidget;
 class QDialogButtonBox;
 class QCheckBox;
+class QLineEdit;
+
 class Settings;
 
 class SettingsDialog :
@@ -26,8 +28,11 @@ private:
     void reject();
     void apply();
 
-public:
-    void onChange(int slot);
+signals:
+    void applySettings();
+
+public slots:
+    void onChange();
 };
 
 class GeneralTab : public QWidget
@@ -44,6 +49,15 @@ class FileTab : public QWidget
 
 public:
     explicit FileTab(Settings* settings);
+signals:
+    void onChange();
+public slots:
+    void onApplySettings();
+private:
+    Settings* mSettings = nullptr;
+    QLineEdit* mWorkspaceLineEdit = nullptr;
+private slots:
+    void onChangeWorkspaceButtonClicked();
 };
 
 class UITab : public QWidget
@@ -54,7 +68,7 @@ public:
     explicit UITab(QWidget* parent = nullptr);
 
 signals:
-    void onChange(int index);
+    void onChange();
 };
 
 class AnkiTab : public QWidget
@@ -62,11 +76,14 @@ class AnkiTab : public QWidget
     Q_OBJECT
 
 public:
-    explicit AnkiTab(QWidget* parent = nullptr);
+    explicit AnkiTab(Settings* settings);
 
 signals:
-    void onChange(int slot);
+    void onChange();
+public slots:
+    void onApplySettings();
 
 private:
+    Settings* mSettings = nullptr;
     QCheckBox* mEnableAnkiConnectCheckbox;
 };

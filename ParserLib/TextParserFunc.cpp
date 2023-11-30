@@ -315,7 +315,6 @@ size_t getCharacterCount(const char* str, size_t index, size_t length)
 }
 
 std::pair<WordDict, LocationsDict> Tokenize(std::string const& folder, const char* pInputText, const std::string& fileId, Wordlist& outWordlist, Words& outWords) {
-    //QByteArray dictionaryPathBA = QDir("C:\\Users\\Colin\\Desktop\\unidic-cwj-3.1.1").absoluteFilePath("Dictionary").toUtf8();
     QByteArray dictionaryPathBA = QDir(folder.c_str()).absoluteFilePath("DictionaryData").toUtf8();
 
     MecabSlim mcs = MecabSlim(dictionaryPathBA.data());

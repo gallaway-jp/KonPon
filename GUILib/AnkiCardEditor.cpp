@@ -16,8 +16,8 @@
 #include <QColorDialog>
 #include "ListDialog.h"
 
-AnkiCardEditor::AnkiCardEditor(QWidget* parent)
-	: QWidget(parent)
+AnkiCardEditor::AnkiCardEditor()
+	: QWidget(nullptr)
 {
 	setTextWidth();
 
@@ -342,5 +342,25 @@ QString AnkiCardEditor::getCurrentDeck(bool& isNewDeck)
 	if (mNewDecks.find(mCurrentDeck) != mNewDecks.end()) {
 		isNewDeck = true;
 	}
-	return mCurrentNoteType;
+	return mCurrentDeck;
+}
+
+void AnkiCardEditor::onUpdateDeckNames(const QStringList& decks)
+{
+	for (const auto& deck : decks) {
+		if (!mDecks.contains(deck)) {
+			mDecks.append(deck);
+		}
+	}
+}
+
+void AnkiCardEditor::onUpdateNoteTypes(const QStringList& models, const QList<QStringList>& fieldsLists)
+{
+	int i = 0;
+	for (const auto& model : models) {
+		if (!mNoteTypes.contains(model)) {
+			mNoteTypes[model] = fieldsLists[i];
+		}
+		++i;
+	}
 }

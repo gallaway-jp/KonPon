@@ -55,7 +55,7 @@ QList<QAction*>* Menubar::createFileActions()
     retActions->append(createAction(QT_TR_NOOP("&Import Text"),
         PASS_METHOD(onImportText), Qt::CTRL | Qt::Key_O, &(tmpIcon = GET_STANDARD_ICON(SP_FileIcon))));
     retActions->append(createAction(QT_TR_NOOP("&Import Audio"),
-        PASS_METHOD(onImportAudio), Qt::CTRL | Qt::Key_A, &(tmpIcon = GET_STANDARD_ICON(SP_MediaVolume))));
+        PASS_METHOD(onImportAudio), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_A*/, &(tmpIcon = GET_STANDARD_ICON(SP_MediaVolume))));
     retActions->append(createAction(QT_TR_NOOP("&Import Text & Audio"),
         PASS_METHOD(onImportTextAudio), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DriveCDIcon))));
     retActions->append(createAction(QT_TR_NOOP("&View Word Lists"),

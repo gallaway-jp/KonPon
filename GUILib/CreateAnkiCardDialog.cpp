@@ -16,17 +16,11 @@
 CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji)
 	: QDialog(parent)
 {
-	
-
 	setAcceptDrops(true);
 	QVBoxLayout* mainLayout = new QVBoxLayout(this);
 	QHBoxLayout* horizontalLayout = new QHBoxLayout();
 	mainLayout->addLayout(horizontalLayout);
-	// select card type and deck
-	// default card type has:
-	// front
-	// back
-	// tags
+
 	constexpr int layoutSpacing = 25;
 	QFormLayout* wordDataLayout = new QFormLayout();
 	wordDataLayout->setHorizontalSpacing(layoutSpacing);
@@ -38,11 +32,17 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	wordDataLayout->addRow(tr("Kanji"), kanjiLabel);
 	wordDataLayout->addWidget(new DragWidget());
 
+	std::function<void(QStringList)> getDeckNamesSlot = [this](QStringList decks) { onGetDeckNames(decks); };
+	mAnkiConnect.GetDeckNames(getDeckNamesSlot);
 
-	mAnkiCardEditor = new AnkiCardEditor(nullptr);
+	std::function<void(QStringList)> getModelNamesSlot = [this](QStringList models) { onGetModelNames(models); };
+	mAnkiConnect.getModelNames(getModelNamesSlot);
+
+	mAnkiCardEditor = new AnkiCardEditor();
 	horizontalLayout->addWidget(mAnkiCardEditor);
 
 	QPushButton* saveToLocalButton = new QPushButton(tr("Save to Local"));
+	saveToLocalButton->setDisabled(true);
 	connect(saveToLocalButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onSaveToLocalButtonClicked);
 	mSendToAnkiButton = new QPushButton(tr("Send to Anki"));
 	connect(mSendToAnkiButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onSendToAnkiButtonClicked);
@@ -51,6 +51,9 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	buttonBox->addButton(saveToLocalButton, QDialogButtonBox::ActionRole);
 	buttonBox->addButton(mSendToAnkiButton, QDialogButtonBox::ActionRole);
 	mainLayout->addWidget(buttonBox);
+
+	connect(this, &CreateAnkiCardDialog::updateDeckNames, mAnkiCardEditor, &AnkiCardEditor::onUpdateDeckNames);
+	connect(this, &CreateAnkiCardDialog::updateNoteTypes, mAnkiCardEditor, &AnkiCardEditor::onUpdateNoteTypes);
 
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 }
@@ -90,7 +93,23 @@ void CreateAnkiCardDialog::onSendToAnkiButtonClicked()
 	}
 	std::function<void(bool)> slot = [this](bool added) {onNoteAdded(added); };
 	mAnkiConnect.addNote(deck, noteType, fields, mAnkiCardEditor->getTags(), slot);
-	/*mAnkiConnect.addNote("createDeckTestDeck", "_TestType_", { { "表面", "FieldData0112"}, { "裏面", "FieldData0112"} }, {}, slot);*/
+}
+
+void CreateAnkiCardDialog::onGetDeckNames(const QStringList& decks)
+{
+	emit updateDeckNames(decks);
+}
+
+void CreateAnkiCardDialog::onGetModelNames(const QStringList& models)
+{
+	mModels = models;
+	std::function<void(QList<QStringList>)> getModelsFieldNamesSlot = [this](QList<QStringList> fieldsLists) { onGetModelsFieldNames(fieldsLists); };
+	mAnkiConnect.getModelsFieldNames(models, getModelsFieldNamesSlot);
+}
+
+void CreateAnkiCardDialog::onGetModelsFieldNames(const QList<QStringList>& fieldsLists)
+{
+	emit updateNoteTypes(mModels, fieldsLists);
 }
 
 void CreateAnkiCardDialog::onNoteAdded(bool bAdded)
@@ -112,32 +131,3 @@ void CreateAnkiCardDialog::onDeckCreated(bool created)
 
 	mAnkiConnect.addNote(deck, noteType, fields, mAnkiCardEditor->getTags(), slot);
 }
-
-#include <QDropEvent>
-#include <QMimeData>
-//void CreateAnkiCardDialog::dragEnterEvent(QDragEnterEvent* event)
-//{
-//	event->accept();
-//}
-//
-//void CreateAnkiCardDialog::dropEvent(QDropEvent* event)
-//{
-//	if (event->mimeData()->hasFormat("application/x-dnditemdata")) {
-//		QByteArray itemData = event->mimeData()->data("application/x-dnditemdata");
-//		QDataStream dataStream(&itemData, QIODevice::ReadOnly);
-//
-//		//QPixmap pixmap;
-//		QString text;
-//		QPoint offset;
-//		dataStream /*>> pixmap*/ >> text >> offset;
-//
-//		//frontTextEdit->setText(text);
-//		//QString html1 = "<div style=\"border - radius: 10px; background: beige; padding: 10px; \">";
-//		//QString html2 = "</div>";
-//		QString html1 = "<b>";
-//		QString html2 = "</b>";
-//		frontTextEdit->setHtml(html1 + text + html2);
-//		
-//	}
-//	QDialog::dropEvent(event);
-//}

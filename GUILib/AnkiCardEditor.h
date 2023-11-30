@@ -20,11 +20,14 @@ class AnkiCardEditor :
     public QWidget
 {
 public:
-    AnkiCardEditor(QWidget* parent);
+    AnkiCardEditor();
     QMap<QString, QString> getFields();
     QStringList getTags();
     QString getCurrentNoteType(bool& isNewNoteType);
     QString getCurrentDeck(bool& isNewDeck);
+public slots:
+    void onUpdateDeckNames(const QStringList& decks);
+    void onUpdateNoteTypes(const QStringList& models, const QList<QStringList>& fieldsLists);
 private:
     void setTextWidth();
     void createNoteDeckButtons();

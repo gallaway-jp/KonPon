@@ -5,12 +5,22 @@
 
 Settings::Settings(QString& appPath) : mFile(appPath), mParser() {}
 
-Settings::File::File(QString& appPath)
+Settings::File::File(const QString& appPath)
 {
 	ReadSettings(appPath);
 }
 
-void Settings::File::ReadSettings(QString& appPath)
+Settings::File::~File()
+{
+	WriteSettings();
+}
+
+void Settings::File::setWorkspace(const QString& workspace)
+{
+	this->workspace = workspace;
+}
+
+void Settings::File::ReadSettings(const QString& appPath)
 {
 	QSettings settings;
 	settings.beginGroup("File");
@@ -23,6 +33,37 @@ void Settings::File::WriteSettings()
 	QSettings settings;
 	settings.beginGroup("File");
 	settings.setValue("workspace", workspace);
+	settings.endGroup();
+}
+
+Settings::Anki::Anki()
+{
+	ReadSettings();
+}
+
+Settings::Anki::~Anki()
+{
+	WriteSettings();
+}
+
+void Settings::Anki::setEnableAnkiConnectFeature(bool enable)
+{
+	isAnkiConnectFeatureEnabled = enable;
+}
+
+void Settings::Anki::ReadSettings()
+{
+	QSettings settings;
+	settings.beginGroup("Anki");
+	isAnkiConnectFeatureEnabled = settings.value("enableAnkiConnectFeature", true).toBool();
+	settings.endGroup();
+}
+
+void Settings::Anki::WriteSettings()
+{
+	QSettings settings;
+	settings.beginGroup("Anki");
+	settings.setValue("enableAnkiConnectFeature", isAnkiConnectFeatureEnabled);
 	settings.endGroup();
 }
 
