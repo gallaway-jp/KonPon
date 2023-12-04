@@ -287,6 +287,7 @@ namespace MeCab {
     }
 
     bool load_dictionary_resource(Param* param) {
+#if 0
         std::string rcfile = param->get<std::string>("rcfile");
 
 #ifdef HAVE_GETENV
@@ -369,13 +370,14 @@ namespace MeCab {
         if (!param->load(rcfile.c_str())) {
             return false;
         }
+#endif //#if 0
 
         std::string dicdir = param->get<std::string>("dicdir");
         if (dicdir.empty()) {
             dicdir = ".";  // current
         }
-        remove_filename(&rcfile);
-        replace_string(&dicdir, "$(rcpath)", rcfile);
+        //remove_filename(&rcfile);
+        //replace_string(&dicdir, "$(rcpath)", rcfile);
         param->set<std::string>("dicdir", dicdir, true);
         dicdir = create_filename(dicdir, DICRC);
 

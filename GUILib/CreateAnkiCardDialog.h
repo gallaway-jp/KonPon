@@ -24,6 +24,7 @@ signals:
     void updateDeckNames(const QStringList& decks);
     void updateNoteTypes(const QStringList& models, const QList<QStringList>& fieldsLists);
     void insertDataIntoField(const QString& data, const QString& field);
+    void modelCreated();
 public slots:
 
 private:
@@ -42,5 +43,5 @@ private slots:
     void onGetModelNames(const QStringList& models);
     void onGetModelsFieldNames(const QList<QStringList>& fieldsLists);
     void onNoteAdded(bool bAdded);
-    void onDeckCreated(bool created);
+    void onModelCreated(bool created);
 };

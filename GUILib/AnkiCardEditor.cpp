@@ -93,7 +93,6 @@ QToolBar* AnkiCardEditor::createEditToolbar()
 	QToolBar* cardEditMenuBar = new QToolBar();
 	
 	QAction* boldAction = cardEditMenuBar->addAction("B", QKeySequence::Bold);
-	//boldAction->setStatusTip(tr("Bold"));
 	boldAction->setToolTip(tr("Bold"));
 	boldAction->setCheckable(true);
 	boldAction->setChecked(false);
@@ -271,9 +270,9 @@ void AnkiCardEditor::onNoteTypeButtonClicked()
 				fieldsLayout->removeRow(0);
 			}
 
-			if (dialog.result.count() > 1) {
-				mNewNoteTypes.insert(dialog.result[0]);
-				for (int i = 1; i < dialog.result.count(); i++) {
+			if (dialog.result.count() > 3) {
+				mNewNoteTypes[dialog.result[0]] = { dialog.result[1], dialog.result[2] };
+				for (int i = 3; i < dialog.result.count(); i++) {
 					mNoteTypes[dialog.result[0]].append(dialog.result[i]);
 				}
 			}
@@ -337,11 +336,17 @@ QString AnkiCardEditor::getCurrentNoteType(bool& isNewNoteType)
 	return mCurrentNoteType;
 }
 
-QString AnkiCardEditor::getCurrentDeck(bool& isNewDeck)
+std::pair<QString, QString> AnkiCardEditor::getCurrentNoteTypeTemplates()
 {
-	if (mNewDecks.find(mCurrentDeck) != mNewDecks.end()) {
-		isNewDeck = true;
+	auto it = mNewNoteTypes.find(mCurrentNoteType);
+	if (it != mNewNoteTypes.end()) {
+		return *it;
 	}
+	return {};
+}
+
+QString AnkiCardEditor::getCurrentDeck()
+{
 	return mCurrentDeck;
 }
 
@@ -373,4 +378,9 @@ void AnkiCardEditor::onInsertDataIntoField(const QString& data, const QString& f
 	}
 	QTextEdit* fieldEdit = dynamic_cast<QTextEdit*>(fieldsLayout->itemAt(index, QFormLayout::FieldRole)->widget());
 	fieldEdit->insertPlainText(data);
+}
+
+void AnkiCardEditor::onModelCreated()
+{
+	mNewNoteTypes.remove(mCurrentNoteType);
 }

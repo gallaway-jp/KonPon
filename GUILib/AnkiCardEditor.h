@@ -24,11 +24,13 @@ public:
     QMap<QString, QString> getFields();
     QStringList getTags();
     QString getCurrentNoteType(bool& isNewNoteType);
-    QString getCurrentDeck(bool& isNewDeck);
+    std::pair<QString, QString> getCurrentNoteTypeTemplates();
+    QString getCurrentDeck();
 public slots:
     void onUpdateDeckNames(const QStringList& decks);
     void onUpdateNoteTypes(const QStringList& models, const QList<QStringList>& fieldsLists);
     void onInsertDataIntoField(const QString& data, const QString& field);
+    void onModelCreated();
 private:
     void setTextWidth();
     void createNoteDeckButtons();
@@ -51,7 +53,7 @@ private:
     //std::vector<std::pair<std::string, QTextEdit*>> mFields;
     QStringList mDecks = { "Default" };
     QMap<QString, QStringList> mNoteTypes = { {"Default", {"Front", "Back"}}};
-    std::unordered_set <QString> mNewNoteTypes;
+    QMap<QString, std::pair<QString, QString>> mNewNoteTypes;
     std::unordered_set <QString> mNewDecks;
 
 private slots:

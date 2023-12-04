@@ -85,9 +85,7 @@ void AnkiConnectTest::createModelTest()
     bool createdModel;
     std::function<void(bool)> createModelSlot = [this, &createdModel](bool result) { createdModel = result; mFinished = true; };
     ankiConnect.createModel("testModel1125_2", 
-        { {"field1", CardTemplateFieldType::FrontOnly},
-        {"field2", CardTemplateFieldType::BackOnly},
-        {"field3", CardTemplateFieldType::BackOnly} },
+        { {{"field1"}, {"field2"}, {"field3"}}, "{{field1}}", "{{FrontSide}}\n\n<hr id=answer>\n\n<br>{{field2}}\n\n<br>{{field3}}"},
         createModelSlot);
     while (!mFinished) {
         QCoreApplication::processEvents();

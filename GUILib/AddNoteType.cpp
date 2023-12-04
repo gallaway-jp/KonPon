@@ -32,6 +32,15 @@ AddNoteType::AddNoteType(QWidget* parent)
 	QVBoxLayout* fieldButtonLayout = new QVBoxLayout();
 	listLayout->addLayout(fieldButtonLayout);
 
+	layout->addWidget(new QLabel(tr("Front Template")));
+	mFrontTemplateEdit = new QTextEdit("{{Replace with Field}}");
+	layout->addWidget(mFrontTemplateEdit);
+
+	layout->addWidget(new QLabel(tr("Back Template")));
+	mBackTemplateEdit = new QTextEdit();
+	mBackTemplateEdit->setPlainText("{{FrontSide}}\n\n< hr id = answer >\n\n<br>{{Replace with Field}}");
+	layout->addWidget(mBackTemplateEdit);
+
 	QPushButton* createFieldButton = new QPushButton(tr("Add"));
 	connect(createFieldButton, &QPushButton::clicked, this, &AddNoteType::onCreateFieldButtonClicked);
 	QPushButton* deleteFieldButton = new QPushButton(tr("Delete"));
@@ -52,6 +61,8 @@ void AddNoteType::accept()
 	for (int i = 0; i < mListWidget->count(); i++) {
 		fields.append(mListWidget->item(i)->text());
 	}
+	frontTemplate = mFrontTemplateEdit->toPlainText();
+	backTemplate = mBackTemplateEdit->toPlainText();
 	QDialog::accept();
 }
 

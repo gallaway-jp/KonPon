@@ -18,12 +18,11 @@ struct ANKICONNECTLIB_EXPORT NoteData
 	QStringList tags;
 };
 
-enum class CardTemplateFieldType
+struct NewCardTypeData
 {
-	NoShow,
-	FrontOnly,
-	BackOnly,
-	Both,
+	QStringList fields;
+	QString frontTemplate;
+	QString backTemplate;
 };
 
 /*!
@@ -48,7 +47,7 @@ public:
 
 	void getModelsFieldNames(QStringList modelNames, std::function<void(QList<QStringList>)>& slot);
 
-	void createModel(QString modelName, std::vector<std::pair<QString, CardTemplateFieldType>> fields, std::function<void(bool)>& slot);
+	void createModel(QString modelName, NewCardTypeData newCardTypeData, std::function<void(bool)>& slot);
 	
 	void addNote(QString deckName, QString modelName, std::vector<std::pair<QString, QString>> fields, QStringList tags, std::function<void(bool)>& slot);
 

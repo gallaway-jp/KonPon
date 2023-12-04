@@ -105,14 +105,17 @@ void ListDialog::getNewNoteType()
 {
 	AddNoteType addNoteTypeDialog = AddNoteType(this);
 	addNoteTypeDialog.exec();
-	if (!addNoteTypeDialog.noteType.isEmpty() && !addNoteTypeDialog.fields.isEmpty()) {
+	if (!addNoteTypeDialog.noteType.isEmpty() && !addNoteTypeDialog.fields.isEmpty()
+		&& !addNoteTypeDialog.frontTemplate.isEmpty() && !addNoteTypeDialog.backTemplate.isEmpty()) {
 		if (!mListWidget->findItems(addNoteTypeDialog.noteType, Qt::MatchExactly).empty()) {
 			QMessageBox::information(this, tr("Item already exists"), tr("Item already exists in list!"));
 			return;
 		}
 
 		QListWidgetItem* item = new QListWidgetItem(addNoteTypeDialog.noteType);
-		item->setData(Qt::UserRole, { addNoteTypeDialog.fields });
+		QStringList data = { addNoteTypeDialog.frontTemplate, addNoteTypeDialog.backTemplate };
+		data.append(addNoteTypeDialog.fields);
+		item->setData(Qt::UserRole, data);
 		mListWidget->addItem(item);
 	}
 }

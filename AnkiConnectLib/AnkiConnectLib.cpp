@@ -293,18 +293,14 @@ void AnkiConnect::onGetModelsFieldNamesResponse(QString data)
 }
 
 /*!
-  \fn void AnkiConnect::createModel(QString modelName, std::vector<std::pair<QString, CardTemplateFieldType>> fields, std::function<void(bool)>& slot)
+  \fn void AnkiConnect::createModel(QString modelName, NewCardTypeData newCardTypeData, std::function<void(bool)>& slot)
 
-  Creates a new model named \a modelName with \a fields
+  Creates a new model named \a modelName with fields in \a newCardTypeData
+  and front and back templates in \a newCardTypeData,
   and returns whether the model was successfully created
   in the bool parameter of \a slot.
-
-  The \a fields parameter is a list of field names with each
-  field having a \c CardTemplateFieldType flag that describes
-  whether the field should be visible in the front of the card,
-  back of the card, both, or neither.
 */
-void AnkiConnect::createModel(QString modelName, std::vector<std::pair<QString, CardTemplateFieldType>> fields, std::function<void(bool)>& slot)
+void AnkiConnect::createModel(QString modelName, NewCardTypeData newCardTypeData, std::function<void(bool)>& slot)
 {
 	while (mCreateModelConnect) {
 		QCoreApplication::processEvents();
@@ -312,35 +308,12 @@ void AnkiConnect::createModel(QString modelName, std::vector<std::pair<QString, 
 
 	QJsonObject params;
 	QJsonArray fieldsArray;
-	QString frontSide;
-	QString backSide = "{{FrontSide}}\n\n<hr id=answer>\n\n";
-	for (const auto& [field, type] : fields) {
+	for (const auto& field : newCardTypeData.fields) {
 		fieldsArray.append(field);
-		switch (type)
-		{
-		case CardTemplateFieldType::Both:
-		case CardTemplateFieldType::FrontOnly:
-			if (!frontSide.isEmpty()) {
-				frontSide.append("\n\n<br>\n\n");
-			}
-			frontSide.append(QString("{{%1}}").arg(field));
-			if (type == CardTemplateFieldType::FrontOnly) {
-				break;
-			}
-			[[fallthrough]];
-		case CardTemplateFieldType::BackOnly:
-			if (!backSide.endsWith("<hr id=answer>\n\n")) {
-				backSide.append("\n\n<br>\n\n");
-			}
-			backSide.append(QString("{{%1}}").arg(field));
-			break;
-		default:
-			break;
-		}
 	}
 
 	QJsonArray cardTemplatesArray = {
-		{QJsonObject({{"Front", frontSide}, {"Back", backSide}})}
+		{QJsonObject({{"Front", newCardTypeData.frontTemplate}, {"Back", newCardTypeData.backTemplate}})}
 	};
 
 	params["modelName"] = modelName;

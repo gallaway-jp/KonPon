@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QToolBar>
 #include <QSizePolicy>
+#include <QMessageBox>
 
 #include "DragWidget.h"
 #include "AnkiCardEditor.h"
@@ -73,6 +74,7 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	connect(this, &CreateAnkiCardDialog::updateDeckNames, mAnkiCardEditor, &AnkiCardEditor::onUpdateDeckNames);
 	connect(this, &CreateAnkiCardDialog::updateNoteTypes, mAnkiCardEditor, &AnkiCardEditor::onUpdateNoteTypes);
 	connect(this, &CreateAnkiCardDialog::insertDataIntoField, mAnkiCardEditor, &AnkiCardEditor::onInsertDataIntoField);
+	connect(this, &CreateAnkiCardDialog::modelCreated, mAnkiCardEditor, &AnkiCardEditor::onModelCreated);
 
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 }
@@ -101,27 +103,21 @@ void CreateAnkiCardDialog::onSaveToLocalButtonClicked()
 	int a = 0;
 }
 
-// TODO: Properly retrieve template data
 void CreateAnkiCardDialog::onSendToAnkiButtonClicked()
 {
 	mSendToAnkiButton->setDisabled(true);
 	
-	bool isNew = false;
-	QString deck = mAnkiCardEditor->getCurrentDeck(isNew);
-	QString noteType = mAnkiCardEditor->getCurrentNoteType(isNew);
-	if (isNew) {
-		std::function<void(bool)> slot = [this](bool created) {onDeckCreated(created); };
-		std::vector<std::pair<QString, CardTemplateFieldType>> fields;
-		bool first = true;
-		for (const auto& [fieldName, fieldData] : mAnkiCardEditor->getFields().asKeyValueRange()) {
-			if (first) {
-				fields.push_back({ fieldName, CardTemplateFieldType::FrontOnly });
-				first = false;
-				continue;
-			}
-			fields.push_back({ fieldName, CardTemplateFieldType::BackOnly });
-		}
-		mAnkiConnect.createModel(noteType, fields, slot);
+	bool isNewNoteType = false;
+	QString deck = mAnkiCardEditor->getCurrentDeck();
+	QString noteType = mAnkiCardEditor->getCurrentNoteType(isNewNoteType);
+	if (isNewNoteType) {
+		std::function<void(bool)> slot = [this](bool created) {onModelCreated(created); };
+		NewCardTypeData newCardTypeData;
+		newCardTypeData.fields = mAnkiCardEditor->getFields().keys();
+		auto [frontTemplate, backTemplate] = mAnkiCardEditor->getCurrentNoteTypeTemplates();
+		newCardTypeData.frontTemplate = frontTemplate;
+		newCardTypeData.backTemplate = backTemplate;
+		mAnkiConnect.createModel(noteType, newCardTypeData, slot);
 		return;
 	}
 
@@ -153,13 +149,25 @@ void CreateAnkiCardDialog::onGetModelsFieldNames(const QList<QStringList>& field
 void CreateAnkiCardDialog::onNoteAdded(bool bAdded)
 {
 	mSendToAnkiButton->setEnabled(true);
+
+	if (!bAdded) {
+		QMessageBox::information(this, tr("Could not create note"), tr("Failed to create note!"));
+	}
 }
 
-void CreateAnkiCardDialog::onDeckCreated(bool created)
+void CreateAnkiCardDialog::onModelCreated(bool created)
 {
+	if (!created) {
+		QMessageBox::information(this, tr("Could not create note type"), tr("Failed to create note type!"));
+		mSendToAnkiButton->setEnabled(true);
+		return;
+	}
+
 	bool isNew = false;
-	QString deck = mAnkiCardEditor->getCurrentDeck(isNew);
+	QString deck = mAnkiCardEditor->getCurrentDeck();
 	QString noteType = mAnkiCardEditor->getCurrentNoteType(isNew);
+	emit modelCreated();
+
 	std::function<void(bool)> slot = [this](bool added) {onNoteAdded(added); };
 
 	std::vector<std::pair<QString, QString>> fields;
