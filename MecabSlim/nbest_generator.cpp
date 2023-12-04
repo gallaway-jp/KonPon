@@ -32,7 +32,6 @@ namespace MeCab {
                 for (QueueElement* n = top; n->next; n = n->next) {
                     n->node->next = n->next->node;   // change next & prev
                     n->next->node->prev = n->node;
-                    // TODO: rewrite costs;
                 }
                 return true;
             }

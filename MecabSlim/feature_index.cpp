@@ -611,7 +611,6 @@ namespace MeCab {
         return true;
     }
 
-    // TODO(taku): consider charset
     bool EncoderFeatureIndex::reopen(const char* filename,
         const char* dic_charset,
         std::vector<double>* alpha,

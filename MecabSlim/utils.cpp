@@ -287,97 +287,11 @@ namespace MeCab {
     }
 
     bool load_dictionary_resource(Param* param) {
-#if 0
-        std::string rcfile = param->get<std::string>("rcfile");
-
-#ifdef HAVE_GETENV
-        if (rcfile.empty()) {
-            const char* homedir = getenv("HOME");
-            if (homedir) {
-                const std::string s = MeCab::create_filename(std::string(homedir),
-                    ".mecabrc");
-                std::ifstream ifs(WPATH(s.c_str()));
-                if (ifs) {
-                    rcfile = s;
-                }
-            }
-        }
-
-        if (rcfile.empty()) {
-            const char* rcenv = getenv("MECABRC");
-            if (rcenv) {
-                rcfile = rcenv;
-            }
-        }
-#endif
-
-#if defined (HAVE_GETENV) && defined(_WIN32) && !defined(__CYGWIN__)
-        if (rcfile.empty()) {
-            scoped_fixed_array<wchar_t, BUF_SIZE> buf;
-            const DWORD len = ::GetEnvironmentVariableW(L"MECABRC",
-                buf.get(),
-                buf.size());
-            if (len < buf.size() && len > 0) {
-                rcfile = WideToUtf8(buf.get());
-            }
-        }
-#endif
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-        HKEY hKey;
-        scoped_fixed_array<wchar_t, BUF_SIZE> v;
-        DWORD vt;
-        DWORD size = Conversion::convertULongLongToULong(v.size() * sizeof(v[0]));
-
-        if (rcfile.empty()) {
-            ::RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"software\\mecab", 0, KEY_READ, &hKey);
-            ::RegQueryValueExW(hKey, L"mecabrc", 0, &vt,
-                reinterpret_cast<BYTE*>(v.get()), &size);
-            ::RegCloseKey(hKey);
-            if (vt == REG_SZ) {
-                rcfile = WideToUtf8(v.get());
-            }
-        }
-
-        if (rcfile.empty()) {
-            ::RegOpenKeyExW(HKEY_CURRENT_USER, L"software\\mecab", 0, KEY_READ, &hKey);
-            ::RegQueryValueExW(hKey, L"mecabrc", 0, &vt,
-                reinterpret_cast<BYTE*>(v.get()), &size);
-            ::RegCloseKey(hKey);
-            if (vt == REG_SZ) {
-                rcfile = WideToUtf8(v.get());
-            }
-        }
-
-        if (rcfile.empty()) {
-            // TODO: replace "vt = ::GetModuleFileNameW(DllInstance, v.get(), size);"
-            // with alternative file to search for in same directory
-            // maybe current process?
-            vt = ::GetModuleFileNameW(NULL, v.get(), size);
-            if (vt != 0) {
-                scoped_fixed_array<wchar_t, _MAX_DRIVE> drive;
-                scoped_fixed_array<wchar_t, _MAX_DIR> dir;
-                _wsplitpath_s(v.get(),drive.get(), drive.size(), dir.get(), dir.size(), NULL, 0, NULL, 0);
-                const std::wstring path =
-                    std::wstring(drive.get()) + std::wstring(dir.get()) + L"mecabrc";
-                if (::GetFileAttributesW(path.c_str()) != -1) {
-                    rcfile = WideToUtf8(path);
-                }
-            }
-        }
-#endif
-
-        if (!param->load(rcfile.c_str())) {
-            return false;
-        }
-#endif //#if 0
 
         std::string dicdir = param->get<std::string>("dicdir");
         if (dicdir.empty()) {
             dicdir = ".";  // current
         }
-        //remove_filename(&rcfile);
-        //replace_string(&dicdir, "$(rcpath)", rcfile);
         param->set<std::string>("dicdir", dicdir, true);
         dicdir = create_filename(dicdir, DICRC);
 
