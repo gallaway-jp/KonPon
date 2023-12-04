@@ -1,6 +1,21 @@
 #include "Words.h"
 
 #include "Word.h"
+
+#include <QDirIterator>
+#include <QtConcurrent>
+QString Words::getPath()
+{
+	QDir dir = QDir(mWorkspace.c_str() + QString("/KonPonData") +
+		QString("/Words")
+	);
+	if (!dir.exists()) {
+		// Create folder if does not exist
+		dir.mkpath(".");
+	}
+	return dir.absolutePath();
+}
+
 bool Words::insertWord(const Word& newWord)
 {	
 	auto iter = mWords.find({ newWord.getKana(), newWord.getKanji() });
@@ -22,6 +37,59 @@ bool Words::setWorkspace(const std::string& workspace)
 	for (auto [key, val] : mWords) {
 		val.setWorkspace(workspace);
 	}
-
+	mWorkspace = workspace;
 	return true;
+}
+
+void Words::removeTextId(int64_t textId) {
+	std::ignore = QtConcurrent::run([this, textId]()
+		{
+			QDirIterator it(getPath(), { "*.json" }, QDir::Files, QDirIterator::Subdirectories);
+			while (it.hasNext()) {
+				QString wordInfoFilePath = it.next();
+				QFile file(wordInfoFilePath);
+
+				if (!file.open(QIODevice::ReadWrite)) {
+					continue;
+				}
+				QByteArray data = file.readAll();
+
+				QJsonDocument doc = QJsonDocument::fromJson(data);
+				if (doc.isNull()) {
+					file.close();
+					continue;
+				}
+
+				if (!doc.isObject()) {
+					file.close();
+					continue;
+				}
+
+				QJsonObject jsonObject = doc.object();
+				if (!jsonObject.contains("textIds")) {
+					file.close();
+					continue;
+				}
+				QJsonValue textIdsValue = jsonObject.value("textIds");
+				if (!textIdsValue.isArray()) {
+					file.close();
+					continue;
+				}
+				bool updateFile = false;
+				QJsonArray textIdsArray = textIdsValue.toArray();
+				for (qsizetype i = 0; i < textIdsArray.count(); ++i) {
+					if (textIdsArray[i] == textId) {
+						textIdsArray.removeAt(i);
+						updateFile = true;
+						break;
+					}
+				}
+				if (updateFile) {
+					jsonObject["textIds"] = textIdsArray;
+					file.resize(0);
+					file.write(QJsonDocument(jsonObject).toJson());
+				}
+				file.close();
+			}
+		});
 }

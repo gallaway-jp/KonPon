@@ -49,7 +49,6 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 	connect(mCopyButton, &QPushButton::clicked, this, &WordView::onCopyWordInfo);
 	layout->addRow(mCopyButton);
 
-	// TODO implement Create Anki Card behavior
 	if (mSettings->mAnki.isAnkiConnectFeatureEnabled) {
 		QPushButton* createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
 		connect(createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
@@ -97,6 +96,7 @@ void WordView::addTextListWidget(QFormLayout* layout)
 			QListWidgetItem* item = new QListWidgetItem(it->second.first.c_str());
 			item->setData(Qt::UserRole, textID);
 			mTextList->addItem(item);
+			mTextListItems[textID] = item;
 		}
 		//TODO text in word info should really be deleted on iteration of words in text's wordlist
 	}
@@ -114,11 +114,10 @@ void WordView::onTextClicked(QListWidgetItem* item)
 	emit viewTextClicked(textId);
 }
 
-void WordView::onRemoveTextIdFromWordInfo(int64_t textId)
+void WordView::onRemoveTextId(int64_t textId)
 {
 	if (auto it = mTextListItems.find(textId); it != mTextListItems.end()) {
 		delete mTextList->takeItem(mTextList->row(it->second));
-		mTextWord.removeTextId(textId);
 		mTextListItems.erase(it);
 	}
 }

@@ -28,7 +28,7 @@ public slots:
 	void onViewWordClicked(const std::string& kana, const std::string& kanji);
 	void setWordOpen(const std::string& kana, const std::string& kanji, QDialog* dialog = nullptr);
 signals:
-	void removeTextIdFromWordInfo(int64_t textId);
+	void removeTextId(int64_t textId);
 
 private:
 	Settings* mSettings = nullptr;

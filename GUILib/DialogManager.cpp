@@ -99,8 +99,11 @@ void DialogManager::onAddTextId(int64_t textId, const std::string& name)
 
 void DialogManager::onRemoveTextId(int64_t textId)
 {
+    emit removeTextId(textId);
+    if (mTextIds[textId].second) {
+        mTextIds[textId].second->close();
+    }
     mTextIds.erase(textId);
-    emit removeTextIdFromWordInfo(textId);
     writeTextIdsToJsonFile();
 }
 
@@ -112,7 +115,7 @@ void DialogManager::onViewWordClicked(const std::string& kana, const std::string
         setWordOpen(kana, kanji, dynamic_cast<QDialog*>(wordView));
         connect(wordView, &WordView::closeDialog, this, [this, kana, kanji]() {setWordOpen(kana, kanji); });
         connect(wordView, &WordView::viewTextClicked, this, &DialogManager::onViewTextClicked);
-        connect(this, &DialogManager::removeTextIdFromWordInfo, wordView, &WordView::onRemoveTextIdFromWordInfo);
+        connect(this, &DialogManager::removeTextId, wordView, &WordView::onRemoveTextId);
     }
     mWordMap[{kana, kanji}]->show();
     mWordMap[{kana, kanji}]->raise();

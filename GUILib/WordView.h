@@ -32,7 +32,7 @@ signals:
     void viewTextClicked(int64_t textId);
     void closeDialog();
 public slots:
-    void onRemoveTextIdFromWordInfo(int64_t textId);
+    void onRemoveTextId(int64_t textId);
 
 private:
     QFormLayout* layout;

@@ -353,6 +353,10 @@ void TextTree::removeFile()
     QDir dir = QDir(_mSettings->mFile.workspace + QString("/KonPonData") + QString("/Texts") + QString("/") + QString::number(fileId));
     dir.removeRecursively();
 
+    Words wordsInfo;
+    wordsInfo.setWorkspace(_mSettings->mFile.workspace.toStdString());
+    wordsInfo.removeTextId(fileId);
+
     emit removeTextId(fileId);
 }
 
