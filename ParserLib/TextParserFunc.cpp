@@ -17,6 +17,7 @@
 #include <QString>
 #include <QDir>
 #include <QByteArray>
+#include <QRegularExpression>
 
 // Return number of bytes of one unicode character
 // input: first byte of unicode character
@@ -229,34 +230,21 @@ bool IsAsciiWord(std::string word) {
 Features _SplitFeatures(const std::string& featuresString)
 {
     Features features;
-
-    std::string feature;
-    for (size_t i = 0; i < featuresString.length(); i++) {
-        if (featuresString[i] == ',') {
-            features.push_back(feature);
-            feature = "";
-            continue;
+    
+    bool inside = (featuresString[0] == '\"');
+    QStringList tmpList = QString(featuresString.c_str()).split(QRegularExpression("\""), Qt::SkipEmptyParts);
+    for(const auto& s : tmpList) {
+        if (inside) {
+            features.push_back(s.toStdString());
         }
-        else if (featuresString[i] == '\"') {
-            i++;
-            size_t end = featuresString.find('\"', i);
-            if (end == std::string::npos) {
-                feature.append(featuresString, i);
-                break;
+        else {
+            for (const auto& feature : s.split(",", Qt::SkipEmptyParts)) {
+                features.push_back(feature.toStdString());
             }
-            size_t length = end - i;
-            if (length <= 0) {
-                continue;
-            }
-            feature.append(featuresString, i, length);
-            i += length;
-            continue;
         }
-        feature.append(1, featuresString[i]);
+        inside = !inside;
     }
-    if (!feature.empty()) {
-        features.push_back(feature);
-    }
+    
     return features;
 }
 
