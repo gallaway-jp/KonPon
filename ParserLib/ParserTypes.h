@@ -1,10 +1,10 @@
 #pragma once
 
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
-#include <set>
+#include <unordered_set>
     
-using Locations = std::map<size_t, uint8_t>; //value is length of word at location
-using WordDict = std::map<std::string, std::map<std::string, Locations>>;
-using LocationsDict = std::map<size_t, std::map<std::string, std::set<std::string>>>;
+using Locations = std::unordered_map<size_t, uint8_t>; //value is length of word at location
+using WordDict = std::unordered_map<std::string, std::unordered_map<std::string, Locations>>;
+using LocationsDict = std::unordered_map<size_t, std::unordered_map<std::string, std::unordered_set<std::string>>>;

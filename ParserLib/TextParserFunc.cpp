@@ -34,8 +34,6 @@ inline short GetCharSize(char leadByte) {
     return 0;
 }
 
-using Features = std::vector<std::string>;
-
 enum FeatureEnum {
     pos1,
     pos2,
@@ -69,7 +67,7 @@ enum FeatureEnum {
     FeatureCount
 };
 
-inline bool IsJapanesePunctuationCharacter(const std::string& character)
+inline bool IsJapanesePunctuationCharacter(std::string_view character)
 {
     if (character.length() == 3) {
         //Japanese - style punctuation U + 3000 - U + 303f
@@ -78,7 +76,7 @@ inline bool IsJapanesePunctuationCharacter(const std::string& character)
     return false;
 }
 
-inline bool IsKanaCharacter(const std::string& character)
+inline bool IsKanaCharacter(std::string_view character)
 {
     if (character.length() == 3) {
         //hiragana U + 3040 - U + 309F
@@ -88,7 +86,7 @@ inline bool IsKanaCharacter(const std::string& character)
     return false;
 }
 
-inline bool IsKatakanaCharacter(const std::string& character)
+inline bool IsKatakanaCharacter(std::string_view character)
 {
     if (character.length() == 3) {
         //hiragana U + 3040 - U + 309F
@@ -98,7 +96,7 @@ inline bool IsKatakanaCharacter(const std::string& character)
     return false;
 }
 
-unsigned int threeByteUTFToCodePoint(const std::string& character)
+unsigned int threeByteUTFToCodePoint(std::string_view character)
 {
     unsigned char highOrder = character[0] & 0x0F;
     unsigned char mediumOrder = character[1] & 0x3F;
@@ -115,7 +113,7 @@ std::string codePointToThreeByteUTF(unsigned int codePoint)
     return std::string(charArray);
 }
 
-std::string KatakanaToHiragana(const std::string& string)
+std::string KatakanaToHiragana(std::string_view string)
 {
     //Converts katanaka characters in string to hiragana characters.
     //
@@ -130,24 +128,11 @@ std::string KatakanaToHiragana(const std::string& string)
         if (size == 0) {
             size = 1; //unknown character size... add it to the result anyway
         }
-        std::string character = string.substr(i, size);
+        std::string_view character = string.substr(i, size);
         i += size - 1;
         if (IsKatakanaCharacter(character)) {
             unsigned int codePoint = threeByteUTFToCodePoint(character) - 0x60; //subtract katakana hiragana codepoint difference
             convertedString += codePointToThreeByteUTF(codePoint); //convert back to UTF8 representation
-            //convertedString += character[0];
-            //
-            //unsigned char subtractFromThird = (unsigned short)0x0120 - 0x0100; //= 0x20
-            //unsigned short carry = 0x0000;
-            //character[1] -= 1; //The difference is more than 1 byte, so subtract at least one from 2nd byte
-            //if (character[2] < subtractFromThird) {
-            //    character[1] -= 1; //Since third byte's value is not enough, borrow from 2nd byte
-            //    carry = 0x0100;
-            //}
-            //character[2] = carry + character[2] - subtractFromThird;
-
-            //convertedString += character[1];
-            //convertedString += character[2];
             continue;
         }
         convertedString += character;
@@ -155,14 +140,14 @@ std::string KatakanaToHiragana(const std::string& string)
     return convertedString;
 }
 
-std::string KatakanaToHiraganaWhenLemmaNotKatakana(std::string lemma, std::string reading)
+std::string KatakanaToHiraganaWhenLemmaNotKatakana(std::string_view lemma, std::string_view reading)
 {
     
     for(int i = 0; i < lemma.length(); i++){
         short size = GetCharSize(lemma[i]);
         if (size == 3) {
             if (IsKatakanaCharacter(lemma.substr(i, size))) {
-                return reading;
+                return std::string(reading);
             }
         }
         if (size > 0) {
@@ -179,13 +164,13 @@ bool IsAsciiCharacter(char character)
     return 0x00 <= character && character <= 0x7F;
 }
 
-bool IsStrangeCharacter(std::string& character)
+bool IsStrangeCharacter(std::string_view character)
 {
     //Full - width roman characters and half - width katakana(ff00 - ffef)
     return "\uff00" <= character && character <= "\uffef";
 }
 
-bool IsKanjiCharacter(std::string& character)
+bool IsKanjiCharacter(std::string_view character)
 {
     //CJK unified ideographs Extension A - Rare kanji(3400 - 4dbf)
     //CJK unifed ideographs - Common and uncommon kanji(4e00 - 9faf)
@@ -195,13 +180,13 @@ bool IsKanjiCharacter(std::string& character)
         || "\u20000" <= character && character <= "\u2A6DF";
 }
 
-inline bool IsSingleNonKanjiCharacter(std::string word) {
+inline bool IsSingleNonKanjiCharacter(std::string_view word) {
     short size = GetCharSize(word[0]);
     if (size > 0) {
         if (size < word.length()) {
             return false; //If is multiple characters
         }
-        std::string character = word.substr(0, size);
+        std::string_view character = word.substr(0, size);
         if (size >=3 && IsKanjiCharacter(character)) {
             return false; //If is kanji character
         }
@@ -209,14 +194,14 @@ inline bool IsSingleNonKanjiCharacter(std::string word) {
     return true;
 }
 
-bool IsAsciiWord(std::string word) {
+bool IsAsciiWord(std::string_view word) {
     for (int i = 0; i < word.length(); i++) {
         short size = GetCharSize(word[i]);
         if (size == 1) {
             continue; //Ascii characters are only 1 byte
         }
         if (size == 3) {
-            std::string character = word.substr(i, size);
+            std::string_view character = word.substr(i, size);
             if (IsStrangeCharacter(character)) {
                 i += size - 1;
                 continue;
@@ -227,32 +212,49 @@ bool IsAsciiWord(std::string word) {
     return true;
 }
 
-Features _SplitFeatures(const std::string& featuresString)
-{
-    Features features;
-    
-    bool inside = (featuresString[0] == '\"');
-    QStringList tmpList = QString(featuresString.c_str()).split(QRegularExpression("\""), Qt::SkipEmptyParts);
-    for(const auto& s : tmpList) {
-        if (inside) {
-            features.push_back(s.toStdString());
-        }
-        else {
-            for (const auto& feature : s.split(",", Qt::SkipEmptyParts)) {
-                features.push_back(feature.toStdString());
+auto _SplitFeatures(std::string_view str)
+{   
+    std::vector<std::string_view> features;
+
+    int indexCommaToLeftOfColumn = 0;
+    int indexCommaToRightOfColumn = -1;
+
+    bool ignoreDelimiter = false;
+    for (int i = 0; i < static_cast<int>(str.size()); i++)
+    {
+        switch (str[i])
+        {
+        case ',':
+        {
+            if (!ignoreDelimiter) {
+                indexCommaToLeftOfColumn = indexCommaToRightOfColumn;
+                indexCommaToRightOfColumn = i;
+                int index = indexCommaToLeftOfColumn + 1;
+                int length = indexCommaToRightOfColumn - index;
+
+                std::string_view column(str.data() + index, length);
+                features.push_back(column);
             }
+            break;
         }
-        inside = !inside;
+        case '\"':
+            ignoreDelimiter = !ignoreDelimiter;
+            break;
+        default:
+            break;
+        }
     }
+    const std::string_view finalColumn(str.data() + indexCommaToRightOfColumn + 1, str.size() - indexCommaToRightOfColumn - 1);
+    features.push_back(finalColumn);
     
     return features;
 }
 
 
 
-std::string trim(const std::string& string, const char* trimCharacterList = " \t\v\r\n")
+std::string_view trim(std::string_view string, const char* trimCharacterList = " \t\v\r\n")
 {
-    std::string result;
+    std::string_view result;
     std::string::size_type left = string.find_first_not_of(trimCharacterList);
 
     if (left != std::string::npos)
@@ -263,28 +265,36 @@ std::string trim(const std::string& string, const char* trimCharacterList = " \t
     return result;
 }
 
-std::vector<std::string> split(const std::string& string, const char* splitCharacterList = " \t\v\r\n")
+std::vector<uint8_t> accentSplit(std::string_view str)
 {
-    std::vector<std::string> result;
-    std::string current;
-    for (int i = 0; i < string.length(); i++) {
-        bool splitCharFound = false;
-        const char* pCurrentSplitCharacter = splitCharacterList;
-        while(*pCurrentSplitCharacter != 0x00) {
-            if (string[i] == *pCurrentSplitCharacter) {
-                result.push_back(current);
-                current = "";
-                splitCharFound = true;
-                break;
-            }
-            pCurrentSplitCharacter++;
+    std::vector<uint8_t> result;
+
+    int indexCommaToLeftOfColumn = 0;
+    int indexCommaToRightOfColumn = -1;
+
+    bool ignoreDelimiter = false;
+    for (int i = 0; i < static_cast<int>(str.size()); i++)
+    {
+        switch (str[i])
+        {
+        case ',':
+        {
+            indexCommaToLeftOfColumn = indexCommaToRightOfColumn;
+            indexCommaToRightOfColumn = i;
+            int index = indexCommaToLeftOfColumn + 1;
+            int length = indexCommaToRightOfColumn - index;
+
+            std::string_view column(str.data() + index, length);
+            result.push_back(std::stoi(std::string(column)));
+            break;
         }
-        if (!splitCharFound) {
-            current += string[i];
+        default:
+            break;
         }
     }
-    if (!current.empty()) {
-        result.push_back(current);
+    const std::string_view finalColumn(str.data() + indexCommaToRightOfColumn + 1, str.size() - indexCommaToRightOfColumn - 1);
+    if (!finalColumn.empty()) {
+        result.push_back(std::stoi(std::string(finalColumn)));
     }
 
     return result;
@@ -322,13 +332,14 @@ std::pair<WordDict, LocationsDict> Tokenize(std::string const& folder, const cha
             current = current->next;
             continue;
         }
-        Features features = _SplitFeatures(current->feature);
+        auto features = _SplitFeatures(current->feature);
         if (features.size() != FeatureEnum::FeatureCount) {
             current = current->next;
             continue; //invalid number of features, so go to next node
         }
-        std::string word = features[FeatureEnum::orthBase]; //dictionary form
-        if (word.empty()) {
+        std::string_view word = features[FeatureEnum::orthBase]; //dictionary form
+        
+        if (features[FeatureEnum::orthBase].empty()) {
             word = current->surface;
         }
         if (word.empty()) {
@@ -347,32 +358,28 @@ std::pair<WordDict, LocationsDict> Tokenize(std::string const& folder, const cha
             continue;
         }
 
-        std::string accent = features[aType] != "*" ? features[aType] : ""; //pitch accent of word
+        std::string_view accent = features[aType] != "*" ? features[aType] : ""; //pitch accent of word
 
-        std::vector<std::string> accentSplit = split(accent, ",");
-        std::vector<uint8_t> accents;
-        for (std::string accent : accentSplit) {
-            accents.push_back(std::stoi(accent));
-        }
+        std::vector<uint8_t> accents = accentSplit(trim(accent, "\""));
 
         uint8_t surfaceLen = getCharacterCount(pInputText, 0,current->length); //length of the surface form in text
         
         //surface is form as appears in text
         size_t oldIndex = index;
-        index = std::string(pInputText).find(current->surface, index);
+        index = std::string_view(pInputText).find(current->surface, index);
         charIndex += getCharacterCount(pInputText, oldIndex, index - oldIndex);
 
-        if (wordDictionary.find(kana) == wordDictionary.end() || wordDictionary[kana].find(word) == wordDictionary[kana].end()) {
-            Word newWord = Word(kana, word);
+        if (wordDictionary.find(kana) == wordDictionary.end() || wordDictionary[kana].find(std::string(word)) == wordDictionary[kana].end()) {
+            Word newWord = Word(kana, std::string(word));
             newWord.addTextId(textId);
             for (uint8_t accent : accents) {
                 newWord.addPitchAccent(accent);
             }
             outWords.insertWord(newWord);
         }
-        wordDictionary[kana][word][charIndex] = surfaceLen;
-        outWordlist.insertWord(kana, word);
-        locationsDictionary[charIndex][kana].insert(word);
+        wordDictionary[kana][std::string(word)][charIndex] = surfaceLen;
+        outWordlist.insertWord(kana, std::string(word));
+        locationsDictionary[charIndex][kana].insert(std::string(word));
 
         current = current->next;
     }
