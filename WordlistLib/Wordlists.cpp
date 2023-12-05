@@ -127,11 +127,13 @@ void Wordlists::moveWordsToCustomWordlist(const Wordlist& newWords, const std::s
 void Wordlists::removeWordFromUnknownWordlist(const std::string& kana, const std::string& kanji)
 {
     mUnknownWordlist.removeWord(kana, kanji);
+    mUnknownWordlist.removeWords(Wordlist()); // Save to file
 }
 
 void Wordlists::removeWordFromKnownWordlist(const std::string& kana, const std::string& kanji)
 {
     mKnownWordlist.removeWord(kana, kanji);
+    mKnownWordlist.removeWords(Wordlist()); // Save to file
 }
 
 void Wordlists::removeWordFromCustomWordlist(const std::string& kana, const std::string& kanji, const std::string& name)
@@ -142,6 +144,7 @@ void Wordlists::removeWordFromCustomWordlist(const std::string& kana, const std:
     }
 
     pos->second.removeWord(kana, kanji);
+    pos->second.removeWords(Wordlist()); // Save to file
 }
 
 void Wordlists::removeWordsFromUnknownWordlist(const Wordlist& wordsToRemove)
@@ -236,4 +239,24 @@ void Wordlists::setCustomColor(const std::string& wordlist, WordListInfo::Color 
         return;
     }
     mWordLists[wordlist].setColor(color);
+}
+
+bool Wordlists::contains(const std::string& kana, const std::string& kanji)
+{
+    bool wordExists = false;
+    wordExists = mUnknownWordlist.contains(kana, kanji)
+        || mKnownWordlist.contains(kana, kanji);
+
+    if (wordExists) {
+        return wordExists;
+    }
+
+    for (const auto& [_,customWordlist] : mWordLists) {
+        wordExists = customWordlist.contains(kana, kanji);
+        if (wordExists) {
+            return wordExists;
+        }
+    }
+
+    return wordExists;
 }

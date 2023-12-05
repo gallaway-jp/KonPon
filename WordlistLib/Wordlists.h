@@ -34,6 +34,7 @@ public: // interface methods
     void setUnknownColor(WordListInfo::Color color);
     void setKnownColor(WordListInfo::Color color);
     void setCustomColor(const std::string& wordlist, WordListInfo::Color color);
+    bool contains(const std::string& kana, const std::string& kanji);
 public: // interface member variables
     
 private: // implementation member variables

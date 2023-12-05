@@ -14,6 +14,7 @@
 #include <QInputDialog>
 #include <QMessageBox>
 #include <QStackedWidget>
+#include <QDir>
 
 WordlistsView::WordlistsView(QWidget* parent, TextTree* textTree, Settings* settings, Wordlists& wordlists)
 	: QDialog(parent), mTextTree(textTree), mWordlists(wordlists), mSettings(settings)
@@ -46,6 +47,13 @@ void WordlistsView::createLists()
 	leftComboLayout->addWidget(mLeftCombobox);
 	leftComboLayout->addWidget(mLeftListEditButton);
 	leftListLayout->addLayout(leftComboLayout);
+
+	mLeftAddWordButton = new QPushButton(tr("Add Word"));
+	mLeftDeleteWordsButton = new QPushButton(tr("Delete Words"));
+	QHBoxLayout* leftButtonLayout = new QHBoxLayout();
+	leftButtonLayout->addWidget(mLeftAddWordButton);
+	leftButtonLayout->addWidget(mLeftDeleteWordsButton);
+	leftListLayout->addLayout(leftButtonLayout);
 	leftListLayout->addWidget(mLeftStack);
 
 	mMoveRightButton = new QPushButton("→");
@@ -60,6 +68,13 @@ void WordlistsView::createLists()
 	rightComboLayout->addWidget(mRightCombobox);
 	rightComboLayout->addWidget(mRightListEditButton);
 	rightListLayout->addLayout(rightComboLayout);
+
+	mRightAddWordButton = new QPushButton(tr("Add Word"));
+	mRightDeleteWordsButton = new QPushButton(tr("Delete Words"));
+	QHBoxLayout* rightButtonLayout = new QHBoxLayout();
+	rightButtonLayout->addWidget(mRightAddWordButton);
+	rightButtonLayout->addWidget(mRightDeleteWordsButton);
+	rightListLayout->addLayout(rightButtonLayout);
 	rightListLayout->addWidget(mRightStack);
 
 	mLeftCombobox->addItem(tr("Unknown Wordlist"), 1);
@@ -110,6 +125,10 @@ void WordlistsView::createConnects()
 	connect(mMoveLeftButton, &QPushButton::clicked, this, &WordlistsView::onMoveLeft);
 	connect(mLeftListEditButton, &QPushButton::clicked, this, &WordlistsView::onEditLeftList);
 	connect(mRightListEditButton, &QPushButton::clicked, this, &WordlistsView::onEditRightList);
+	connect(mLeftAddWordButton, &QPushButton::clicked, this, &WordlistsView::onAddLeftWord);
+	connect(mLeftDeleteWordsButton, &QPushButton::clicked, this, &WordlistsView::onDeleteLeftWords);
+	connect(mRightAddWordButton, &QPushButton::clicked, this, &WordlistsView::onAddRightWord);
+	connect(mRightDeleteWordsButton, &QPushButton::clicked, this, &WordlistsView::onDeleteRightWords);
 	connect(mUnknownList, &QListWidget::itemDoubleClicked, this, &WordlistsView::onItemDoubleClicked);
 	connect(mKnownList, &QListWidget::itemDoubleClicked, this, &WordlistsView::onItemDoubleClicked);
 }
@@ -396,6 +415,58 @@ void WordlistsView::onEditRightList()
 	onEditList(mRightCombobox);
 }
 
+void WordlistsView::onAddLeftWord()
+{
+	QListWidget* listWidget = mUnknownList;
+	WordListInfo::Type type = WordListInfo::Type::UNKNOWN;
+	std::string listName;
+	if (mLeftCombobox->currentIndex() != 0) {
+		type = WordListInfo::Type::CUSTOM;
+		listName = mLeftCombobox->currentText().toStdString();
+		listWidget = mCustomLists[listName];
+	}
+	onAddWord(listWidget, type, listName);
+}
+
+void WordlistsView::onAddRightWord()
+{
+	QListWidget* listWidget = mKnownList;
+	WordListInfo::Type type = WordListInfo::Type::KNOWN;
+	std::string listName;
+	if (mRightCombobox->currentIndex() != 0) {
+		type = WordListInfo::Type::CUSTOM;
+		listName = mRightCombobox->currentText().toStdString();
+		listWidget = mCustomLists[listName];
+	}
+	onAddWord(listWidget, type, listName);
+}
+
+void WordlistsView::onDeleteLeftWords()
+{
+	QListWidget* listWidget = mUnknownList;
+	WordListInfo::Type type = WordListInfo::Type::UNKNOWN;
+	std::string listName;
+	if (mLeftCombobox->currentIndex() != 0) {
+		type = WordListInfo::Type::CUSTOM;
+		listName = mLeftCombobox->currentText().toStdString();
+		listWidget = mCustomLists[listName];
+	}
+	onDeleteWords(listWidget, type, listName);
+}
+
+void WordlistsView::onDeleteRightWords()
+{
+	QListWidget* listWidget = mKnownList;
+	WordListInfo::Type type = WordListInfo::Type::KNOWN;
+	std::string listName;
+	if (mRightCombobox->currentIndex() != 0) {
+		type = WordListInfo::Type::CUSTOM;
+		listName = mRightCombobox->currentText().toStdString();
+		listWidget = mCustomLists[listName];
+	}
+	onDeleteWords(listWidget, type, listName);
+}
+
 void WordlistsView::onEditList(QComboBox* combobox)
 {
 	EditWordlistDialog dialog(this, combobox->currentData().toInt(), combobox->currentText(), combobox->itemData(combobox->currentIndex(), Qt::UserRole + 1).toInt());
@@ -435,6 +506,95 @@ void WordlistsView::onItemDoubleClicked(QListWidgetItem* item)
 		return;
 	}
 	emit viewWordClicked(qstrings[0].toStdString(), qstrings[1].toStdString());
+}
+
+void WordlistsView::onAddWord(QListWidget* list, WordListInfo::Type type, const std::string& listName)
+{
+	std::string kana;
+	std::string kanji;
+
+	kana = QInputDialog::getText(this, tr("Enter Kana"), tr("Kana:")).toStdString();
+	if (kana.empty()) {
+		return;
+	}
+
+	kanji = QInputDialog::getText(this, tr("Enter Kanji"), tr("Kanji:")).toStdString();
+	if (kanji.empty()) {
+		return;
+	}
+
+	if (mWordlists.contains(kana, kanji)) {
+		QMessageBox::information(this, tr("Word exists"), tr("The word already exists in a list!"));
+		return;
+	}
+
+	Wordlist wordlist;
+	wordlist.insertWord(kana, kanji);
+	switch (type)
+	{
+	case WordListInfo::Type::UNKNOWN:
+		mWordlists.addWordsToUnknownWordlist(wordlist);
+		mUnknownList->clear();
+		for (const auto& [kana, kanji] : mWordlists.getUnknownWordlist()) {
+			QListWidgetItem* item = new QListWidgetItem();
+			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+			mUnknownList->addItem(item);
+		}
+		break;
+	case WordListInfo::Type::KNOWN:
+		mWordlists.addWordsToKnownWordlist(wordlist);
+		mKnownList->clear();
+		for (const auto& [kana, kanji] : mWordlists.getKnownWordlist()) {
+			QListWidgetItem* item = new QListWidgetItem();
+			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+			mKnownList->addItem(item);
+		}
+		break;
+	case WordListInfo::Type::CUSTOM:
+		mWordlists.addWordsToCustomWordlist(wordlist, listName);
+		mCustomLists[listName]->clear();
+		for (const auto& [kana, kanji] : mWordlists.getCustomWordlist(listName)) {
+			QListWidgetItem* item = new QListWidgetItem();
+			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+			mCustomLists[listName]->addItem(item);
+		}
+		break;
+	default:
+		break;
+	}
+}
+
+void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, const std::string& listName)
+{
+	for (auto item : list->selectedItems()) {
+		auto takenItem = list->takeItem(list->row(item));
+		QStringList qstrings = item->data(Qt::UserRole).toStringList();
+		if (qstrings.size() == 2) {
+			switch (type)
+			{
+			case WordListInfo::Type::UNKNOWN:
+				mWordlists.removeWordFromUnknownWordlist(qstrings[0].toStdString(), qstrings[1].toStdString());
+				break;
+			case WordListInfo::Type::KNOWN:
+				mWordlists.removeWordFromKnownWordlist(qstrings[0].toStdString(), qstrings[1].toStdString());
+				break;
+			case WordListInfo::Type::CUSTOM:
+				mWordlists.removeWordFromCustomWordlist(qstrings[0].toStdString(), qstrings[1].toStdString(), listName);
+				break;
+			default:
+				break;
+			}
+			QDir directory = QDir(mSettings->mFile.workspace + QString("/KonPonData/Words/") + QString(qstrings[0]));
+			directory.remove(qstrings[1] + QString(".json"));
+			if (directory.isEmpty()) {
+				directory.rmdir(".");
+			}
+		}
+		delete takenItem;
+	}
 }
 
 WordlistsView::~WordlistsView()

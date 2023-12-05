@@ -51,6 +51,10 @@ private:
     std::string mPrevRightItem = "";
     QPushButton* mLeftListEditButton = nullptr;
     QPushButton* mRightListEditButton = nullptr;
+    QPushButton* mLeftAddWordButton = nullptr;
+    QPushButton* mLeftDeleteWordsButton = nullptr;
+    QPushButton* mRightAddWordButton = nullptr;
+    QPushButton* mRightDeleteWordsButton = nullptr;
 signals:
     void viewWordClicked(const std::string& kana, const std::string& kanji);
 public slots:
@@ -65,9 +69,16 @@ public slots:
     void onEditLeftList();
     void onEditRightList();
     void onEditList(QComboBox* combobox);
+private slots:
+    void onAddLeftWord();
+    void onAddRightWord();
+    void onDeleteLeftWords();
+    void onDeleteRightWords();
 private:
     void onComboboxChange(QComboBox* activeCombobox, QComboBox* inactiveCombobox, std::string& previousItem, int index);
     void setCurrentList(QStackedWidget* stack, QComboBox* combobox);
     void setItemColor(QComboBox* combobox, int index, WordListInfo::Color color);
     void onItemDoubleClicked(QListWidgetItem* item);
+    void onAddWord(QListWidget* list, WordListInfo::Type type, const std::string& listName);
+    void onDeleteWords(QListWidget* list, WordListInfo::Type type, const std::string& listName = "");
 };
