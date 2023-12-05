@@ -48,8 +48,8 @@ void WordlistsView::createLists()
 	leftListLayout->addLayout(leftComboLayout);
 	leftListLayout->addWidget(mLeftStack);
 
-	mMoveRightButton = new QPushButton(QString::fromLocal8Bit("R"));
-	mMoveLeftButton = new QPushButton(QString::fromLocal8Bit("L"));
+	mMoveRightButton = new QPushButton("→");
+	mMoveLeftButton = new QPushButton("←");
 	middleLayout->addWidget(mMoveRightButton);
 	middleLayout->addWidget(mMoveLeftButton);
 
