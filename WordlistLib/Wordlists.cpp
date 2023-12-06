@@ -181,6 +181,7 @@ const Wordlist& Wordlists::getUnknownWordlist()
 {
     return mUnknownWordlist;
 }
+
 const Wordlist& Wordlists::getKnownWordlist()
 {
     return mKnownWordlist;

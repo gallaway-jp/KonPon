@@ -169,7 +169,13 @@ bool Word::writeWord()
         jsonObject.insert("notes", mNotes.c_str());
     }
 
-    result = file.write(QJsonDocument(jsonObject).toJson()) > 0 ? true : false;
+#ifdef QT_DEBUG
+    QJsonDocument::JsonFormat format = QJsonDocument::Indented;
+#else
+    QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+#endif
+
+    result = file.write(QJsonDocument(jsonObject).toJson(format)) > 0 ? true : false;
     file.close();
     return result;
 }

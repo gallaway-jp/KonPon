@@ -1,14 +1,14 @@
 #pragma once
 
 #include "wordlistlib_global.h"
+#include <QString>
+
 #include <string>
 #include <set>
 
-#include <QString>
-
 class WORDLISTLIB_EXPORT Word
 {
-public:
+public: //interface methods
 	Word() = default;
 	Word(const std::string& kana, const std::string& kanji, const std::string& workspace = "");
 	bool addTextId(int64_t textId);
@@ -22,14 +22,14 @@ public:
 	const std::string& getNotes() const;
 	void setNotes(const std::string& notes);
 	bool erase();
-private:
+
+private: // implementation fields
 	std::string mKana;
 	std::string mKanji;
 	std::string mWorkspace;
 	std::set<int64_t> mTextIds;
 	std::set<uint8_t> mPitchAccents;
 	std::string mNotes;
-
 private: // implementation methods
 	void readWord();
 	bool writeWord();

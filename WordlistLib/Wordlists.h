@@ -1,6 +1,5 @@
 #pragma once
 
-#include "wordlistlib_global.h"
 #include "Wordlist.h"
 
 #include <map>
@@ -35,9 +34,8 @@ public: // interface methods
     void setKnownColor(WordListInfo::Color color);
     void setCustomColor(const std::string& wordlist, WordListInfo::Color color);
     bool contains(const std::string& kana, const std::string& kanji);
-public: // interface member variables
     
-private: // implementation member variables
+private: // implementation fields
     std::string mWorkspace;
     std::map<std::string, Wordlist> mWordLists;
     Wordlist mKnownWordlist;

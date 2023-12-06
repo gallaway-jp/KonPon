@@ -271,7 +271,14 @@ bool Wordlist::writeWords()
     }
     object["words"] = wordsObject;
     object["color"] = static_cast<int>(mColor);
-    result = file.write(QJsonDocument(object).toJson()) > 0 ? true : false;
+
+#ifdef QT_DEBUG
+    QJsonDocument::JsonFormat format = QJsonDocument::Indented;
+#else
+    QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+#endif
+
+    result = file.write(QJsonDocument(object).toJson(format)) > 0 ? true : false;
     file.close();
     return result;
 }

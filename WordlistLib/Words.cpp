@@ -87,7 +87,14 @@ void Words::removeTextId(int64_t textId) {
 				if (updateFile) {
 					jsonObject["textIds"] = textIdsArray;
 					file.resize(0);
-					file.write(QJsonDocument(jsonObject).toJson());
+
+#ifdef QT_DEBUG
+					QJsonDocument::JsonFormat format = QJsonDocument::Indented;
+#else
+					QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+#endif
+
+					file.write(QJsonDocument(jsonObject).toJson(format));
 				}
 				file.close();
 			}

@@ -66,7 +66,13 @@ bool DialogManager::writeTextIdsToJsonFile()
         object[QString::number(textId)] = name.c_str();
     }
 
-    bool writeSucceeded = file.write(QJsonDocument(object).toJson()) > 0;
+#ifdef QT_DEBUG
+    QJsonDocument::JsonFormat format = QJsonDocument::Indented;
+#else
+    QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+#endif
+
+    bool writeSucceeded = file.write(QJsonDocument(object).toJson(format)) > 0;
     file.close();
     return writeSucceeded;
 }

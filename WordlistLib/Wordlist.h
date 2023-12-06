@@ -1,10 +1,10 @@
 #pragma once
 
 #include "wordlistlib_global.h"
+
 #include <map>
 #include <string>
 
-#include <qnamespace.h>
 struct WORDLISTLIB_EXPORT WordListInfo {
     enum class Color {
         NOCOLOR,
@@ -45,10 +45,10 @@ public: // interface methods
     void removeWord(const std::string& kana, const std::string& kanji);
     void removeWords(const Wordlist& wordsToRemove);
     bool erase();
-public: // interface member variables
     MultiMapType::const_iterator begin() const { return mWords.begin(); }
     MultiMapType::const_iterator end() const { return mWords.end(); }
-private: // implementation member variables
+
+private: // implementation fields
     MultiMapType mWords;
     std::string mName;
     std::string mWorkspace;

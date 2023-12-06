@@ -82,6 +82,7 @@
     <ClCompile>
       <AdditionalIncludeDirectories>$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>BUILD_STATIC;</PreprocessorDefinitions>
+      <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)x64\Release\;$(OutputPath)</AdditionalLibraryDirectories>

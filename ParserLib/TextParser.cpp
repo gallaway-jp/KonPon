@@ -3,12 +3,8 @@
 #include "MeCab.h"
 #include "MecabSlim.h"
 
-#include "Wordlist.h"
-#include "Words.h"
-
 #include <string>
 #include <map>
-#include <chrono>
 #include <filesystem>
 
 #include <QString>
@@ -19,58 +15,66 @@
 #include <QJsonObject>
 #include <QJsonArray>
 
-bool outputToJsonFile(const char* path, const WordDict &wordDictionary, const LocationsDict& locationsDictionary)
-{
-	QFile file(path);
-	if (!file.open(QIODevice::WriteOnly)) {
-		return false;
-	}
-
-	QJsonObject object;
+namespace {
+	bool outputToJsonFile(const char* path, const WordDict& wordDictionary, const LocationsDict& locationsDictionary)
 	{
-		QJsonObject kanaObject;
-		for (auto const& [key, val] : wordDictionary)
-		{
-			QJsonObject kanjiObject;
-			for (auto const& [kkey, kval] : val) {
-				QJsonObject locationsObject;
-				for (auto const& [lkey, lval] : kval) {
-					locationsObject[QString::number(lkey)] = QJsonValue(lval);
-				}
-
-				kanjiObject[QString(kkey.c_str())] = locationsObject;
-			}
-			kanaObject[QString(key.c_str())] = kanjiObject;
+		QFile file(path);
+		if (!file.open(QIODevice::WriteOnly)) {
+			return false;
 		}
-		object["words"] = kanaObject;
-	}
-	{
-		QJsonObject locationsObject;
-		for (auto const& [key, val] : locationsDictionary)
-		{
-			QJsonObject wordObject;
-			for (auto const& [kkey, kval] : val) {
-				QJsonArray kanjiArray;
-				//qjarr.fromVariantList
-				for (const std::string& kanji : kval) {
-					kanjiArray.append(kanji.c_str());
-				}
-				wordObject[kkey.c_str()] = kanjiArray;
-			}
-			locationsObject[std::to_string(key).c_str()] = wordObject;
-		}
-		object["locations"] = locationsObject;
-	}
 
-	bool writeSucceeded = file.write(QJsonDocument(object).toJson()) > 0;
-	file.close();
-	return writeSucceeded;
+		QJsonObject object;
+		{
+			QJsonObject kanaObject;
+			for (auto const& [key, val] : wordDictionary)
+			{
+				QJsonObject kanjiObject;
+				for (auto const& [kkey, kval] : val) {
+					QJsonObject locationsObject;
+					for (auto const& [lkey, lval] : kval) {
+						locationsObject[QString::number(lkey)] = QJsonValue(lval);
+					}
+
+					kanjiObject[QString(kkey.c_str())] = locationsObject;
+				}
+				kanaObject[QString(key.c_str())] = kanjiObject;
+			}
+			object["words"] = kanaObject;
+		}
+		{
+			QJsonObject locationsObject;
+			for (auto const& [key, val] : locationsDictionary)
+			{
+				QJsonObject wordObject;
+				for (auto const& [kkey, kval] : val) {
+					QJsonArray kanjiArray;
+					//qjarr.fromVariantList
+					for (const std::string& kanji : kval) {
+						kanjiArray.append(kanji.c_str());
+					}
+					wordObject[kkey.c_str()] = kanjiArray;
+				}
+				locationsObject[std::to_string(key).c_str()] = wordObject;
+			}
+			object["locations"] = locationsObject;
+		}
+
+#ifdef QT_DEBUG
+		QJsonDocument::JsonFormat format = QJsonDocument::Indented;
+#else
+		QJsonDocument::JsonFormat format = QJsonDocument::Compact;
+#endif
+
+		bool writeSucceeded = file.write(QJsonDocument(object).toJson(format)) > 0;
+		file.close();
+		return writeSucceeded;
+	}
 }
 
 int64_t Parser::TokenizeText(std::string const& folder, std::string const& name, const char *pInputText,
 	const std::string& fileId, Wordlist& outWordlist, Words& outWords)
 {
-	auto [wordDictionary, locationsDictionary] = Tokenize(folder, pInputText, fileId, outWordlist, outWords);
+	auto [wordDictionary, locationsDictionary] = ParserFunc::Tokenize(folder, pInputText, fileId, outWordlist, outWords);
 	if (wordDictionary.empty()) {
 		return 0;
 	}
