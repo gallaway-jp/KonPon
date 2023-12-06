@@ -99,6 +99,7 @@ void BottomMenu::onViewWordlistsClicked()
     if (!mWordlistsView) {
         mWordlistsView = new WordlistsView(this, mTextTree, _mSettings, mWordlists);
         connect(mWordlistsView, &WordlistsView::viewWordClicked, this, &BottomMenu::viewWordClicked);
+        connect(mWordlistsView, &WordlistsView::closeWordViewWindow, this, &BottomMenu::closeWordViewWindow);
     }
     mWordlistsView->show();
 }

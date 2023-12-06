@@ -25,6 +25,7 @@ CentralWidget::CentralWidget(QWidget* parent, Settings* settings)
     connect(mTextTree, &TextTree::removeTextId, mDlgMgr, &DialogManager::onRemoveTextId);
     
     connect(bottomMenu, &BottomMenu::viewWordClicked, mDlgMgr, &DialogManager::onViewWordClicked);
+    connect(bottomMenu, &BottomMenu::closeWordViewWindow, mDlgMgr, &DialogManager::onCloseWordViewWindow);
 }
 
 CentralWidget::~CentralWidget()

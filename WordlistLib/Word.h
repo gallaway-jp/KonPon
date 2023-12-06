@@ -19,6 +19,8 @@ public:
 	const std::string& getKanji() const;
 	const std::set<int64_t>& getTextIds() const;
 	const std::set<uint8_t>& getPitchAccents() const;
+	const std::string& getNotes() const;
+	void setNotes(const std::string& notes);
 	bool erase();
 private:
 	std::string mKana;
@@ -26,6 +28,7 @@ private:
 	std::string mWorkspace;
 	std::set<int64_t> mTextIds;
 	std::set<uint8_t> mPitchAccents;
+	std::string mNotes;
 
 private: // implementation methods
 	void readWord();

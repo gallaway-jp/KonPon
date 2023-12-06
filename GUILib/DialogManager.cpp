@@ -122,6 +122,13 @@ void DialogManager::onViewWordClicked(const std::string& kana, const std::string
     mWordMap[{kana, kanji}]->activateWindow();
 }
 
+void DialogManager::onCloseWordViewWindow(const std::string& kana, const std::string& kanji)
+{
+    if (mWordMap[{kana, kanji}] != nullptr) {
+        mWordMap[{kana, kanji}]->close();
+    }
+}
+
 void DialogManager::setWordOpen(const std::string& kana, const std::string& kanji, QDialog* dialog)
 {
     mWordMap[{kana, kanji}] = dialog;

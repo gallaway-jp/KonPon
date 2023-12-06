@@ -587,6 +587,9 @@ void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, co
 			default:
 				break;
 			}
+
+			emit closeWordViewWindow(qstrings[0].toStdString(), qstrings[1].toStdString());
+
 			QDir directory = QDir(mSettings->mFile.workspace + QString("/KonPonData/Words/") + QString(qstrings[0]));
 			directory.remove(qstrings[1] + QString(".json"));
 			if (directory.isEmpty()) {

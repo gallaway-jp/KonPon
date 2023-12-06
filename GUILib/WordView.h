@@ -46,6 +46,7 @@ private:
     QPushButton* mShowMoreButton = nullptr;
     QTextEdit* mNotesEdit = nullptr;
     QPushButton* mCopyButton = nullptr;
+    bool mRequiresNotesUpdate = false;
 private:
     void setDialogProperties();
     void addKanaKanjiLineWidgets(QFormLayout* layout);
@@ -57,4 +58,5 @@ private slots:
     void onCopyWordInfo();
     void onToggledShowMore(bool checked);
     void onTextClicked(QListWidgetItem* item);
+    void onNotesTextChanged();
 };

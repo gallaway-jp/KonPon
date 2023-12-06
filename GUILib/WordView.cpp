@@ -36,8 +36,10 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 	layout->addRow(tr("Notes"), (QWidget*)nullptr);
 	mNotesRow = layout->rowCount() - 1;
 
-	mNotesEdit = new QTextEdit("TODO replace this with notes data from word info");
+	mNotesEdit = new QTextEdit();
+	mNotesEdit->setPlainText(mTextWord.getNotes().c_str());
 	layout->addRow(mNotesEdit);
+	connect(mNotesEdit, &QTextEdit::textChanged, this, &WordView::onNotesTextChanged);
 
 	mShowMoreButton = new QPushButton();
 	mShowMoreButton->setCheckable(true);
@@ -135,6 +137,16 @@ void WordView::onCopyWordInfo()
 	text += mTextWord.getKana().c_str();
 	text += "\nKanji: ";
 	text += mTextWord.getKanji().c_str();
+	text += "\nPitch Accents: ";
+	bool first = true;
+	for (auto pitchAccent : mTextWord.getPitchAccents())
+	{
+		if (!first) {
+			text += ", ";
+		}
+		first = false;
+		text += std::to_string(pitchAccent).c_str();
+	}
 
 	QClipboard* clipboard = QApplication::clipboard();
 	clipboard->setText(text, QClipboard::Clipboard);
@@ -149,7 +161,6 @@ void WordView::onCopyWordInfo()
 #endif
 	constexpr int second = 1000; //1000 milliseconds in 1 second
 	constexpr int tooltipDuration = 3 * second; // tooltip is shown for 3 seconds
-	//setToolTip(tr("Word info copied to clipboard."));
 	QToolTip::showText(mCopyButton->mapToGlobal(mCopyButton->rect().topLeft()), tr("Word info copied to clipboard."),
 		nullptr, {}, tooltipDuration);
 }
@@ -169,7 +180,15 @@ void WordView::onToggledShowMore(bool checked)
 	layout->setRowVisible(mNotesEdit, false);
 }
 
+void WordView::onNotesTextChanged()
+{
+	mRequiresNotesUpdate = true;
+}
+
 WordView::~WordView()
 {
+	if (mRequiresNotesUpdate) {
+		mTextWord.setNotes(mNotesEdit->toPlainText().toStdString());
+	}
 	emit closeDialog();
 }

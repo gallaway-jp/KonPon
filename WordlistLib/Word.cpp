@@ -66,6 +66,17 @@ const std::set<uint8_t>& Word::getPitchAccents() const
     return mPitchAccents;
 }
 
+const std::string& Word::getNotes() const
+{
+    return mNotes;
+}
+
+void Word::setNotes(const std::string& notes)
+{
+    mNotes = notes;
+    writeWord();
+}
+
 bool Word::erase()
 {
     if (mWorkspace.empty())
@@ -101,29 +112,26 @@ void Word::readWord()
     }
 
     QJsonObject jsonObject = doc.object();
-    if (!jsonObject.contains("textIds")
-        || !jsonObject.contains("pitchAccents")) {
-        return;
-    }
-    QJsonValue textIdsValue = jsonObject.value("textIds");
-    if (!textIdsValue.isArray()) {
-        return;
-    }
-    QJsonValue pitchAccentsValue = jsonObject.value("pitchAccents");
-    if (!pitchAccentsValue.isArray()) {
-        return;
-    }
-    QJsonArray textIds = textIdsValue.toArray();
-    for (QJsonValue val : textIds) {
-        if (val.isDouble()) {
-            mTextIds.insert(val.toInteger());
+    if (jsonObject.contains("textIds") && jsonObject["textIds"].isArray()) {
+        QJsonArray textIds = jsonObject["textIds"].toArray();
+        for (QJsonValue val : textIds) {
+            if (val.isDouble()) {
+                mTextIds.insert(val.toInteger());
+            }
         }
     }
-    QJsonArray pitchAccents = pitchAccentsValue.toArray();
-    for (QJsonValue val : pitchAccents) {
-        if (val.isDouble()) {
-            mPitchAccents.insert(static_cast<uchar>(val.toVariant().toUInt()));
+
+    if (jsonObject.contains("pitchAccents") && jsonObject["pitchAccents"].isArray()) {
+        QJsonArray pitchAccents = jsonObject["pitchAccents"].toArray();
+        for (QJsonValue val : pitchAccents) {
+            if (val.isDouble()) {
+                mPitchAccents.insert(static_cast<uchar>(val.toVariant().toUInt()));
+            }
         }
+    }
+
+    if (jsonObject.contains("notes") && jsonObject["notes"].isString()) {
+        mNotes = jsonObject["notes"].toString().toStdString();
     }
 }
 
@@ -142,16 +150,24 @@ bool Word::writeWord()
 
     QJsonObject jsonObject;
     QJsonArray jsonArray;
-    for (qint64 textId : mTextIds) {
-        jsonArray.append(QJsonValue(textId));
+    if (!mTextIds.empty()) {
+        for (qint64 textId : mTextIds) {
+            jsonArray.append(QJsonValue(textId));
+        }
+        jsonObject.insert("textIds", QJsonValue(jsonArray));
     }
-    jsonObject.insert("textIds", QJsonValue(jsonArray));
 
-    jsonArray = QJsonArray();
-    for (uchar pitchAccent : mPitchAccents) {
-        jsonArray.append(QJsonValue(pitchAccent));
+    if (!mPitchAccents.empty()) {
+        jsonArray = QJsonArray();
+        for (uchar pitchAccent : mPitchAccents) {
+            jsonArray.append(QJsonValue(pitchAccent));
+        }
+        jsonObject.insert("pitchAccents", QJsonValue(jsonArray));
     }
-    jsonObject.insert("pitchAccents", QJsonValue(jsonArray));
+
+    if (!mNotes.empty()) {
+        jsonObject.insert("notes", mNotes.c_str());
+    }
 
     result = file.write(QJsonDocument(jsonObject).toJson()) > 0 ? true : false;
     file.close();
