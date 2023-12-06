@@ -26,7 +26,9 @@ BottomMenu::BottomMenu(QWidget* parent, TextTree* textTree, Settings* settings, 
     addTextButton->setPopupMode(QToolButton::MenuButtonPopup);
     addTextButton->setText(tr("Add Text"));
     QAction* addAudioAction = addTextButton->addAction(tr("Add Audio"));
+    addAudioAction->setEnabled(false);
     QAction* addTextAudioAction = addTextButton->addAction(tr("Add Text & Audio"));
+    addTextAudioAction->setEnabled(false);
 
     QPushButton* deleteFolderButton = new QPushButton(tr("Delete Folder"));
     QPushButton* deleteTextButton = new QPushButton(tr("Delete Text"));

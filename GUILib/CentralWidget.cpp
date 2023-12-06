@@ -5,6 +5,7 @@
 #include "BottomMenu.h"
 
 #include <QVBoxLayout>
+
 #include <Wordlists.h>
 
 CentralWidget::CentralWidget(QWidget* parent, Settings* settings)
