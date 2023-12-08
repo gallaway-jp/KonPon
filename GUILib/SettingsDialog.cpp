@@ -31,7 +31,7 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::RestoreDefaults);
 	QPushButton* clearDataButton = buttonBox->addButton(tr("Clear Data"), QDialogButtonBox::ActionRole);
-	connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &SettingsDialog::restoreDefaults);
+	connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &SettingsDialog::restoreAllDefaults);
 	connect(clearDataButton, &QPushButton::clicked, this, &SettingsDialog::clearData);
 
 	mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
@@ -43,6 +43,10 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 	connect(this, &SettingsDialog::applySettings, fileTab, &FileTab::onApplySettings);
 	connect(this, &SettingsDialog::applySettings, uiTab, &UITab::onApplySettings);
 	connect(this, &SettingsDialog::applySettings, ankiTab, &AnkiTab::onApplySettings);
+
+	connect(this, &SettingsDialog::restoreDefaults, fileTab, &FileTab::onRestoreDefaults);
+	connect(this, &SettingsDialog::restoreDefaults, uiTab, &UITab::onRestoreDefaults);
+	connect(this, &SettingsDialog::restoreDefaults, ankiTab, &AnkiTab::onRestoreDefaults);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(mTabWidget);
@@ -83,6 +87,12 @@ void SettingsDialog::clearData()
 		QMessageBox::information(this, tr("Clearing Data"), tr("Data will be cleared when KonPon is closed."));
 		m_settings->clearDataOnTermination();
 	}
+}
+
+void SettingsDialog::restoreAllDefaults()
+{
+	emit restoreDefaults();
+	onChange();
 }
 
 void SettingsDialog::onChange()
@@ -131,6 +141,11 @@ void FileTab::onApplySettings()
 	mSettings->mFile.setWorkspace(mWorkspaceLineEdit->text());
 }
 
+void FileTab::onRestoreDefaults()
+{
+	mWorkspaceLineEdit->setText(mSettings->mFile.defaultWorkspace);
+}
+
 UITab::UITab(Settings* settings)
 	: QWidget(nullptr), mSettings(settings)
 {
@@ -169,6 +184,11 @@ void UITab::onApplySettings()
 	mSettings->ui.setTheme(static_cast<Settings::Theme>(m_themeCombo->currentData().toInt()));
 }
 
+void UITab::onRestoreDefaults()
+{
+	m_themeCombo->setCurrentIndex(m_themeCombo->findData(static_cast<int>(Settings::Theme::Default)));
+}
+
 AnkiTab::AnkiTab(Settings* settings)
 	: QWidget(nullptr), mSettings(settings)
 {
@@ -185,4 +205,9 @@ AnkiTab::AnkiTab(Settings* settings)
 void AnkiTab::onApplySettings()
 {
 	mSettings->mAnki.setEnableAnkiConnectFeature(mEnableAnkiConnectCheckbox->isChecked());
+}
+
+void AnkiTab::onRestoreDefaults()
+{
+	mEnableAnkiConnectCheckbox->setChecked(true);
 }

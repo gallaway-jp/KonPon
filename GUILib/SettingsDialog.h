@@ -32,6 +32,7 @@ private:
     void reject();
     void apply();
     void clearData();
+    void restoreAllDefaults();
 
 signals:
     void applySettings();
@@ -59,6 +60,7 @@ signals:
     void onChange();
 public slots:
     void onApplySettings();
+    void onRestoreDefaults();
 private:
     Settings* mSettings = nullptr;
     QLineEdit* mWorkspaceLineEdit = nullptr;
@@ -74,6 +76,7 @@ public:
     explicit UITab(Settings* settings);
 public slots:
     void onApplySettings();
+    void onRestoreDefaults();
 private:
     Settings* mSettings = nullptr;
     QComboBox* m_themeCombo = nullptr;
@@ -92,7 +95,7 @@ signals:
     void onChange();
 public slots:
     void onApplySettings();
-
+    void onRestoreDefaults();
 private:
     Settings* mSettings = nullptr;
     QCheckBox* mEnableAnkiConnectCheckbox;

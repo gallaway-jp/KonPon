@@ -23,6 +23,9 @@ private:
 		~File();
 		void setWorkspace(const QString& workspace);
 		QString workspace;
+		QString defaultWorkspace;
+	private:
+		
 	private:
 		void ReadSettings();
 		void WriteSettings();

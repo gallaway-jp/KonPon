@@ -26,6 +26,8 @@ void Settings::clearDataOnTermination()
 
 Settings::File::File()
 {
+	defaultWorkspace = QCoreApplication::applicationDirPath();
+
 	ReadSettings();
 }
 
@@ -44,7 +46,7 @@ void Settings::File::ReadSettings()
 	QSettings settings;
 	settings.beginGroup("File");
 
-	workspace = settings.value("workspace", QCoreApplication::applicationDirPath()).toString();
+	workspace = settings.value("workspace", defaultWorkspace).toString();
 	settings.endGroup();
 }
 
@@ -56,10 +58,6 @@ void Settings::File::WriteSettings()
 	settings.endGroup();
 }
 
-#include <QJsonDocument>
-#include <QJsonObject>
-#include <QFile>
-#include <QMetaEnum>
 Settings::UI::UI()
 {
 	m_isSystemDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
@@ -150,9 +148,7 @@ void Settings::UI::setTheme(Settings::Theme theme)
 		switch (theme)
 		{
 		case Settings::Default:
-			if (m_isSystemDarkMode) {
-				setPalette(Settings::Dark);
-			}
+			setPalette(m_isSystemDarkMode ? Settings::Dark : Settings::Light);
 			break;
 		case Settings::Light:
 		case Settings::Dark:
