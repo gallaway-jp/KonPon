@@ -1,11 +1,14 @@
 #pragma once
 #include <qdialog.h>
 
+QT_BEGIN_NAMESPACE
 class QString;
 class QTabWidget;
 class QDialogButtonBox;
 class QCheckBox;
 class QLineEdit;
+class QComboBox;
+QT_END_NAMESPACE
 
 class Settings;
 
@@ -17,6 +20,7 @@ public:
     SettingsDialog(Settings* settings, bool& settingsDialogOpened);
 
 private:
+    Settings* m_settings = nullptr;
     bool& mSettingsDialogOpened;
     bool hasChanges = false;
 
@@ -27,9 +31,11 @@ private:
     void accept();
     void reject();
     void apply();
+    void clearData();
 
 signals:
     void applySettings();
+    void restoreDefaults();
 
 public slots:
     void onChange();
@@ -65,8 +71,12 @@ class UITab : public QWidget
     Q_OBJECT
 
 public:
-    explicit UITab(QWidget* parent = nullptr);
-
+    explicit UITab(Settings* settings);
+public slots:
+    void onApplySettings();
+private:
+    Settings* mSettings = nullptr;
+    QComboBox* m_themeCombo = nullptr;
 signals:
     void onChange();
 };

@@ -14,7 +14,5 @@ public:
     ~MainWindow();
     void changeEvent(QEvent* event);
 private:
-    bool _mIsDarkMode = false;
     Settings* mSettings;
-    Wordlists* mWordlists;
 };

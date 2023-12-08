@@ -2,17 +2,18 @@
 
 #include "Settings.h"
 
-#include "QTabWidget.h"
-#include "QDialogButtonBox.h"
-#include "QCheckBox.h"
-#include "QPushButton.h"
-#include "QFormLayout.h"
-#include "QLabel.h"
-#include "QComboBox.h"
-#include "QLineEdit.h"
+#include <QTabWidget>
+#include <QDialogButtonBox>
+#include <QCheckBox>
+#include <QPushButton>
+#include <QFormLayout>
+#include <QLabel>
+#include <QComboBox>
+#include <QLineEdit>
+#include <QMessageBox>
 
 SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
-	: mSettingsDialogOpened(settingsDialogOpened),
+	: mSettingsDialogOpened(settingsDialogOpened), m_settings(settings),
 	QDialog(nullptr)
 {
 	mTabWidget = new QTabWidget;
@@ -21,12 +22,17 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 	mTabWidget->addTab(fileTab, tr("File"));
 	connect(fileTab, &FileTab::onChange, this, &SettingsDialog::onChange);
 
-	UITab* uiTab = new UITab;
+	UITab* uiTab = new UITab(settings);
 	mTabWidget->addTab(uiTab, tr("UI"));
 	connect(uiTab, &UITab::onChange, this, &SettingsDialog::onChange);
 	AnkiTab* ankiTab = new AnkiTab(settings);
 	mTabWidget->addTab(ankiTab, tr("Anki"));
 	connect(ankiTab, &AnkiTab::onChange, this, &SettingsDialog::onChange);
+
+	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::RestoreDefaults);
+	QPushButton* clearDataButton = buttonBox->addButton(tr("Clear Data"), QDialogButtonBox::ActionRole);
+	connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &SettingsDialog::restoreDefaults);
+	connect(clearDataButton, &QPushButton::clicked, this, &SettingsDialog::clearData);
 
 	mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
 	connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -35,10 +41,12 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
 
 	connect(this, &SettingsDialog::applySettings, fileTab, &FileTab::onApplySettings);
+	connect(this, &SettingsDialog::applySettings, uiTab, &UITab::onApplySettings);
 	connect(this, &SettingsDialog::applySettings, ankiTab, &AnkiTab::onApplySettings);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(mTabWidget);
+	mainLayout->addWidget(buttonBox);
 	mainLayout->addWidget(mButtonBox);
 	setLayout(mainLayout);
 
@@ -64,6 +72,17 @@ void SettingsDialog::apply()
 	hasChanges = false;
 	emit applySettings();
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
+}
+
+void SettingsDialog::clearData()
+{
+	int result = QMessageBox::warning(this, tr("Clearing Data"),
+		tr("You are about to clear all data including\nimported texts, word lists, and settings.\nAre you sure?"),
+		QMessageBox::Yes | QMessageBox::No);
+	if (result == QMessageBox::Yes) {
+		QMessageBox::information(this, tr("Clearing Data"), tr("Data will be cleared when KonPon is closed."));
+		m_settings->clearDataOnTermination();
+	}
 }
 
 void SettingsDialog::onChange()
@@ -112,20 +131,21 @@ void FileTab::onApplySettings()
 	mSettings->mFile.setWorkspace(mWorkspaceLineEdit->text());
 }
 
-UITab::UITab(QWidget* parent)
-	: QWidget(parent)
+UITab::UITab(Settings* settings)
+	: QWidget(nullptr), mSettings(settings)
 {
-	/*QFormLayout* layout = new QFormLayout(this);
+	QFormLayout* layout = new QFormLayout(this);
 	layout->setHorizontalSpacing(50);
 
-	QComboBox* themeCombo = new QComboBox;
-	themeCombo->setEditable(false);
-	themeCombo->addItem(tr("Default"));
-	themeCombo->addItem(tr("Light"));
-	themeCombo->addItem(tr("Dark"));
-	connect(themeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
+	m_themeCombo = new QComboBox;
+	m_themeCombo->setEditable(false);
+	m_themeCombo->addItem(tr("Default"), static_cast<int>(Settings::Theme::Default));
+	m_themeCombo->addItem(tr("Light"), static_cast<int>(Settings::Theme::Light));
+	m_themeCombo->addItem(tr("Dark"), static_cast<int>(Settings::Theme::Dark));
+	m_themeCombo->setCurrentIndex(m_themeCombo->findData(static_cast<int>(mSettings->ui.getTheme())));
+	connect(m_themeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
 
-	QComboBox* languageCombo = new QComboBox;
+	/*QComboBox* languageCombo = new QComboBox;
 	languageCombo->setEditable(false);
 	languageCombo->addItem(tr("Default"));
 	languageCombo->addItem(tr("English"));
@@ -137,11 +157,16 @@ UITab::UITab(QWidget* parent)
 	textSizeCombo->addItem(tr("Small"));
 	textSizeCombo->addItem(tr("Medium"));
 	textSizeCombo->addItem(tr("Large"));
-	connect(textSizeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
+	connect(textSizeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);*/
 
-	layout->addRow(tr("Theme"), themeCombo);
-	layout->addRow(tr("Language"), languageCombo);
+	layout->addRow(tr("Theme"), m_themeCombo);
+	/*layout->addRow(tr("Language"), languageCombo);
 	layout->addRow(tr("Text Size"), textSizeCombo);*/
+}
+
+void UITab::onApplySettings()
+{
+	mSettings->ui.setTheme(static_cast<Settings::Theme>(m_themeCombo->currentData().toInt()));
 }
 
 AnkiTab::AnkiTab(Settings* settings)

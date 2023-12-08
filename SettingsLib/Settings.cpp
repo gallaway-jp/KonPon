@@ -2,12 +2,31 @@
 
 #include <QSettings>
 #include <QString>
+#include <QCoreApplication>
+#include <QGuiApplication>
+#include <QStyleHints>
+#include <QPalette>
+#include <QDir>
 
-Settings::Settings(QString& appPath) : mFile(appPath), mParser() {}
+Settings::Settings() : mFile(), ui(), mParser() {}
 
-Settings::File::File(const QString& appPath)
+Settings::~Settings()
 {
-	ReadSettings(appPath);
+	if (m_clearDataOnTermination) {
+		QSettings settings;
+		settings.clear();
+		QDir(mFile.workspace + QString("/KonPonData")).removeRecursively();
+	}
+}
+
+void Settings::clearDataOnTermination()
+{
+	m_clearDataOnTermination = true;
+}
+
+Settings::File::File()
+{
+	ReadSettings();
 }
 
 Settings::File::~File()
@@ -20,11 +39,12 @@ void Settings::File::setWorkspace(const QString& workspace)
 	this->workspace = workspace;
 }
 
-void Settings::File::ReadSettings(const QString& appPath)
+void Settings::File::ReadSettings()
 {
 	QSettings settings;
 	settings.beginGroup("File");
-	workspace = settings.value("workspace", appPath).toString();
+
+	workspace = settings.value("workspace", QCoreApplication::applicationDirPath()).toString();
 	settings.endGroup();
 }
 
@@ -34,6 +54,132 @@ void Settings::File::WriteSettings()
 	settings.beginGroup("File");
 	settings.setValue("workspace", workspace);
 	settings.endGroup();
+}
+
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QFile>
+#include <QMetaEnum>
+Settings::UI::UI()
+{
+	m_isSystemDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
+
+	ReadSettings();
+}
+
+Settings::UI::~UI()
+{
+	WriteSettings();
+}
+
+void Settings::UI::ReadSettings()
+{
+	QSettings settings;
+	settings.beginGroup("UI");
+	m_theme = static_cast<Theme>(settings.value("theme", static_cast<Theme>(Theme::Default)).toInt());
+	if (m_theme != Theme::Default) {
+		if ((m_isSystemDarkMode && m_theme != Theme::Dark)
+			|| (!m_isSystemDarkMode && m_theme == Theme::Dark)) {
+			setPalette(m_theme);
+		}
+	}
+	settings.endGroup();
+}
+
+void Settings::UI::WriteSettings()
+{
+	QSettings settings;
+	settings.beginGroup("UI");
+	settings.setValue("theme", static_cast<int>(m_theme));
+	settings.endGroup();
+}
+
+void Settings::UI::setPalette(Theme theme) {
+	struct PaletteItem {
+		QPalette::ColorRole role;
+		unsigned int activeDarkColor;
+		unsigned int disabledDarkColor;
+		unsigned int inactiveDarkColor;
+		unsigned int activeLightColor;
+		unsigned int disabledLightColor;
+		unsigned int inactiveLightColor;
+	};
+
+	QPalette::ColorRole;
+	QPalette palette = QGuiApplication::palette();
+	std::vector<PaletteItem> paletteItems = {
+		{QPalette::Accent, 0xff0078d7, 0xff0078d7, 0xff0078d7, 0xff0078d7, 0xff787878, 0xfff0f0f0},
+		{QPalette::AlternateBase, 0xff002642, 0xf343434, 0xff002642, 0xffe9e7e3, 0xfff7f7f7, 0xffe9e7e3},
+		{QPalette::Base, 0xff2d2d2d, 0xff1e1e1e, 0xff2d2d2d, 0xffffffff, 0xfff0f0f0, 0xffffffff},
+		{QPalette::BrightText, 0xffa6d8ff, 0xffa6d8ff, 0xffa6d8ff, 0xffffffff, 0xffffffff, 0xffffffff},
+		{QPalette::Button, 0xff3c3c3c, 0xff3c3c3c, 0xff3c3c3c, 0xfff0f0f0, 0xfff0f0f0, 0xfff0f0f0},
+		{QPalette::ButtonText, 0xffffffff, 0xff9d9d9d, 0xffffffff, 0xff000000, 0xff787878, 0xff000000},
+		{QPalette::Dark, 0xff1e1e1e, 0xff1e1e1e, 0xff1e1e1e, 0xffa0a0a0, 0xffa0a0a0, 0xffa0a0a0},
+		{QPalette::Highlight, 0xff0078d7, 0xff0078d7, 0xff1e1e1e, 0xff0078d7, 0xff0078d7, 0xfff0f0f0},
+		{QPalette::HighlightedText, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xffffffff, 0xff000000},
+		{QPalette::Light, 0xff787878, 0xff787878, 0xff787878, 0xffffffff, 0xffffffff, 0xffffffff},
+		{QPalette::Link, 0xff0078d7, 0xff308cc6, 0xff0078d7, 0xff0078d7, 0xff0000ff, 0xff0078d7},
+		{QPalette::LinkVisited, 0xff002642, 0xffff00ff, 0xff002642, 0xff002642, 0xffff00ff, 0xff002642},
+		{QPalette::Mid, 0xff282828, 0xff282828, 0xff282828, 0xffa0a0a0, 0xffa0a0a0, 0xffa0a0a0},
+		{QPalette::Midlight, 0xff5a5a5a, 0xff5a5a5a, 0xff5a5a5a, 0xffe3e3e3, 0xfff7f7f7, 0xffe3e3e3},
+		{QPalette::NoRole, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000, 0xff000000},
+		{QPalette::PlaceholderText, 0x80ffffff, 0x80ffffff, 0x80ffffff, 0x80000000, 0x80000000, 0x80000000},
+		{QPalette::Shadow, 0xff000000, 0xff000000, 0xff000000, 0xff696969, 0xff000000, 0xff696969},
+		{QPalette::Text, 0xffffffff, 0xff9d9d9d, 0xffffffff, 0xff000000, 0xff787878, 0xff000000},
+		{QPalette::ToolTipBase, 0xff3c3c3c, 0xffffffdc, 0xff3c3c3c, 0xffffffdc, 0xffffffdc, 0xffffffdc},
+		{QPalette::ToolTipText, 0xffd4d4d4, 0xff000000, 0xffd4d4d4, 0xff000000, 0xff000000, 0xff000000},
+		{QPalette::Window, 0xff1e1e1e, 0xff1e1e1e, 0xff1e1e1e, 0xfff0f0f0, 0xfff0f0f0, 0xfff0f0f0},
+		{QPalette::WindowText, 0xffffffff, 0xff9d9d9d, 0xffffffff, 0xff000000, 0xff787878, 0xff000000},
+	};
+	for (const auto& item : paletteItems) {
+		palette.setColor(QPalette::Active, item.role, theme == Theme::Dark ? item.activeDarkColor : item.activeLightColor);
+		palette.setColor(QPalette::Disabled, item.role, theme == Theme::Dark ? item.disabledDarkColor : item.disabledLightColor);
+		palette.setColor(QPalette::Inactive, item.role, theme == Theme::Dark ? item.inactiveDarkColor : item.inactiveLightColor);
+	}
+	QGuiApplication::setPalette(palette);
+}
+
+Settings::Theme Settings::UI::getTheme()
+{
+	return m_theme;
+}
+
+void Settings::UI::setTheme(Settings::Theme theme)
+{
+	if (m_theme != theme) {
+		switch (theme)
+		{
+		case Settings::Default:
+			if (m_isSystemDarkMode) {
+				setPalette(Settings::Dark);
+			}
+			break;
+		case Settings::Light:
+		case Settings::Dark:
+		default:
+			setPalette(theme);
+			break;
+		};
+		m_theme = theme;
+	}
+}
+
+bool Settings::UI::isDarkTheme()
+{
+	switch (m_theme)
+	{
+	case Settings::Default:
+		if (m_isSystemDarkMode) {
+			return true;
+		}
+		return false;
+	case Settings::Light:
+		return false;
+	case Settings::Dark:
+		return true;
+	default:
+		return false;
+	}
 }
 
 Settings::Anki::Anki()

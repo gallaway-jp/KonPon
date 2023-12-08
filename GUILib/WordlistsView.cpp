@@ -469,7 +469,8 @@ void WordlistsView::onDeleteRightWords()
 
 void WordlistsView::onEditList(QComboBox* combobox)
 {
-	EditWordlistDialog dialog(this, combobox->currentData().toInt(), combobox->currentText(), combobox->itemData(combobox->currentIndex(), Qt::UserRole + 1).toInt());
+	EditWordlistDialog dialog(this, combobox->currentData().toInt(), combobox->currentText(),
+		combobox->itemData(combobox->currentIndex(), Qt::UserRole + 1).toInt(), mSettings);
 	if (dialog.exec()) {
 		WordListInfo::Color color = static_cast<WordListInfo::Color>(dialog.result);
 		setItemColor(combobox, combobox->currentIndex(), color);
@@ -495,7 +496,9 @@ void WordlistsView::onEditList(QComboBox* combobox)
 void WordlistsView::setItemColor(QComboBox *combobox, int index, WordListInfo::Color color)
 {
 	combobox->setItemData(index, static_cast<int>(color), Qt::UserRole + 1);
-	QColor qcolor = QColor(Qt::GlobalColor(WordListInfo::Colors.at(color).second));
+	QColor qcolor = QColor(Qt::GlobalColor(
+		mSettings->ui.isDarkTheme() ? WordListInfo::Colors.at(color).second
+		: WordListInfo::Colors.at(color).first));
 	combobox->setItemData(index, qcolor, Qt::DecorationRole);
 }
 

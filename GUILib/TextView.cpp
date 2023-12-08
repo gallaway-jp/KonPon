@@ -20,7 +20,8 @@
 #include <QLabel>
 
 TextView::TextView(QWidget* parent, uint64_t fileId, Settings* settings, Wordlists& wordlists)
-	: m_currentPage(0), mFileId(fileId), mWordlists(wordlists), mTextWords(fileId, settings->mFile.workspace.toStdString()),
+	: m_currentPage(0), mFileId(fileId), mWordlists(wordlists), 
+    mTextWords(fileId, settings->mFile.workspace.toStdString()), m_settings(settings),
     QDialog(parent)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
@@ -218,8 +219,9 @@ void TextView::highlightWords(const Wordlist& words, bool setHighlight)
     if (setHighlight) {
         auto color = words.getColor();
         if (color != WordListInfo::Color::NOCOLOR) {
-            // TODO set based on theme: dark(second) vs white(first)
-            fmt.setBackground(static_cast<Qt::GlobalColor>(WordListInfo::Colors.at(color).second));
+            fmt.setBackground(static_cast<Qt::GlobalColor>(
+                m_settings->ui.isDarkTheme() ? WordListInfo::Colors.at(color).second
+                : WordListInfo::Colors.at(color).first));
         }
     }
 

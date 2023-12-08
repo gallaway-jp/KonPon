@@ -15,6 +15,7 @@ inline MainWindow::MainWindow(QWidget* parent)
     : QMainWindow(parent)
 {
     QApplication::setStyle("fusion");
+    QString styleSheetString = qApp->styleSheet();
 
     QDir resDir = QDir(":/res");
     for (const QFileInfo& fileinfo : resDir.entryInfoList()) {
@@ -23,24 +24,15 @@ inline MainWindow::MainWindow(QWidget* parent)
     }
 
     QTranslator translator;
-    //if (translator.load("Translation_ja.qm", ":/res/translations")) {
     if (translator.load("", ":/res/translations")) {
         QCoreApplication::installTranslator(&translator);
     }
     
-
     QCoreApplication::setOrganizationName("Colin Gallaway");
     QCoreApplication::setOrganizationDomain("https://github.com/gallaway-jp/KonPon");
     QCoreApplication::setApplicationName("KonPon");
 
-    _mIsDarkMode = QApplication::palette().color(QPalette::Window).black() >= 225;
-    
-    QGuiApplication::styleHints()->colorScheme();
-    //this->style()->styleHint(QStyle::colors)
-
-    QString appDirPath = QCoreApplication::applicationDirPath();
-    mSettings = new Settings(appDirPath);
-    //mWordlists = new Wordlists(mSettings->mFile.workspace.toStdString());
+    mSettings = new Settings();
 
     CentralWidget *centralWidget = new CentralWidget(this, mSettings);
 
@@ -77,6 +69,5 @@ inline void MainWindow::changeEvent(QEvent* event)
 
 inline MainWindow::~MainWindow()
 {
-    //delete mWordlists;
     delete mSettings;
 }

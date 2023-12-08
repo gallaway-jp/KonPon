@@ -10,8 +10,8 @@
 #include "QString"
 #include <QDialogButtonBox>
 
-EditWordlistDialog::EditWordlistDialog(QWidget* parent, int WordlistType, const QString& wordlistname, int currentColor)
-	: QDialog(parent)
+EditWordlistDialog::EditWordlistDialog(QWidget* parent, int WordlistType, const QString& wordlistname, int currentColor, Settings* settings)
+	: QDialog(parent), m_settings(settings)
 {
     switch (WordlistType)
     {
@@ -73,11 +73,10 @@ QComboBox* EditWordlistDialog::createColorCombobox()
 	};
 
     for (uint8_t i = 0; i < colors.size(); i++) {
-        //Dark theme
-		QColor qcolor(colors[i].first.second);
+		QColor qcolor(m_settings->ui.isDarkTheme() ? colors[i].first.second
+            : colors[i].first.first);
         
         combobox->insertItem(i, colors[i].second);
-        //combobox->insertItem(i, getColorName(qcolor));
         combobox->setItemData(i, qcolor, Qt::DecorationRole);
 	}
 

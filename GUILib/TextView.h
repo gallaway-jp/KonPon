@@ -30,6 +30,7 @@ public:
     void closeDialog();
     //void highlightCustomWordlist(const std::string& name, bool setHighlight = true);
 private:
+    Settings* m_settings = nullptr;
     int64_t mFileId;
     TextWords mTextWords;
     Wordlists& mWordlists;
