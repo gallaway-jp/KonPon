@@ -36,6 +36,8 @@ TextTree::TextTree(QWidget* parent, Settings* settings, Wordlists* wordlists)
 
     QTreeView::setDragDropMode(QAbstractItemView::InternalMove);
     QTreeView::setHeaderHidden(true);
+
+    connect(this, &TextTree::textsTokenized, this, &TextTree::onTextsTokenized);
 }
 
 void TextTree::dragEnterEvent(QDragEnterEvent *event)
@@ -458,7 +460,7 @@ void TextTree::tokenizeTexts(const QStringList filePaths, const QString workspac
     mergedWords.setWorkspace(workspace.toStdString());
 
 
-    emit onTextsTokenized();
+    emit textsTokenized();
 }
 
 std::pair<Wordlist, Words> TextTree::tokenizeText(const QString filePath, const QString workspace, const std::string fileId)

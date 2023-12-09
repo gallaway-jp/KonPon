@@ -74,6 +74,7 @@ signals:
     void viewTextClicked(int64_t textId);
     void addTextId(int64_t textId, const std::string& name);
     void removeTextId(int64_t textId);
+    void textsTokenized();
 
 public slots:
     //void onAddFolderClicked();

@@ -32,4 +32,5 @@ signals:
     void viewTextClicked();
     void viewWordClicked(const std::string& kana, const std::string& kanji);
     void closeWordViewWindow(const std::string& kana, const std::string& kanji);
+    void textsTokenized();
 };

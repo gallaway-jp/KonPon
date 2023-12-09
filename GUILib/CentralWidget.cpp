@@ -24,6 +24,7 @@ CentralWidget::CentralWidget(QWidget* parent, Settings* settings)
     connect(mTextTree, &TextTree::viewTextClicked, mDlgMgr, &DialogManager::onViewTextClicked);
     connect(mTextTree, &TextTree::addTextId, mDlgMgr, &DialogManager::onAddTextId);
     connect(mTextTree, &TextTree::removeTextId, mDlgMgr, &DialogManager::onRemoveTextId);
+    connect(mTextTree, &TextTree::textsTokenized, bottomMenu, &BottomMenu::textsTokenized);
     
     connect(bottomMenu, &BottomMenu::viewWordClicked, mDlgMgr, &DialogManager::onViewWordClicked);
     connect(bottomMenu, &BottomMenu::closeWordViewWindow, mDlgMgr, &DialogManager::onCloseWordViewWindow);

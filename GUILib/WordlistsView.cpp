@@ -19,10 +19,14 @@
 WordlistsView::WordlistsView(QWidget* parent, TextTree* textTree, Settings* settings, Wordlists& wordlists)
 	: QDialog(parent), mTextTree(textTree), mWordlists(wordlists), mSettings(settings)
 {
+	this->setUpdatesEnabled(false);
+
 	this->setWindowFlag(Qt::WindowMaximizeButtonHint);
 	this->setWindowFlag(Qt::WindowMinimizeButtonHint);
 	createLists();
 	createConnects();
+
+	this->setUpdatesEnabled(true);
 }
 
 void WordlistsView::createLists()
@@ -96,19 +100,8 @@ void WordlistsView::createLists()
 	mKnownList->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	mRightStack->setCurrentIndex(mRightStack->addWidget(mKnownList));
 
-	
-	for (const auto& [kana, kanji] : mWordlists.getUnknownWordlist()) {
-		QListWidgetItem* item = new QListWidgetItem();
-		item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-		item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-		mUnknownList->addItem(item);
-	}
-	for (const auto& [kana, kanji] : mWordlists.getKnownWordlist()) {
-		QListWidgetItem* item = new QListWidgetItem();
-		item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-		item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-		mKnownList->addItem(item);
-	}
+	insertWordsFromUnknownWordlistIntoListWidget();
+	insertWordsFromKnownWordlistIntoListWidget();
 
 	mAddCustomListButton = new QPushButton(tr("Add Custom List"));
 	mDeleteCustomListButton = new QPushButton(tr("Delete Custom List"));
@@ -162,6 +155,7 @@ void WordlistsView::onRightChange(int index)
 
 void WordlistsView::setCurrentList(QStackedWidget* stack, QComboBox* combobox)
 {
+	this->setUpdatesEnabled(false);
 	switch (combobox->currentData().toInt())
 	{
 	case 1:
@@ -177,15 +171,9 @@ void WordlistsView::setCurrentList(QStackedWidget* stack, QComboBox* combobox)
 		if (iter == mCustomLists.end()) {
 			mCustomLists[currentText] = new QListWidget();
 			mCustomLists[currentText]->setSelectionMode(QAbstractItemView::ExtendedSelection);
-			for (const auto& [kana, kanji] : mWordlists.getCustomWordlist(currentText)) {
-				QListWidgetItem* item = new QListWidgetItem();
-				item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-				item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-				mCustomLists[currentText]->addItem(item);
-			}
+			insertWordsFromCustomWordlistIntoListWidget(currentText);
 			connect(mCustomLists[currentText], &QListWidget::itemDoubleClicked, this, &WordlistsView::onItemDoubleClicked);
-		}
-		if (stack->indexOf(mCustomLists[currentText]) == -1) {
+			
 			stack->addWidget(mCustomLists[currentText]);
 		}
 		stack->setCurrentWidget(mCustomLists[currentText]);
@@ -194,11 +182,8 @@ void WordlistsView::setCurrentList(QStackedWidget* stack, QComboBox* combobox)
 	default:
 		break;
 	}
+	this->setUpdatesEnabled(true);
 }
-// TODO add method to update a QListWidget if already exists when a Wordlist changes
-// use QListWidget->clear to delete all items in list
-// void WordlistsView::updateList(int wordlistType, const std::string& customListName = "")
-
 
 void WordlistsView::onComboboxChange(QComboBox* activeCombobox, QComboBox* inactiveCombobox, std::string& previousItem, int index)
 {
@@ -249,7 +234,7 @@ void WordlistsView::onAddCustomList()
 
 void WordlistsView::onDeleteCustomList()
 {
-
+	this->setUpdatesEnabled(false);
 	DeleteWordlistDialog dialog(mWordlists.getCustomWordlistNames());
 	if (dialog.exec()) {
 		const auto& [deleteListName, destination] = dialog.result;
@@ -265,34 +250,16 @@ void WordlistsView::onDeleteCustomList()
 			switch (destinationType)
 			{
 			case 1:
-				mUnknownList->clear();
 				mWordlists.moveWordsToUnknownWordlist(deleteList, deleteListName);
-				for (const auto& [kana, kanji] : mWordlists.getUnknownWordlist()) {
-					QListWidgetItem* item = new QListWidgetItem();
-					item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-					item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-					mUnknownList->addItem(item);
-				}
+				insertWordsFromUnknownWordlistIntoListWidget();
 				break;
 			case 2:
-				mKnownList->clear();
 				mWordlists.moveWordsToKnownWordlist(deleteList, deleteListName);
-				for (const auto& [kana, kanji] : mWordlists.getKnownWordlist()) {
-					QListWidgetItem* item = new QListWidgetItem();
-					item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-					item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-					mKnownList->addItem(item);
-				}
+				insertWordsFromKnownWordlistIntoListWidget();
 				break;
 			case 3:
-				mCustomLists[destinationListName]->clear();
 				mWordlists.moveWordsToCustomWordlist(deleteList, destinationListName, deleteListName);
-				for (const auto& [kana, kanji] : mWordlists.getCustomWordlist(destinationListName)) {
-					QListWidgetItem* item = new QListWidgetItem();
-					item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-					item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-					mCustomLists[destinationListName]->addItem(item);
-				}
+				insertWordsFromCustomWordlistIntoListWidget(destinationListName);
 				break;
 			default:
 				break;
@@ -317,10 +284,12 @@ void WordlistsView::onDeleteCustomList()
 		delete mCustomLists[deleteListName];
 		mCustomLists.erase(deleteListName);
 	}
+	this->setUpdatesEnabled(true);
 }
 
 void WordlistsView::deleteFromCombobox(QComboBox* combobox, const std::string& itemText)
 {
+	this->setUpdatesEnabled(false);
 	// Index of first custom list name in combobox
 	int firstCustomIndex = combobox->findData(3);
 
@@ -339,6 +308,7 @@ void WordlistsView::deleteFromCombobox(QComboBox* combobox, const std::string& i
 		combobox->removeItem(removeIndex);
 		setComboboxConnects(true);
 	}
+	this->setUpdatesEnabled(true);
 }
 
 void WordlistsView::onMoveRight()
@@ -354,6 +324,7 @@ void WordlistsView::onMoveLeft()
 // Move words to different list
 void WordlistsView::onMove(QComboBox* sourceCombobox, QComboBox* destCombobox, QStackedWidget* sourceStack, QStackedWidget* destStack)
 {
+	this->setUpdatesEnabled(false);
 	Wordlist moveList = Wordlist();
 	QListWidget* sourceList = dynamic_cast<QListWidget*>(sourceStack->currentWidget());
 	QListWidget* destList = dynamic_cast<QListWidget*>(destStack->currentWidget());
@@ -403,6 +374,7 @@ void WordlistsView::onMove(QComboBox* sourceCombobox, QComboBox* destCombobox, Q
 	}
 
 	sourceList->clearSelection();
+	this->setUpdatesEnabled(true);
 }
 
 void WordlistsView::onEditLeftList()
@@ -531,47 +503,32 @@ void WordlistsView::onAddWord(QListWidget* list, WordListInfo::Type type, const 
 		return;
 	}
 
+	this->setUpdatesEnabled(false);
 	Wordlist wordlist;
 	wordlist.insertWord(kana, kanji);
 	switch (type)
 	{
 	case WordListInfo::Type::UNKNOWN:
 		mWordlists.addWordsToUnknownWordlist(wordlist);
-		mUnknownList->clear();
-		for (const auto& [kana, kanji] : mWordlists.getUnknownWordlist()) {
-			QListWidgetItem* item = new QListWidgetItem();
-			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-			mUnknownList->addItem(item);
-		}
+		insertWordsFromUnknownWordlistIntoListWidget();
 		break;
 	case WordListInfo::Type::KNOWN:
 		mWordlists.addWordsToKnownWordlist(wordlist);
-		mKnownList->clear();
-		for (const auto& [kana, kanji] : mWordlists.getKnownWordlist()) {
-			QListWidgetItem* item = new QListWidgetItem();
-			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-			mKnownList->addItem(item);
-		}
+		insertWordsFromKnownWordlistIntoListWidget();
 		break;
 	case WordListInfo::Type::CUSTOM:
 		mWordlists.addWordsToCustomWordlist(wordlist, listName);
-		mCustomLists[listName]->clear();
-		for (const auto& [kana, kanji] : mWordlists.getCustomWordlist(listName)) {
-			QListWidgetItem* item = new QListWidgetItem();
-			item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
-			item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
-			mCustomLists[listName]->addItem(item);
-		}
+		insertWordsFromCustomWordlistIntoListWidget(listName);
 		break;
 	default:
 		break;
 	}
+	this->setUpdatesEnabled(true);
 }
 
 void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, const std::string& listName)
 {
+	this->setUpdatesEnabled(false);
 	for (auto item : list->selectedItems()) {
 		auto takenItem = list->takeItem(list->row(item));
 		QStringList qstrings = item->data(Qt::UserRole).toStringList();
@@ -600,6 +557,53 @@ void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, co
 			}
 		}
 		delete takenItem;
+	}
+	this->setUpdatesEnabled(true);
+}
+
+void WordlistsView::onReloadWordlists()
+{
+	this->setUpdatesEnabled(false);
+	insertWordsFromUnknownWordlistIntoListWidget();
+	insertWordsFromKnownWordlistIntoListWidget();
+	for (auto& [customListName, customListWidget] : mCustomLists) {
+		insertWordsFromCustomWordlistIntoListWidget(customListName);
+	}
+	this->setUpdatesEnabled(true);
+}
+
+void WordlistsView::insertWordsFromUnknownWordlistIntoListWidget()
+{
+	mUnknownList->clear();
+	for (const auto& [kana, kanji] : mWordlists.getUnknownWordlist()) {
+		QListWidgetItem* item = new QListWidgetItem();
+		item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+		item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+		mUnknownList->addItem(item);
+	}
+}
+
+void WordlistsView::insertWordsFromKnownWordlistIntoListWidget()
+{
+	mKnownList->clear();
+	for (const auto& [kana, kanji] : mWordlists.getKnownWordlist()) {
+		QListWidgetItem* item = new QListWidgetItem();
+		item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+		item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+		mKnownList->addItem(item);
+	}
+}
+
+void WordlistsView::insertWordsFromCustomWordlistIntoListWidget(const std::string& customListName)
+{
+	QListWidget* customListWidget = mCustomLists[customListName];
+
+	customListWidget->clear();
+	for (const auto& [kana, kanji] : mWordlists.getCustomWordlist(customListName)) {
+		QListWidgetItem* item = new QListWidgetItem();
+		item->setText(QString(kana.c_str()) + ", " + kanji.c_str());
+		item->setData(Qt::UserRole, { QStringList{QString(kana.c_str()), QString(kanji.c_str())} });
+		customListWidget->addItem(item);
 	}
 }
 

@@ -70,6 +70,7 @@ public slots:
     void onEditLeftList();
     void onEditRightList();
     void onEditList(QComboBox* combobox);
+    void onReloadWordlists();
 private slots:
     void onAddLeftWord();
     void onAddRightWord();
@@ -82,4 +83,7 @@ private:
     void onItemDoubleClicked(QListWidgetItem* item);
     void onAddWord(QListWidget* list, WordListInfo::Type type, const std::string& listName);
     void onDeleteWords(QListWidget* list, WordListInfo::Type type, const std::string& listName = "");
+    void insertWordsFromUnknownWordlistIntoListWidget();
+    void insertWordsFromKnownWordlistIntoListWidget();
+    void insertWordsFromCustomWordlistIntoListWidget(const std::string& customListName);
 };

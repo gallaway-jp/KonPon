@@ -102,6 +102,7 @@ void BottomMenu::onViewWordlistsClicked()
         mWordlistsView = new WordlistsView(this, mTextTree, _mSettings, mWordlists);
         connect(mWordlistsView, &WordlistsView::viewWordClicked, this, &BottomMenu::viewWordClicked);
         connect(mWordlistsView, &WordlistsView::closeWordViewWindow, this, &BottomMenu::closeWordViewWindow);
+        connect(this, &BottomMenu::textsTokenized, mWordlistsView, &WordlistsView::onReloadWordlists);
     }
     mWordlistsView->show();
 }
