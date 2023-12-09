@@ -529,24 +529,12 @@ void WordlistsView::onAddWord(QListWidget* list, WordListInfo::Type type, const 
 void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, const std::string& listName)
 {
 	this->setUpdatesEnabled(false);
+	Wordlist wordlist;
 	for (auto item : list->selectedItems()) {
 		auto takenItem = list->takeItem(list->row(item));
 		QStringList qstrings = item->data(Qt::UserRole).toStringList();
 		if (qstrings.size() == 2) {
-			switch (type)
-			{
-			case WordListInfo::Type::UNKNOWN:
-				mWordlists.removeWordFromUnknownWordlist(qstrings[0].toStdString(), qstrings[1].toStdString());
-				break;
-			case WordListInfo::Type::KNOWN:
-				mWordlists.removeWordFromKnownWordlist(qstrings[0].toStdString(), qstrings[1].toStdString());
-				break;
-			case WordListInfo::Type::CUSTOM:
-				mWordlists.removeWordFromCustomWordlist(qstrings[0].toStdString(), qstrings[1].toStdString(), listName);
-				break;
-			default:
-				break;
-			}
+			wordlist.insertWord(qstrings[0].toStdString(), qstrings[1].toStdString());
 
 			emit closeWordViewWindow(qstrings[0].toStdString(), qstrings[1].toStdString());
 
@@ -556,8 +544,26 @@ void WordlistsView::onDeleteWords(QListWidget* list, WordListInfo::Type type, co
 				directory.rmdir(".");
 			}
 		}
-		delete takenItem;
+		if (takenItem) {
+			delete takenItem;
+		}
 	}
+		
+	switch (type)
+	{
+	case WordListInfo::Type::UNKNOWN:
+		mWordlists.removeWordsFromUnknownWordlist(wordlist);
+		break;
+	case WordListInfo::Type::KNOWN:
+		mWordlists.removeWordsFromKnownWordlist(wordlist);
+		break;
+	case WordListInfo::Type::CUSTOM:
+		mWordlists.removeWordsFromCustomWordlist(wordlist, listName);
+		break;
+	default:
+		break;
+	}
+
 	this->setUpdatesEnabled(true);
 }
 
