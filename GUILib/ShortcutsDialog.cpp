@@ -1,25 +1,43 @@
 #include "ShortcutsDialog.h"
 
-#include "QFormLayout.h"
-#include "QLabel.h"
+#include <QCoreApplication>
+#include <QFormLayout>
+#include <QLabel>
 
-ShortcutsDialog::ShortcutsDialog(bool& keyboardShortcutsDialogOpened)
-	: mKeyboardShortcutsDialogOpened(keyboardShortcutsDialogOpened), QDialog(nullptr)
+ShortcutsDialog::ShortcutsDialog()
+	: QDialog(nullptr)
 {
-	//QWidget* widget = new QWidget(this);
+	setAttribute(Qt::WA_DeleteOnClose);
+
 	QFormLayout* layout = new QFormLayout(this);
 	layout->setHorizontalSpacing(50);
 
-	layout->addRow(tr("Import Text"), new QLabel("CTRL + O"));
-	layout->addRow(tr("Import Audio"), new QLabel("CTRL + A"));
-	layout->addRow(tr("Settings"), new QLabel("CTRL + T"));
-	layout->addRow(tr("Keyboard Shortcuts"), new QLabel("CTRL + K"));
+	m_importTextLabel = new QLabel(tr("Import Text"));
+	layout->addRow(m_importTextLabel, new QLabel("CTRL + O"));
+	m_importAudioLabel = new QLabel(tr("Import Audio"));
+	layout->addRow(m_importAudioLabel, new QLabel("CTRL + A"));
+	m_settingsLabel = new QLabel(tr("Settings"));
+	layout->addRow(m_settingsLabel, new QLabel("CTRL + T"));
+	m_keyboardShortcutsLabel = new QLabel(tr("Keyboard Shortcuts"));
+	layout->addRow(m_keyboardShortcutsLabel, new QLabel("CTRL + K"));
 
 	this->layout()->setSizeConstraint(QLayout::SetFixedSize);
 }
 
 void ShortcutsDialog::reject()
 {
-	mKeyboardShortcutsDialogOpened = false;
 	QDialog::reject();
+}
+
+void ShortcutsDialog::onRetranslateUI()
+{
+	m_importTextLabel->setText(QCoreApplication::translate("ShortcutsDialog", "Import Text"));
+	m_importAudioLabel->setText(QCoreApplication::translate("ShortcutsDialog", "Import Audio"));
+	m_settingsLabel->setText(QCoreApplication::translate("ShortcutsDialog", "Settings"));
+	m_keyboardShortcutsLabel->setText(QCoreApplication::translate("ShortcutsDialog", "Keyboard Shortcuts"));
+}
+
+ShortcutsDialog::~ShortcutsDialog()
+{
+	emit closeDialog();
 }

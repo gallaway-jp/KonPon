@@ -2,37 +2,44 @@
 
 #include "Settings.h"
 
-#include <QTabWidget>
-#include <QDialogButtonBox>
 #include <QCheckBox>
-#include <QPushButton>
+#include <QComboBox>
+#include <QCoreApplication>
+#include <QDialogButtonBox>
+#include <QFileDialog>
 #include <QFormLayout>
 #include <QLabel>
-#include <QComboBox>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QTabWidget>
 
-SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
-	: mSettingsDialogOpened(settingsDialogOpened), m_settings(settings),
+SettingsDialog::SettingsDialog(Settings* settings)
+	: m_settings(settings),
 	QDialog(nullptr)
 {
-	mTabWidget = new QTabWidget;
-	mTabWidget->addTab(new GeneralTab(), tr("General"));
-	FileTab* fileTab = new FileTab(settings);
-	mTabWidget->addTab(fileTab, tr("File"));
-	connect(fileTab, &FileTab::onChange, this, &SettingsDialog::onChange);
+	setAttribute(Qt::WA_DeleteOnClose);
 
-	UITab* uiTab = new UITab(settings);
-	mTabWidget->addTab(uiTab, tr("UI"));
-	connect(uiTab, &UITab::onChange, this, &SettingsDialog::onChange);
-	AnkiTab* ankiTab = new AnkiTab(settings);
-	mTabWidget->addTab(ankiTab, tr("Anki"));
-	connect(ankiTab, &AnkiTab::onChange, this, &SettingsDialog::onChange);
+	mTabWidget = new QTabWidget;
+	m_generalTab = new GeneralTab();
+	mTabWidget->addTab(m_generalTab, tr("General"));
+	m_fileTab = new FileTab(settings);
+	mTabWidget->addTab(m_fileTab, tr("File"));
+	connect(m_fileTab, &FileTab::onChange, this, &SettingsDialog::onChange);
+
+	m_uiTab = new UITab(settings);
+	mTabWidget->addTab(m_uiTab, tr("UI"));
+	connect(m_uiTab, &UITab::onChange, this, &SettingsDialog::onChange);
+	connect(m_uiTab, &UITab::retranslateUI, this, &SettingsDialog::retranslateUI);
+
+	m_ankiTab = new AnkiTab(settings);
+	mTabWidget->addTab(m_ankiTab, tr("Anki"));
+	connect(m_ankiTab, &AnkiTab::onChange, this, &SettingsDialog::onChange);
 
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::RestoreDefaults);
-	QPushButton* clearDataButton = buttonBox->addButton(tr("Clear Data"), QDialogButtonBox::ActionRole);
+	m_clearDataButton = buttonBox->addButton(tr("Clear Data"), QDialogButtonBox::ActionRole);
 	connect(buttonBox->button(QDialogButtonBox::RestoreDefaults), &QPushButton::clicked, this, &SettingsDialog::restoreAllDefaults);
-	connect(clearDataButton, &QPushButton::clicked, this, &SettingsDialog::clearData);
+	connect(m_clearDataButton, &QPushButton::clicked, this, &SettingsDialog::clearData);
 
 	mButtonBox = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel | QDialogButtonBox::Apply);
 	connect(mButtonBox, &QDialogButtonBox::accepted, this, &QDialog::accept);
@@ -40,13 +47,18 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 	connect(mButtonBox->button(QDialogButtonBox::Apply), &QPushButton::clicked, this, &SettingsDialog::apply);
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
 
-	connect(this, &SettingsDialog::applySettings, fileTab, &FileTab::onApplySettings);
-	connect(this, &SettingsDialog::applySettings, uiTab, &UITab::onApplySettings);
-	connect(this, &SettingsDialog::applySettings, ankiTab, &AnkiTab::onApplySettings);
+	connect(this, &SettingsDialog::applySettings, m_fileTab, &FileTab::onApplySettings);
+	connect(this, &SettingsDialog::applySettings, m_uiTab, &UITab::onApplySettings);
+	connect(this, &SettingsDialog::applySettings, m_ankiTab, &AnkiTab::onApplySettings);
 
-	connect(this, &SettingsDialog::restoreDefaults, fileTab, &FileTab::onRestoreDefaults);
-	connect(this, &SettingsDialog::restoreDefaults, uiTab, &UITab::onRestoreDefaults);
-	connect(this, &SettingsDialog::restoreDefaults, ankiTab, &AnkiTab::onRestoreDefaults);
+	connect(this, &SettingsDialog::restoreDefaults, m_fileTab, &FileTab::onRestoreDefaults);
+	connect(this, &SettingsDialog::restoreDefaults, m_uiTab, &UITab::onRestoreDefaults);
+	connect(this, &SettingsDialog::restoreDefaults, m_ankiTab, &AnkiTab::onRestoreDefaults);
+
+	connect(this, &SettingsDialog::retranslateUI, this, &SettingsDialog::onRetranslateUI);
+	connect(this, &SettingsDialog::retranslateUI, m_fileTab, &FileTab::onRetranslateUI);
+	connect(this, &SettingsDialog::retranslateUI, m_uiTab, &UITab::onRetranslateUI);
+	connect(this, &SettingsDialog::retranslateUI, m_ankiTab, &AnkiTab::onRetranslateUI);
 
 	QVBoxLayout* mainLayout = new QVBoxLayout;
 	mainLayout->addWidget(mTabWidget);
@@ -60,14 +72,12 @@ SettingsDialog::SettingsDialog(Settings* settings, bool& settingsDialogOpened)
 
 void SettingsDialog::accept()
 {
-	mSettingsDialogOpened = false;
 	emit applySettings();
 	QDialog::accept();
 }
 
 void SettingsDialog::reject()
 {
-	mSettingsDialogOpened = false;
 	QDialog::reject();
 }
 
@@ -101,6 +111,21 @@ void SettingsDialog::onChange()
 	mButtonBox->button(QDialogButtonBox::Apply)->setDisabled(!hasChanges);
 }
 
+void SettingsDialog::onRetranslateUI()
+{
+	setWindowTitle(QCoreApplication::translate("SettingsDialog", "Settings"));
+	mTabWidget->setTabText(mTabWidget->indexOf(m_generalTab), QCoreApplication::translate("SettingsDialog", "General"));
+	mTabWidget->setTabText(mTabWidget->indexOf(m_fileTab), QCoreApplication::translate("SettingsDialog", "File"));
+	mTabWidget->setTabText(mTabWidget->indexOf(m_uiTab), QCoreApplication::translate("SettingsDialog", "UI"));
+	mTabWidget->setTabText(mTabWidget->indexOf(m_ankiTab), QCoreApplication::translate("SettingsDialog", "Anki"));
+	m_clearDataButton->setText(QCoreApplication::translate("SettingsDialog", "Clear Data"));
+}
+
+SettingsDialog::~SettingsDialog()
+{
+	emit closeDialog();
+}
+
 GeneralTab::GeneralTab(QWidget* parent)
 	: QWidget(parent)
 {
@@ -116,17 +141,16 @@ FileTab::FileTab(Settings* settings)
 	
 	QHBoxLayout* workspaceLayout = new QHBoxLayout();
 	mWorkspaceLineEdit = new QLineEdit(settings->mFile.workspace);
-	QPushButton* changeWorkspaceButton = new QPushButton(tr("Specify Workspace"));
+	m_changeWorkspaceButton = new QPushButton(tr("Specify Workspace"));
 	connect(mWorkspaceLineEdit, &QLineEdit::textChanged, this, &FileTab::onChange);
-	connect(changeWorkspaceButton, &QPushButton::clicked, this, &FileTab::onChangeWorkspaceButtonClicked);
+	connect(m_changeWorkspaceButton, &QPushButton::clicked, this, &FileTab::onChangeWorkspaceButtonClicked);
 	
 	workspaceLayout->addWidget(mWorkspaceLineEdit);
-	workspaceLayout->addWidget(changeWorkspaceButton);
+	workspaceLayout->addWidget(m_changeWorkspaceButton);
 
 	layout->addLayout(workspaceLayout);	
 }
 
-#include <QFileDialog>
 void FileTab::onChangeWorkspaceButtonClicked()
 {
 	QFileDialog dialog;
@@ -146,6 +170,11 @@ void FileTab::onRestoreDefaults()
 	mWorkspaceLineEdit->setText(mSettings->mFile.defaultWorkspace);
 }
 
+void FileTab::onRetranslateUI()
+{
+	m_changeWorkspaceButton->setText(QCoreApplication::translate("FileTab", "Specify Workspace"));
+}
+
 UITab::UITab(Settings* settings)
 	: QWidget(nullptr), mSettings(settings)
 {
@@ -160,33 +189,50 @@ UITab::UITab(Settings* settings)
 	m_themeCombo->setCurrentIndex(m_themeCombo->findData(static_cast<int>(mSettings->ui.getTheme())));
 	connect(m_themeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
 
-	/*QComboBox* languageCombo = new QComboBox;
-	languageCombo->setEditable(false);
-	languageCombo->addItem(tr("Default"));
-	languageCombo->addItem(tr("English"));
-	languageCombo->addItem(tr("Japanese"));
-	connect(languageCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
+	m_languageCombo = new QComboBox;
+	m_languageCombo->setEditable(false);
+	m_languageCombo->addItem(tr("Default"), static_cast<int>(Settings::Language::Default));
+	m_languageCombo->addItem(tr("English"), static_cast<int>(Settings::Language::English));
+	m_languageCombo->addItem(tr("Japanese"), static_cast<int>(Settings::Language::Japanese));
+	m_languageCombo->setCurrentIndex(m_themeCombo->findData(static_cast<int>(mSettings->ui.getLanguage())));
+	connect(m_languageCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);
 
-	QComboBox* textSizeCombo = new QComboBox;
-	textSizeCombo->setEditable(false);
-	textSizeCombo->addItem(tr("Small"));
-	textSizeCombo->addItem(tr("Medium"));
-	textSizeCombo->addItem(tr("Large"));
-	connect(textSizeCombo, &QComboBox::currentIndexChanged, this, &UITab::onChange);*/
-
-	layout->addRow(tr("Theme"), m_themeCombo);
-	/*layout->addRow(tr("Language"), languageCombo);
-	layout->addRow(tr("Text Size"), textSizeCombo);*/
+	m_themeLabel = new QLabel(tr("Theme"));
+	layout->addRow(m_themeLabel, m_themeCombo);
+	m_languageLabel = new QLabel(tr("Language"));
+	layout->addRow(m_languageLabel, m_languageCombo);
 }
 
 void UITab::onApplySettings()
 {
 	mSettings->ui.setTheme(static_cast<Settings::Theme>(m_themeCombo->currentData().toInt()));
+	mSettings->ui.setLanguage(static_cast<Settings::Language>(m_languageCombo->currentData().toInt()));
+	emit retranslateUI();
 }
 
 void UITab::onRestoreDefaults()
 {
 	m_themeCombo->setCurrentIndex(m_themeCombo->findData(static_cast<int>(Settings::Theme::Default)));
+	m_languageCombo->setCurrentIndex(m_languageCombo->findData(static_cast<int>(Settings::Language::Default)));
+}
+
+void UITab::onRetranslateUI()
+{
+	m_themeLabel->setText(QCoreApplication::translate("UITab", "Theme"));
+	m_themeCombo->setItemText(m_themeCombo->findData(static_cast<int>(Settings::Theme::Default)),
+		QCoreApplication::translate("UITab", "Default"));
+	m_themeCombo->setItemText(m_themeCombo->findData(static_cast<int>(Settings::Theme::Light)),
+		QCoreApplication::translate("UITab", "Light"));
+	m_themeCombo->setItemText(m_themeCombo->findData(static_cast<int>(Settings::Theme::Dark)),
+		QCoreApplication::translate("UITab", "Dark"));
+
+	m_languageLabel->setText(QCoreApplication::translate("UITab", "Language"));
+	m_languageCombo->setItemText(m_languageCombo->findData(static_cast<int>(Settings::Language::Default)),
+		QCoreApplication::translate("UITab", "Default"));
+	m_languageCombo->setItemText(m_languageCombo->findData(static_cast<int>(Settings::Language::English)),
+		QCoreApplication::translate("UITab", "English"));
+	m_languageCombo->setItemText(m_languageCombo->findData(static_cast<int>(Settings::Language::Japanese)),
+		QCoreApplication::translate("UITab", "Japanese"));
 }
 
 AnkiTab::AnkiTab(Settings* settings)
@@ -210,4 +256,9 @@ void AnkiTab::onApplySettings()
 void AnkiTab::onRestoreDefaults()
 {
 	mEnableAnkiConnectCheckbox->setChecked(true);
+}
+
+void AnkiTab::onRetranslateUI()
+{
+	mEnableAnkiConnectCheckbox->setText(QCoreApplication::translate("AnkiTab", "Enable Anki Connect Feature"));
 }

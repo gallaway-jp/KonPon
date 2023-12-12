@@ -2,9 +2,106 @@
 <!DOCTYPE TS>
 <TS version="2.1" language="ja_JP">
 <context>
+    <name>AddNoteType</name>
+    <message>
+        <location filename="AddNoteType.cpp" line="23"/>
+        <source>Note Type: </source>
+        <translation>ノートタイプ：</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="26"/>
+        <source>Fields</source>
+        <translation>フィールド</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="35"/>
+        <source>Front Template</source>
+        <translation>表のテンプレート</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="39"/>
+        <source>Back Template</source>
+        <translation>裏のテンプレート</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="44"/>
+        <source>Add</source>
+        <translation>追加</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="46"/>
+        <source>Delete</source>
+        <translation>削除</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="71"/>
+        <source>Add a Field</source>
+        <translation>フィールドを追加</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="74"/>
+        <source>Item already exists</source>
+        <translation>アイテムが既にある</translation>
+    </message>
+    <message>
+        <location filename="AddNoteType.cpp" line="74"/>
+        <source>Item already exists in list!</source>
+        <translation>リストにアイテムが既にある！</translation>
+    </message>
+</context>
+<context>
+    <name>AnkiCardEditor</name>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="41"/>
+        <source>Tags</source>
+        <translation>タグ</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="60"/>
+        <source>Note Type</source>
+        <translation>ノートタイプ</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="64"/>
+        <source>Deck Type</source>
+        <translation>デッキタイプ</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="96"/>
+        <source>Bold</source>
+        <translation>太字</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="105"/>
+        <source>Italic</source>
+        <translation>斜体</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="114"/>
+        <source>Underline</source>
+        <translation>下線</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="123"/>
+        <source>Strikeout</source>
+        <translation>取り消し線</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="145"/>
+        <source>Text Color</source>
+        <translation>テキストの色</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="153"/>
+        <source>Highlight Color</source>
+        <translation>ハイライトの色</translation>
+    </message>
+</context>
+<context>
     <name>AnkiTab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="129"/>
+        <location filename="SettingsDialog.cpp" line="244"/>
+        <location filename="SettingsDialog.cpp" line="263"/>
         <source>Enable Anki Connect Feature</source>
         <translation>暗記コネクト機能を有効にする</translation>
     </message>
@@ -13,49 +110,108 @@
     <name>BottomMenu</name>
     <message>
         <location filename="BottomMenu.cpp" line="23"/>
-        <location filename="BottomMenu.cpp" line="61"/>
+        <location filename="BottomMenu.cpp" line="63"/>
+        <location filename="BottomMenu.cpp" line="115"/>
         <source>Add Folder</source>
         <translation>フォルダを追加</translation>
     </message>
     <message>
         <location filename="BottomMenu.cpp" line="27"/>
+        <location filename="BottomMenu.cpp" line="116"/>
         <source>Add Text</source>
         <translation>テキストを追加</translation>
     </message>
     <message>
         <location filename="BottomMenu.cpp" line="28"/>
+        <location filename="BottomMenu.cpp" line="117"/>
         <source>Add Audio</source>
         <translation>オーディオを追加</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="29"/>
-        <source>Add Text &amp; Audio</source>
-        <translation type="unfinished"></translation>
+        <location filename="BottomMenu.cpp" line="30"/>
+        <location filename="BottomMenu.cpp" line="118"/>
+        <source>Add Text &amp;&amp; Audio</source>
+        <oldsource>Add Text &amp; Audio</oldsource>
+        <translation>テキストとオーディオを追加</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="31"/>
+        <location filename="BottomMenu.cpp" line="33"/>
+        <location filename="BottomMenu.cpp" line="119"/>
         <source>Delete Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダを削除</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="32"/>
+        <location filename="BottomMenu.cpp" line="34"/>
+        <location filename="BottomMenu.cpp" line="120"/>
+        <location filename="BottomMenu.cpp" line="121"/>
         <source>Delete Text</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストを削除</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="38"/>
+        <location filename="BottomMenu.cpp" line="40"/>
+        <location filename="BottomMenu.cpp" line="122"/>
         <source>View Text</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストを閲覧</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="39"/>
+        <location filename="BottomMenu.cpp" line="41"/>
+        <location filename="BottomMenu.cpp" line="123"/>
         <source>View Wordlists</source>
-        <translation type="unfinished"></translation>
+        <translation>言葉のリストを閲覧</translation>
     </message>
     <message>
-        <location filename="BottomMenu.cpp" line="61"/>
+        <location filename="BottomMenu.cpp" line="63"/>
         <source>Add Folder2</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダを追加</translation>
+    </message>
+</context>
+<context>
+    <name>CreateAnkiCardDialog</name>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="31"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="40"/>
+        <source>Add to Field</source>
+        <translation>フィールドに追加</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="48"/>
+        <source>Kana</source>
+        <translation>かな</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="49"/>
+        <source>Kanji</source>
+        <translation>漢字</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="63"/>
+        <source>Save to Local</source>
+        <translation>ローカルに保存</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="66"/>
+        <source>Send to Anki</source>
+        <translation>暗記アプリに送信</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="154"/>
+        <source>Could not create note</source>
+        <translation>ノートを作成することが出来ませんでした</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="154"/>
+        <source>Failed to create note!</source>
+        <translation>ノートの作成に失敗しました！</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="161"/>
+        <source>Could not create note type</source>
+        <translation>ノートタイプを作成することが出来ませんでした</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="161"/>
+        <source>Failed to create note type!</source>
+        <translation>ノートタイプの作成に失敗しました！</translation>
     </message>
 </context>
 <context>
@@ -63,7 +219,7 @@
     <message>
         <location filename="CustomCheckboxDialog.cpp" line="38"/>
         <source>Select custom wordlists to highlight</source>
-        <translation type="unfinished"></translation>
+        <translation>ハイライトするカスタム言葉のリストを選択</translation>
     </message>
 </context>
 <context>
@@ -71,27 +227,27 @@
     <message>
         <location filename="DeleteWordlistDialog.cpp" line="22"/>
         <source>Move words to the below list</source>
-        <translation type="unfinished"></translation>
+        <translation>以下のリストに言葉を移動</translation>
     </message>
     <message>
         <location filename="DeleteWordlistDialog.cpp" line="23"/>
         <source>Delete words contained in list</source>
-        <translation type="unfinished"></translation>
+        <translation>リストに含まれている言葉を削除</translation>
     </message>
     <message>
         <location filename="DeleteWordlistDialog.cpp" line="27"/>
         <source>Unknown List</source>
-        <translation type="unfinished"></translation>
+        <translation>未習得の言葉のリスト</translation>
     </message>
     <message>
         <location filename="DeleteWordlistDialog.cpp" line="28"/>
         <source>Known List</source>
-        <translation type="unfinished"></translation>
+        <translation>習得済みの言葉のリスト</translation>
     </message>
     <message>
         <location filename="DeleteWordlistDialog.cpp" line="55"/>
         <source>Delete Wordlist</source>
-        <translation type="unfinished"></translation>
+        <translation>言葉のリストを削除</translation>
     </message>
 </context>
 <context>
@@ -99,22 +255,23 @@
     <message>
         <location filename="EditWordlistDialog.cpp" line="19"/>
         <source>Edit Unknown List Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>未習得の言葉リストの設定を編集</translation>
     </message>
     <message>
         <location filename="EditWordlistDialog.cpp" line="22"/>
         <source>Edit Known List Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>習得済みの言葉リストの設定を編集</translation>
     </message>
     <message>
         <location filename="EditWordlistDialog.cpp" line="25"/>
         <source>Edit </source>
-        <translation type="unfinished"></translation>
+        <translatorcomment>Japanese starts with name of wordlist, so leave this translation blank</translatorcomment>
+        <translation></translation>
     </message>
     <message>
         <location filename="EditWordlistDialog.cpp" line="25"/>
         <source> Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>の設定を編集</translation>
     </message>
     <message>
         <location filename="EditWordlistDialog.cpp" line="37"/>
@@ -165,369 +322,563 @@
 <context>
     <name>FileTab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="86"/>
-        <source>Workspace</source>
-        <translation type="unfinished"></translation>
+        <location filename="SettingsDialog.cpp" line="144"/>
+        <location filename="SettingsDialog.cpp" line="175"/>
+        <source>Specify Workspace</source>
+        <translation>ワークスペースを指定</translation>
     </message>
 </context>
 <context>
-    <name>GeneralTab</name>
+    <name>ListDialog</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="75"/>
-        <source>Import Text</source>
-        <translation type="unfinished"></translation>
+        <location filename="ListDialog.cpp" line="35"/>
+        <source>Create</source>
+        <translation>新規作成</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="76"/>
-        <source>Import Audio</source>
-        <translation type="unfinished"></translation>
+        <location filename="ListDialog.cpp" line="91"/>
+        <source>Create a new Deck</source>
+        <translation>新しいデッキを作成</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="77"/>
-        <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <location filename="ListDialog.cpp" line="94"/>
+        <location filename="ListDialog.cpp" line="111"/>
+        <source>Item already exists</source>
+        <translation>アイテムが既にある</translation>
+    </message>
+    <message>
+        <location filename="ListDialog.cpp" line="94"/>
+        <location filename="ListDialog.cpp" line="111"/>
+        <source>Item already exists in list!</source>
+        <translation>リストにアイテムが既にある！</translation>
     </message>
 </context>
 <context>
     <name>Menubar</name>
     <message>
-        <location filename="Menubar.cpp" line="36"/>
         <source>Parses the input text and adds text and words to app</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">指定したテキストを分析し、テキストと言葉を本アプリに追加する</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="55"/>
+        <location filename="Menubar.cpp" line="56"/>
+        <location filename="Menubar.cpp" line="222"/>
         <source>&amp;Import Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Menubar.cpp" line="57"/>
-        <source>&amp;Import Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;テキストをインポート</translation>
     </message>
     <message>
         <location filename="Menubar.cpp" line="59"/>
+        <location filename="Menubar.cpp" line="223"/>
+        <source>&amp;Import Audio</source>
+        <translation>&amp;オーディオをインポート</translation>
+    </message>
+    <message>
         <source>&amp;Import Text &amp; Audio</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">&amp;テキストとオーディオをインポート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="61"/>
+        <location filename="Menubar.cpp" line="62"/>
+        <location filename="Menubar.cpp" line="224"/>
+        <source>&amp;Import Text &amp;&amp; Audio</source>
+        <translation>&amp;テキストとオーディオをインポート</translation>
+    </message>
+    <message>
+        <location filename="Menubar.cpp" line="65"/>
+        <location filename="Menubar.cpp" line="225"/>
         <source>&amp;View Word Lists</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;言葉リストを閲覧</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="63"/>
+        <location filename="Menubar.cpp" line="68"/>
+        <location filename="Menubar.cpp" line="226"/>
         <source>&amp;Exit</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;終了</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="72"/>
+        <location filename="Menubar.cpp" line="78"/>
+        <location filename="Menubar.cpp" line="229"/>
         <source>&amp;Sync</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;同期</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="74"/>
+        <location filename="Menubar.cpp" line="81"/>
+        <location filename="Menubar.cpp" line="230"/>
         <source>&amp;Settings</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Menubar.cpp" line="83"/>
-        <source>&amp;Manual</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Menubar.cpp" line="85"/>
-        <source>&amp;Release Notes</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Menubar.cpp" line="87"/>
-        <source>&amp;Video Tutorials</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="Menubar.cpp" line="89"/>
-        <source>&amp;Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;設定</translation>
     </message>
     <message>
         <location filename="Menubar.cpp" line="91"/>
-        <source>&amp;View Github</source>
-        <translation type="unfinished"></translation>
+        <location filename="Menubar.cpp" line="233"/>
+        <source>&amp;Manual</source>
+        <translation>&amp;マニュアル</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="93"/>
-        <source>&amp;Check for Updates</source>
-        <translation type="unfinished"></translation>
+        <location filename="Menubar.cpp" line="94"/>
+        <location filename="Menubar.cpp" line="234"/>
+        <source>&amp;Release Notes</source>
+        <translation>&amp;リリースノート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="95"/>
-        <source>&amp;About</source>
-        <translation type="unfinished"></translation>
+        <location filename="Menubar.cpp" line="97"/>
+        <location filename="Menubar.cpp" line="235"/>
+        <source>&amp;Video Tutorials</source>
+        <translation>&amp;ビデオ チュートリアル</translation>
+    </message>
+    <message>
+        <location filename="Menubar.cpp" line="100"/>
+        <location filename="Menubar.cpp" line="236"/>
+        <source>&amp;Keyboard Shortcuts</source>
+        <translation>&amp;キーボード ショートカット</translation>
     </message>
     <message>
         <location filename="Menubar.cpp" line="103"/>
+        <location filename="Menubar.cpp" line="237"/>
+        <source>&amp;View Github</source>
+        <translation>&amp;Githubを閲覧</translation>
+    </message>
+    <message>
+        <location filename="Menubar.cpp" line="106"/>
+        <location filename="Menubar.cpp" line="238"/>
+        <source>&amp;Check for Updates</source>
+        <translation>&amp;更新を確認</translation>
+    </message>
+    <message>
+        <location filename="Menubar.cpp" line="109"/>
+        <location filename="Menubar.cpp" line="239"/>
+        <source>&amp;About</source>
+        <translation>&amp;アプリについて</translation>
+    </message>
+    <message>
+        <location filename="Menubar.cpp" line="118"/>
+        <location filename="Menubar.cpp" line="221"/>
         <source>&amp;File</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ファイル</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="107"/>
+        <location filename="Menubar.cpp" line="123"/>
+        <location filename="Menubar.cpp" line="228"/>
         <source>&amp;Tools</source>
-        <translation type="unfinished"></translation>
+        <translation>ツール</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="111"/>
+        <location filename="Menubar.cpp" line="128"/>
+        <location filename="Menubar.cpp" line="232"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;ヘルプ</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="122"/>
+        <location filename="Menubar.cpp" line="140"/>
         <source>Open Audio</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオを開く</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="122"/>
+        <location filename="Menubar.cpp" line="140"/>
         <source>Audio Files (*.mp3)</source>
-        <translation type="unfinished"></translation>
+        <translation>オーディオ ファイル (*.mp3)</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="190"/>
+        <location filename="Menubar.cpp" line="215"/>
         <source>About</source>
-        <translation type="unfinished"></translation>
+        <translation>アプリについて</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="190"/>
+        <location filename="Menubar.cpp" line="215"/>
         <source>Made by Colin Gallaway.</source>
-        <translation type="unfinished"></translation>
+        <translation>Colin Gallawayにより作成された。</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="191"/>
+        <location filename="Menubar.cpp" line="216"/>
         <source>About Qt</source>
-        <translation type="unfinished"></translation>
+        <translation>Qtについて</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="19"/>
-        <source>General</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsDialog.cpp" line="20"/>
-        <source>File</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="SettingsDialog.cpp" line="22"/>
-        <source>UI</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="SettingsDialog.cpp" line="25"/>
-        <source>Anki</source>
-        <translation type="unfinished"></translation>
+        <location filename="SettingsDialog.cpp" line="117"/>
+        <source>General</source>
+        <translation>全般</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="39"/>
+        <location filename="SettingsDialog.cpp" line="27"/>
+        <location filename="SettingsDialog.cpp" line="118"/>
+        <source>File</source>
+        <translation>ファイル</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="31"/>
+        <location filename="SettingsDialog.cpp" line="119"/>
+        <source>UI</source>
+        <translation>見た目</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="36"/>
+        <location filename="SettingsDialog.cpp" line="120"/>
+        <source>Anki</source>
+        <translation>暗記アプリ</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="40"/>
+        <location filename="SettingsDialog.cpp" line="121"/>
+        <source>Clear Data</source>
+        <translation>データをクリア</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="69"/>
+        <location filename="SettingsDialog.cpp" line="116"/>
         <source>Settings</source>
-        <translation type="unfinished"></translation>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="93"/>
+        <location filename="SettingsDialog.cpp" line="97"/>
+        <source>Clearing Data</source>
+        <translation>データのクリア中</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="94"/>
+        <source>You are about to clear all data including
+imported texts, word lists, and settings.
+Are you sure?</source>
+        <translation>インポートされたテキストや言葉リストや設定などを含める\n全てのデータをクリアしようとしています。\n宜しいですか。</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="97"/>
+        <source>Data will be cleared when KonPon is closed.</source>
+        <translation>KonPonを終了する際に、データがクリアされます。</translation>
     </message>
 </context>
 <context>
     <name>ShortcutsDialog</name>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="13"/>
-        <source>Import Text</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="ShortcutsDialog.cpp" line="14"/>
-        <source>Import Audio</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="ShortcutsDialog.cpp" line="15"/>
+        <location filename="ShortcutsDialog.cpp" line="34"/>
+        <source>Import Text</source>
+        <translation>テキストをインポート</translation>
+    </message>
+    <message>
+        <location filename="ShortcutsDialog.cpp" line="17"/>
+        <location filename="ShortcutsDialog.cpp" line="35"/>
+        <source>Import Audio</source>
+        <translation>オーディオをインポート</translation>
+    </message>
+    <message>
+        <location filename="ShortcutsDialog.cpp" line="19"/>
+        <location filename="ShortcutsDialog.cpp" line="36"/>
+        <source>Settings</source>
+        <translation>設定</translation>
+    </message>
+    <message>
+        <location filename="ShortcutsDialog.cpp" line="21"/>
+        <location filename="ShortcutsDialog.cpp" line="37"/>
         <source>Keyboard Shortcuts</source>
-        <translation type="unfinished"></translation>
+        <translation>キーボード ショートカット</translation>
     </message>
 </context>
 <context>
     <name>TextTree</name>
     <message>
-        <location filename="TextTree.cpp" line="322"/>
+        <location filename="TextTree.cpp" line="330"/>
+        <location filename="TextTree.cpp" line="555"/>
         <source>Root</source>
-        <translation type="unfinished"></translation>
+        <translation>ルート</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="428"/>
+        <location filename="TextTree.cpp" line="470"/>
         <source>Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラー</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="447"/>
+        <location filename="TextTree.cpp" line="502"/>
         <source>Open Text</source>
-        <translation type="unfinished"></translation>
+        <translation>テキストを開く</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="447"/>
+        <location filename="TextTree.cpp" line="502"/>
         <source>Text Files (*.txt)</source>
-        <translation type="unfinished"></translation>
+        <translation>テキスト ファイル (*.txt)</translation>
     </message>
 </context>
 <context>
     <name>TextView</name>
     <message>
         <location filename="TextView.cpp" line="75"/>
+        <location filename="TextView.cpp" line="322"/>
+        <source>Text</source>
+        <translation>テキスト</translation>
+    </message>
+    <message>
+        <location filename="TextView.cpp" line="88"/>
+        <location filename="TextView.cpp" line="324"/>
         <source>Highlight Unknown Words</source>
         <translation>新規の言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="77"/>
+        <location filename="TextView.cpp" line="90"/>
+        <location filename="TextView.cpp" line="325"/>
         <source>Highlight Known Words</source>
         <translation>習得した言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="79"/>
+        <location filename="TextView.cpp" line="92"/>
+        <location filename="TextView.cpp" line="326"/>
         <source>Highlight Words From Custom List</source>
         <translation>カスタムリストからの言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="270"/>
+        <location filename="TextView.cpp" line="300"/>
         <source>Known Wordlist</source>
         <translation>習得言葉のリスト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="273"/>
+        <location filename="TextView.cpp" line="303"/>
         <source>Unknown Wordlist</source>
         <translation>新規言葉のリスト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="284"/>
+        <location filename="TextView.cpp" line="314"/>
         <source>Kana: </source>
         <translation>かな：</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="284"/>
+        <location filename="TextView.cpp" line="314"/>
         <source>Kanji: </source>
         <translation>漢字：</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="285"/>
+        <location filename="TextView.cpp" line="315"/>
         <source>Wordlist: </source>
-        <translation>言葉のリスト</translation>
+        <translation>言葉リスト：</translation>
     </message>
 </context>
 <context>
     <name>UITab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="97"/>
-        <location filename="SettingsDialog.cpp" line="104"/>
+        <location filename="SettingsDialog.cpp" line="186"/>
+        <location filename="SettingsDialog.cpp" line="194"/>
+        <location filename="SettingsDialog.cpp" line="223"/>
+        <location filename="SettingsDialog.cpp" line="231"/>
         <source>Default</source>
         <translation>既定</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="98"/>
+        <location filename="SettingsDialog.cpp" line="187"/>
+        <location filename="SettingsDialog.cpp" line="225"/>
         <source>Light</source>
         <translation>ライト</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="99"/>
+        <location filename="SettingsDialog.cpp" line="188"/>
+        <location filename="SettingsDialog.cpp" line="227"/>
         <source>Dark</source>
         <translation>ダーク</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="105"/>
+        <location filename="SettingsDialog.cpp" line="195"/>
+        <location filename="SettingsDialog.cpp" line="233"/>
         <source>English</source>
         <translation>英語</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="106"/>
+        <location filename="SettingsDialog.cpp" line="196"/>
+        <location filename="SettingsDialog.cpp" line="235"/>
         <source>Japanese</source>
         <translation>日本語</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="111"/>
         <source>Small</source>
-        <translation>小</translation>
+        <translation type="vanished">小</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="112"/>
         <source>Medium</source>
-        <translation>中</translation>
+        <translation type="vanished">中</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="113"/>
         <source>Large</source>
-        <translation>大</translation>
+        <translation type="vanished">大</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="116"/>
+        <location filename="SettingsDialog.cpp" line="200"/>
+        <location filename="SettingsDialog.cpp" line="221"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="117"/>
+        <location filename="SettingsDialog.cpp" line="202"/>
+        <location filename="SettingsDialog.cpp" line="229"/>
         <source>Language</source>
         <translation>言語</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="118"/>
         <source>Text Size</source>
-        <translation>テキストのサイズ</translation>
+        <translation type="vanished">テキストのサイズ</translation>
     </message>
 </context>
 <context>
     <name>WordView</name>
     <message>
-        <location filename="WordView.cpp" line="30"/>
+        <location filename="WordView.cpp" line="35"/>
+        <location filename="WordView.cpp" line="138"/>
+        <source>Notes</source>
+        <translation>ノート</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="50"/>
+        <location filename="WordView.cpp" line="147"/>
+        <source>Copy Word Info</source>
+        <translation>言葉情報をコピー</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="55"/>
+        <location filename="WordView.cpp" line="148"/>
+        <source>Create Anki Card</source>
+        <translation>暗記カードを作成</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="66"/>
+        <location filename="WordView.cpp" line="132"/>
+        <source>Word Info</source>
+        <oldsource>Word View</oldsource>
+        <translation>言葉の情報</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="73"/>
+        <location filename="WordView.cpp" line="134"/>
+        <source>Kana: </source>
+        <translation>かな：</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="78"/>
+        <location filename="WordView.cpp" line="135"/>
+        <source>Kanji: </source>
+        <translation>漢字：</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="92"/>
+        <location filename="WordView.cpp" line="136"/>
         <source>Pitch Accents</source>
         <translation>高低アクセント</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="40"/>
+        <location filename="WordView.cpp" line="108"/>
+        <location filename="WordView.cpp" line="137"/>
         <source>Texts</source>
         <translation>テキスト</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="188"/>
+        <source>Word info copied to clipboard.</source>
+        <translation>クリップボードに言葉情報がコピーされました。</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="141"/>
+        <location filename="WordView.cpp" line="196"/>
+        <source>Show Less</source>
+        <translation>詳細を隠す</translation>
+    </message>
+    <message>
+        <location filename="WordView.cpp" line="144"/>
+        <location filename="WordView.cpp" line="202"/>
+        <source>Show More</source>
+        <translation>詳細を表示</translation>
     </message>
 </context>
 <context>
     <name>WordlistsView</name>
     <message>
-        <location filename="WordlistsView.cpp" line="44"/>
-        <location filename="WordlistsView.cpp" line="58"/>
+        <location filename="WordlistsView.cpp" line="25"/>
+        <location filename="WordlistsView.cpp" line="585"/>
+        <source>Word Lists</source>
+        <translation>言葉リスト</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="51"/>
+        <location filename="WordlistsView.cpp" line="72"/>
+        <location filename="WordlistsView.cpp" line="588"/>
+        <location filename="WordlistsView.cpp" line="593"/>
         <source>Edit List Settings</source>
         <translation>リストの設定を編集</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="65"/>
+        <location filename="WordlistsView.cpp" line="57"/>
+        <location filename="WordlistsView.cpp" line="78"/>
+        <location filename="WordlistsView.cpp" line="589"/>
+        <location filename="WordlistsView.cpp" line="594"/>
+        <source>Add Word</source>
+        <translation>言葉を追加</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="58"/>
+        <location filename="WordlistsView.cpp" line="79"/>
+        <location filename="WordlistsView.cpp" line="590"/>
+        <location filename="WordlistsView.cpp" line="595"/>
+        <source>Delete Words</source>
+        <translation>言葉を削除</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="86"/>
+        <location filename="WordlistsView.cpp" line="587"/>
         <source>Unknown Wordlist</source>
         <translation>新規言葉のリスト</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="67"/>
+        <location filename="WordlistsView.cpp" line="88"/>
+        <location filename="WordlistsView.cpp" line="592"/>
         <source>Known Wordlist</source>
         <translation>習得した言葉のリスト</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="98"/>
-        <location filename="WordlistsView.cpp" line="220"/>
+        <location filename="WordlistsView.cpp" line="108"/>
+        <location filename="WordlistsView.cpp" line="226"/>
+        <location filename="WordlistsView.cpp" line="597"/>
         <source>Add Custom List</source>
         <translation>カスタムリストを追加</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="99"/>
+        <location filename="WordlistsView.cpp" line="109"/>
+        <location filename="WordlistsView.cpp" line="598"/>
         <source>Delete Custom List</source>
         <translation>カスタムリストを削除</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="222"/>
+        <location filename="WordlistsView.cpp" line="228"/>
         <source>Info</source>
         <translation>情報</translation>
     </message>
     <message>
-        <location filename="WordlistsView.cpp" line="222"/>
+        <location filename="WordlistsView.cpp" line="228"/>
         <source>Custom List already exists!</source>
         <translation>カスタムリストが既に存在する！</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="493"/>
+        <source>Enter Kana</source>
+        <translation>かなを入力</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="493"/>
+        <source>Kana:</source>
+        <translation>かな：</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="498"/>
+        <source>Enter Kanji</source>
+        <translation>漢字を入力</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="498"/>
+        <source>Kanji:</source>
+        <translation>漢字：</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="504"/>
+        <source>Word exists</source>
+        <translation>言葉が既にある</translation>
+    </message>
+    <message>
+        <location filename="WordlistsView.cpp" line="504"/>
+        <source>The word already exists in a list!</source>
+        <translation>リストに言葉が既にある！</translation>
     </message>
 </context>
 </TS>

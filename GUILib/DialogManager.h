@@ -30,6 +30,7 @@ public slots:
 	void setWordOpen(const std::string& kana, const std::string& kanji, QDialog* dialog = nullptr);
 signals:
 	void removeTextId(int64_t textId);
+	void retranslateUI();
 
 private:
 	Settings* mSettings = nullptr;

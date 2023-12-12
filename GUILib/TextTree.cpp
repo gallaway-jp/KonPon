@@ -549,3 +549,8 @@ void TextTree::onViewTextClicked()
     
     emit viewTextClicked(textId);
 }
+
+void TextTree::onRetranslateUI()
+{
+    _mRoot->setText(QCoreApplication::translate("TextTree", "Root"));
+}

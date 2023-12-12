@@ -4,24 +4,22 @@
 #include "Wordlist.h"
 #include "Words.h"
 
+#include <unordered_map>
 #include <string>
-#include <map>
 
-#include <QTreeView>
 #include <QElapsedTimer>
+#include <QTreeView>
 
 class Settings;
 class Wordlists;
 
-class QWidget;
-class QStandardItemModel;
-class QStandardItem;
-class QString;
+QT_BEGIN_NAMESPACE
 class QJsonObject;
+class QStandardItem;
 class QStandardItemModel;
-
-
-
+class QString;
+class QWidget;
+QT_END_NAMESPACE
 
 class TextTree : public QTreeView
 {
@@ -85,4 +83,5 @@ public slots:
 
     void onTextTokenized(const QString name, qint64 fileId);
     void onTextsTokenized();
+    void onRetranslateUI();
 };

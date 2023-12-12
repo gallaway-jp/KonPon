@@ -28,6 +28,10 @@ CentralWidget::CentralWidget(QWidget* parent, Settings* settings)
     
     connect(bottomMenu, &BottomMenu::viewWordClicked, mDlgMgr, &DialogManager::onViewWordClicked);
     connect(bottomMenu, &BottomMenu::closeWordViewWindow, mDlgMgr, &DialogManager::onCloseWordViewWindow);
+
+    connect(this, &CentralWidget::retranslateUI, mTextTree, &TextTree::onRetranslateUI);
+    connect(this, &CentralWidget::retranslateUI, mDlgMgr, &DialogManager::retranslateUI);
+    connect(this, &CentralWidget::retranslateUI, bottomMenu, &BottomMenu::onRetranslateUI);
 }
 
 CentralWidget::~CentralWidget()

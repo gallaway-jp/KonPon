@@ -1,34 +1,51 @@
 #include "TextView.h"
 
-#include "Settings.h"
-#include "Wordlists.h"
 #include "CustomCheckboxDialog.h"
+#include "Settings.h"
+#include "TextEdit.h"
+#include "Wordlists.h"
 
-#include <QTextStream>
-#include <QStringList>
-#include <QString>
+#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
-#include <QList>
-#include <QTextEdit>
-#include "TextEdit.h"
-#include <QLineEdit>
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QHBoxLayout>
 #include <QIntValidator>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QLabel>
+#include <QLineEdit>
+#include <QList>
+#include <QPushButton>
+#include <QString>
+#include <QStringList>
+#include <QTextEdit>
+#include <QTextStream>
+#include <QVBoxLayout>
 
-TextView::TextView(QWidget* parent, uint64_t fileId, Settings* settings, Wordlists& wordlists)
+TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
 	: m_currentPage(0), mFileId(fileId), mWordlists(wordlists), 
     mTextWords(fileId, settings->mFile.workspace.toStdString()), m_settings(settings),
-    QDialog(parent)
+    QDialog(nullptr)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
 	QFile file(QDir(settings->mFile.workspace + QString("/KonPonData") + QString("/Texts") + QString("/") + QString::number(fileId)).absoluteFilePath("text.txt"));
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		QDialog::close();
 	}
+
+    QFile nameDataFile(QDir(settings->mFile.workspace + QString("/KonPonData")).absoluteFilePath("TextIds.json"));
+    if (nameDataFile.open(QFile::ReadOnly)) {
+        QByteArray data = nameDataFile.readAll();
+        QJsonDocument doc = QJsonDocument::fromJson(data);
+        if (doc.isObject()) {
+            QJsonObject object = doc.object();
+            if (object.contains(QString::number(fileId))
+                && object[QString::number(fileId)].isString()) {
+                m_textName = object[QString::number(fileId)].toString().toStdString();
+            }
+        }
+        nameDataFile.close();
+    }
 
     QTextStream ReadFile(&file);
     ReadFile.setEncoding(QStringConverter::Encoding::Utf8);
@@ -58,6 +75,7 @@ TextView::TextView(QWidget* parent, uint64_t fileId, Settings* settings, Wordlis
         m_list->append({ stringList, charCountPrev });
     }
     delete tempString;
+    file.close();
 
     if (m_list->length() <= 0) {
         QDialog::close();
@@ -70,6 +88,8 @@ TextView::TextView(QWidget* parent, uint64_t fileId, Settings* settings, Wordlis
         highlightAllWords();
         addWidgets();
     }
+
+    setWindowTitle(tr("Text") + " - " + m_textName.c_str());
 }
 #include <QScrollArea>
 #include <QCheckbox>
@@ -82,15 +102,15 @@ void TextView::addWidgets()
     QHBoxLayout* bottomLayout = new QHBoxLayout(bottomWidget);
     layout->addWidget(m_textEdit);
     
-    QCheckBox* highlightUnknownCheckbox = new QCheckBox(tr("Highlight Unknown Words"));
-    highlightUnknownCheckbox->setChecked(true);
-    QCheckBox* highlightKnownCheckbox = new QCheckBox(tr("Highlight Known Words"));
-    highlightKnownCheckbox->setChecked(true);
-    QPushButton* highlightCustomButton = new QPushButton(tr("Highlight Words From Custom List"));
+    m_highlightUnknownCheckbox = new QCheckBox(tr("Highlight Unknown Words"));
+    m_highlightUnknownCheckbox->setChecked(true);
+    m_highlightKnownCheckbox = new QCheckBox(tr("Highlight Known Words"));
+    m_highlightKnownCheckbox->setChecked(true);
+    m_highlightCustomButton = new QPushButton(tr("Highlight Words From Custom List"));
     QHBoxLayout* checkboxLayout = new QHBoxLayout();
-    checkboxLayout->addWidget(highlightUnknownCheckbox);
-    checkboxLayout->addWidget(highlightKnownCheckbox);
-    checkboxLayout->addWidget(highlightCustomButton);
+    checkboxLayout->addWidget(m_highlightUnknownCheckbox);
+    checkboxLayout->addWidget(m_highlightKnownCheckbox);
+    checkboxLayout->addWidget(m_highlightCustomButton);
     layout->addLayout(checkboxLayout);
 
     layout->addWidget(bottomWidget);
@@ -108,9 +128,9 @@ void TextView::addWidgets()
     connect(m_prevPageButton, &QPushButton::released, this, &TextView::handlePrevPageButtonClicked);
     connect(m_pageEdit, &QLineEdit::textEdited, this, &TextView::handlePageEditEdited);
     connect(m_textEdit, &QTextEdit::cursorPositionChanged, this, &TextView::handleCursorPositionChanged);
-    connect(highlightCustomButton, &QPushButton::clicked, this, &TextView::handleHighlightCustomButtonClicked);
-    connect(highlightKnownCheckbox, &QCheckBox::toggled, this, &TextView::highlightKnownWords);
-    connect(highlightUnknownCheckbox, &QCheckBox::toggled, this, &TextView::highlightUnknownWords);
+    connect(m_highlightCustomButton, &QPushButton::clicked, this, &TextView::handleHighlightCustomButtonClicked);
+    connect(m_highlightKnownCheckbox, &QCheckBox::toggled, this, &TextView::highlightKnownWords);
+    connect(m_highlightUnknownCheckbox, &QCheckBox::toggled, this, &TextView::highlightUnknownWords);
     
 
     bottomLayout->addWidget(m_pageEdit);
@@ -312,6 +332,15 @@ void TextView::onHoveredWord(std::pair<std::string, std::string> word, const QPo
         .append("\n").append(tr("Wordlist: ")).append(wordlistName)
         : "";
     QToolTip::showText(globalPosition, text);
+}
+
+void TextView::onRetranslateUI()
+{
+    setWindowTitle(QCoreApplication::translate("TextView", "Text") + " - " + m_textName.c_str());
+
+    m_highlightUnknownCheckbox->setText(QCoreApplication::translate("TextView", "Highlight Unknown Words"));
+    m_highlightKnownCheckbox->setText(QCoreApplication::translate("TextView", "Highlight Known Words"));
+    m_highlightCustomButton->setText(QCoreApplication::translate("TextView", "Highlight Words From Custom List"));
 }
 
 TextView::~TextView()

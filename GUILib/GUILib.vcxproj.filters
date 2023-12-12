@@ -35,6 +35,9 @@
     <ClInclude Include="AnkiCardEditor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="MainWindow.cpp">
@@ -159,6 +162,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtTranslation Include="Translation_ja.ts">
+      <Filter>Translation Files</Filter>
+    </QtTranslation>
+    <QtTranslation Include="Translation_en.ts">
       <Filter>Translation Files</Filter>
     </QtTranslation>
   </ItemGroup>

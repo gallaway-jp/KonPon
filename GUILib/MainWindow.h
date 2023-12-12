@@ -12,7 +12,6 @@ class GUILIB_EXPORT MainWindow : public QMainWindow
 public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
-    void changeEvent(QEvent* event);
 private:
     Settings* mSettings;
 };

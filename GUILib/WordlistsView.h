@@ -71,6 +71,7 @@ public slots:
     void onEditRightList();
     void onEditList(QComboBox* combobox);
     void onReloadWordlists();
+    void onRetranslateUI();
 private slots:
     void onAddLeftWord();
     void onAddRightWord();

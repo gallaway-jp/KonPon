@@ -1,20 +1,23 @@
 #pragma once
-#include <qdialog.h>
+#include <QDialog>
 
 #include "Words.h"
 
 #include <string>
 #include <unordered_map>
 
-class QWidget;
+QT_BEGIN_NAMESPACE
+class QFormLayout;
+class QLabel;
+class QLineEdit;
 template <typename T>
 class QList;
-class QTextEdit;
-class QLineEdit;
-class QPushButton;
 class QListWidget;
 class QListWidgetItem;
-class QFormLayout;
+class QPushButton;
+class QTextEdit;
+class QWidget;
+QT_END_NAMESPACE
 
 class Settings;
 class Wordlists;
@@ -33,6 +36,7 @@ signals:
     void closeDialog();
 public slots:
     void onRemoveTextId(int64_t textId);
+    void onRetranslateUI();
 
 private:
     QFormLayout* layout;
@@ -46,7 +50,13 @@ private:
     QPushButton* mShowMoreButton = nullptr;
     QTextEdit* mNotesEdit = nullptr;
     QPushButton* mCopyButton = nullptr;
+    QPushButton* m_createAnkiCardButton = nullptr;
     bool mRequiresNotesUpdate = false;
+    QLabel* m_kanaLabel = nullptr;
+    QLabel* m_kanjiLabel = nullptr;
+    QLabel* m_pitchAccentsLabel = nullptr;
+    QLabel* m_textsLabel = nullptr;
+    QLabel* m_notesLabel = nullptr;
 private:
     void setDialogProperties();
     void addKanaKanjiLineWidgets(QFormLayout* layout);

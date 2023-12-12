@@ -6,21 +6,23 @@
 #include "EditWordlistDialog.h"
 #include "WordView.h"
 
-#include <QVBoxLayout>
-#include <QHBoxLayout>
-#include <QListWidget>
+#include <QCoreApplication>
 #include <QComboBox>
-#include <QPushButton>
-#include <QInputDialog>
-#include <QMessageBox>
-#include <QStackedWidget>
 #include <QDir>
+#include <QHBoxLayout>
+#include <QInputDialog>
+#include <QListWidget>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QStackedWidget>
+#include <QVBoxLayout>
 
 WordlistsView::WordlistsView(QWidget* parent, TextTree* textTree, Settings* settings, Wordlists& wordlists)
 	: QDialog(parent), mTextTree(textTree), mWordlists(wordlists), mSettings(settings)
 {
 	this->setUpdatesEnabled(false);
 
+	setWindowTitle(tr("Word Lists"));
 	this->setWindowFlag(Qt::WindowMaximizeButtonHint);
 	this->setWindowFlag(Qt::WindowMinimizeButtonHint);
 	createLists();
@@ -576,6 +578,24 @@ void WordlistsView::onReloadWordlists()
 		insertWordsFromCustomWordlistIntoListWidget(customListName);
 	}
 	this->setUpdatesEnabled(true);
+}
+
+void WordlistsView::onRetranslateUI()
+{
+	setWindowTitle(tr("Word Lists"));
+
+	mLeftCombobox->setItemText(0, QCoreApplication::translate("WordlistsView", "Unknown Wordlist"));
+	mLeftListEditButton->setText(QCoreApplication::translate("WordlistsView", "Edit List Settings"));
+	mLeftAddWordButton->setText(QCoreApplication::translate("WordlistsView", "Add Word"));
+	mLeftDeleteWordsButton->setText(QCoreApplication::translate("WordlistsView", "Delete Words"));
+	
+	mRightCombobox->setItemText(0, QCoreApplication::translate("WordlistsView", "Known Wordlist"));
+	mRightListEditButton->setText(QCoreApplication::translate("WordlistsView", "Edit List Settings"));
+	mRightAddWordButton->setText(QCoreApplication::translate("WordlistsView", "Add Word"));
+	mRightDeleteWordsButton->setText(QCoreApplication::translate("WordlistsView", "Delete Words"));
+
+	mAddCustomListButton->setText(QCoreApplication::translate("WordlistsView", "Add Custom List"));
+	mDeleteCustomListButton->setText(QCoreApplication::translate("WordlistsView", "Delete Custom List"));
 }
 
 void WordlistsView::insertWordsFromUnknownWordlistIntoListWidget()

@@ -1,20 +1,23 @@
 #pragma once
-#include <qdialog.h>
+#include <QDialog>
 
 #include "TextWords.h"
 
 #include <unordered_set>
 #include <string>
 
-class QWidget;
+QT_BEGIN_NAMESPACE
+class QCheckBox;
+class QLineEdit;
 template <typename T>
 class QList;
-class QTextEdit;
-class TextEdit;
-class QLineEdit;
 class QPushButton;
+class QTextEdit;
+class QWidget;
+QT_END_NAMESPACE
 
 class Settings;
+class TextEdit;
 class Wordlist;
 class Wordlists;
 
@@ -24,7 +27,7 @@ class TextView :
     using TextDataList = QList<QPair<QStringList*, int64_t>>;
     Q_OBJECT
 public:
-    TextView(QWidget* parent, uint64_t fileId, Settings* settings, Wordlists& wordlists);
+    TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists);
     ~TextView();
     signals:
     void closeDialog();
@@ -32,6 +35,7 @@ public:
 private:
     Settings* m_settings = nullptr;
     int64_t mFileId;
+    std::string m_textName;
     TextWords mTextWords;
     Wordlists& mWordlists;
     TextDataList* m_list; //each element contains pair of lines and offset from beginning of text
@@ -47,6 +51,9 @@ private:
     bool mHighlightUnknownChecked = true;
     bool mHighlightKnownChecked = true;
     int64_t mOffset = 0;
+    QCheckBox* m_highlightUnknownCheckbox = nullptr;
+    QCheckBox* m_highlightKnownCheckbox = nullptr;
+    QPushButton* m_highlightCustomButton = nullptr;
 private:
     void highlightCustomWordlist(const std::string& name, bool setHighlight = true);
     void addWidgets();
@@ -69,4 +76,5 @@ signals:
 public slots:
     void onSelectedWord(std::pair<std::string, std::string> word);
     void onHoveredWord(std::pair<std::string, std::string> word, const QPoint& globalPosition);
+    void onRetranslateUI();
 };

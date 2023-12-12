@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{30F720B0-C584-4A88-8539-4CE1121B4B7C}</ProjectGuid>
+    <ProjectGuid>{AFA020D3-2EFD-41D6-917E-0E0C8A1668C9}</ProjectGuid>
     <Keyword>QtVS_v304</Keyword>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0</WindowsTargetPlatformVersion>
@@ -19,11 +19,11 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -32,12 +32,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.6.1</QtInstall>
-    <QtModules>core;gui;network;widgets;concurrent</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.6.1</QtInstall>
-    <QtModules>core;gui;network;widgets;concurrent</QtModules>
+    <QtModules>core;gui;network;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -58,24 +58,33 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
   </PropertyGroup>
+  <PropertyGroup Label="QtDeploy" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <QtDeploy>true</QtDeploy>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)ParserLib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GUILib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_STATIC;$(Qt_DEFINES_);%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
-    <Lib>
+    <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)x64\Debug\;$(OutputPath)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ParserLib.lib;SettingsLib.lib;WordlistLib.lib;AnkiConnectLib.lib</AdditionalDependencies>
-    </Lib>
+      <AdditionalDependencies>GUILib.lib;%(AdditionalDependencies);$(Qt_LIBS_)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)ParserLib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories);$(Qt_INCLUDEPATH_)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)GUILib;$(SolutionDir)SettingsLib;$(SolutionDir)WordlistLib;$(SolutionDir)AnkiConnectLib;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_STATIC;</PreprocessorDefinitions>
       <LanguageStandard>$(Qt_STDCPP_)</LanguageStandard>
     </ClCompile>
-    <Lib>
+    <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)x64\Release\;$(OutputPath)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>ParserLib.lib;SettingsLib.lib;WordlistLib.lib;AnkiConnectLib.lib</AdditionalDependencies>
-    </Lib>
+      <AdditionalDependencies>GUILib.lib;$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ClCompile>
@@ -83,7 +92,6 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>GUILIB_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -96,7 +104,6 @@
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
       <DebugInformationFormat>None</DebugInformationFormat>
       <Optimization>MaxSpeed</Optimization>
-      <PreprocessorDefinitions>GUILIB_LIB;BUILD_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -104,73 +111,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="AddNoteType.cpp" />
-    <ClCompile Include="AnkiCardEditor.cpp" />
-    <ClCompile Include="BottomMenu.cpp" />
-    <ClCompile Include="CentralWidget.cpp" />
-    <ClCompile Include="CreateAnkiCardDialog.cpp" />
-    <ClCompile Include="CustomCheckboxDialog.cpp" />
-    <ClCompile Include="DeleteWordlistDialog.cpp" />
-    <ClCompile Include="DialogManager.cpp" />
-    <ClCompile Include="DragWidget.cpp" />
-    <ClCompile Include="EditWordlistDialog.cpp" />
-    <ClCompile Include="ListDialog.cpp" />
-    <ClCompile Include="MainWindow.cpp" />
-    <ClCompile Include="Menubar.cpp" />
-    <ClCompile Include="SettingsDialog.cpp" />
-    <ClCompile Include="ShortcutsDialog.cpp" />
-    <ClCompile Include="TextEdit.cpp" />
-    <ClCompile Include="TextTree.cpp" />
-    <ClCompile Include="TextView.cpp" />
-    <ClCompile Include="Util.cpp" />
-    <ClCompile Include="WordlistsView.cpp" />
-    <ClCompile Include="WordView.cpp">
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
-      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
-      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
-      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
-    </ClCompile>
-    <QtMoc Include="DialogManager.h" />
-    <QtMoc Include="CustomCheckboxDialog.h" />
-    <QtMoc Include="TextEdit.h" />
-    <QtMoc Include="CreateAnkiCardDialog.h" />
-    <QtMoc Include="AddNoteType.h" />
-    <ClInclude Include="AnkiCardEditor.h" />
-    <ClInclude Include="DragWidget.h" />
-    <QtMoc Include="ListDialog.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="Util.h" />
-    <QtMoc Include="WordView.h" />
-    <QtMoc Include="WordlistsView.h" />
-    <QtMoc Include="TextView.h" />
-    <QtMoc Include="TextTree.h" />
-    <QtMoc Include="CentralWidget.h" />
-    <QtMoc Include="BottomMenu.h" />
-    <QtMoc Include="DeleteWordlistDialog.h" />
-    <QtMoc Include="EditWordlistDialog.h" />
-    <ClInclude Include="guilib_global.h" />
-    <QtMoc Include="ShortcutsDialog.h" />
-    <QtMoc Include="SettingsDialog.h" />
-    <QtMoc Include="Menubar.h" />
-    <QtMoc Include="MainWindow.h" />
+    <QtRcc Include="KonPon.qrc" />
+    <QtUic Include="KonPon.ui" />
+    <ClCompile Include="KonPon.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ParserLib\ParserLib.vcxproj">
-      <Project>{745ac373-bb68-4be6-859d-a8a8c5234a77}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\SettingsLib\SettingsLib.vcxproj">
-      <Project>{08fb0ebf-f184-4041-9bc5-c430a1e5c71d}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\WordlistLib\WordlistLib.vcxproj">
-      <Project>{346a68ba-9333-4518-a516-fc1cd47ffd28}</Project>
+    <ProjectReference Include="..\GUILib\GUILib.vcxproj">
+      <Project>{30f720b0-c584-4a88-8539-4ce1121b4b7c}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <QtTranslation Include="Translation_en.ts" />
-    <QtTranslation Include="Translation_ja.ts" />
-  </ItemGroup>
-  <ItemGroup>
-    <QtRcc Include="Resource.qrc" />
+    <ClInclude Include="KonPon.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

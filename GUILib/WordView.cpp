@@ -6,16 +6,15 @@
 #include "TextView.h"
 #include "CreateAnkiCardDialog.h"
 
+#include <QApplication>
+#include <QClipboard>
 #include <QFormLayout>
+#include <QLabel>
 #include <QLineEdit>
 #include <QListWidget>
 #include <QPushButton>
 #include <QTextEdit>
-#include <QClipboard>
-#include <QApplication>
 #include <QTooltip>
-
-#include <map>
 
 WordView::WordView(const std::string& kana, const std::string& kanji, Settings* settings, Wordlists& wordlists, TextIdsMap& textIds)
 	: QDialog(nullptr), mSettings(settings), mWordlists(wordlists), mTextIds(textIds),
@@ -33,7 +32,8 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 
 	addTextListWidget(layout);
 
-	layout->addRow(tr("Notes"), (QWidget*)nullptr);
+	m_notesLabel = new QLabel(tr("Notes"));
+	layout->addRow(m_notesLabel, (QWidget*)nullptr);
 	mNotesRow = layout->rowCount() - 1;
 
 	mNotesEdit = new QTextEdit();
@@ -52,9 +52,9 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 	layout->addRow(mCopyButton);
 
 	if (mSettings->mAnki.isAnkiConnectFeatureEnabled) {
-		QPushButton* createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
-		connect(createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
-		layout->addRow(createAnkiCardButton);
+		m_createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
+		connect(m_createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
+		layout->addRow(m_createAnkiCardButton);
 	}
 }
 
@@ -63,18 +63,20 @@ void WordView::setDialogProperties()
 	setAttribute(Qt::WA_DeleteOnClose);
 	setWindowFlag(Qt::WindowMaximizeButtonHint);
 	setWindowFlag(Qt::WindowMinimizeButtonHint);
-	setWindowTitle(tr("Word View"));
+	setWindowTitle(tr("Word Info"));
 }
 
 void WordView::addKanaKanjiLineWidgets(QFormLayout* layout)
 {
 	QLineEdit* kanaLineEdit = new QLineEdit(mTextWord.getKana().c_str());
 	kanaLineEdit->setReadOnly(true);
-	layout->addRow(tr("Kana: "), kanaLineEdit);
+	m_kanaLabel = new QLabel(tr("Kana: "));
+	layout->addRow(m_kanaLabel, kanaLineEdit);
 
 	QLineEdit* kanjiLineEdit = new QLineEdit(mTextWord.getKanji().c_str());
 	kanjiLineEdit->setReadOnly(true);
-	layout->addRow(tr("Kanji: "), kanjiLineEdit);
+	m_kanjiLabel = new QLabel(tr("Kanji: "));
+	layout->addRow(m_kanjiLabel, kanjiLineEdit);
 }
 
 void WordView::addPitchAccentsLineWidget(QFormLayout* layout)
@@ -87,7 +89,8 @@ void WordView::addPitchAccentsLineWidget(QFormLayout* layout)
 
 	QLineEdit* accentsLineEdit = new QLineEdit(pitchAccentsString);
 	accentsLineEdit->setReadOnly(true);
-	layout->addRow(tr("Pitch Accents"), accentsLineEdit);
+	m_pitchAccentsLabel = new QLabel(tr("Pitch Accents"));
+	layout->addRow(m_pitchAccentsLabel, accentsLineEdit);
 }
 
 void WordView::addTextListWidget(QFormLayout* layout)
@@ -100,10 +103,10 @@ void WordView::addTextListWidget(QFormLayout* layout)
 			mTextList->addItem(item);
 			mTextListItems[textID] = item;
 		}
-		//TODO text in word info should really be deleted on iteration of words in text's wordlist
 	}
 
-	layout->addRow(tr("Texts"), (QWidget*)nullptr);
+	m_textsLabel = new QLabel(tr("Texts"));
+	layout->addRow(m_textsLabel, (QWidget*)nullptr);
 	layout->addRow(mTextList);
 
 	connect(mTextList, &QListWidget::itemClicked, this, &WordView::onTextClicked);
@@ -122,6 +125,27 @@ void WordView::onRemoveTextId(int64_t textId)
 		delete mTextList->takeItem(mTextList->row(it->second));
 		mTextListItems.erase(it);
 	}
+}
+
+void WordView::onRetranslateUI()
+{
+	setWindowTitle(QCoreApplication::translate("WordView", "Word Info"));
+
+	m_kanaLabel->setText(QCoreApplication::translate("WordView", "Kana: "));
+	m_kanjiLabel->setText(QCoreApplication::translate("WordView", "Kanji: "));
+	m_pitchAccentsLabel->setText(QCoreApplication::translate("WordView", "Pitch Accents"));
+	m_textsLabel->setText(QCoreApplication::translate("WordView", "Texts"));
+	m_notesLabel->setText(QCoreApplication::translate("WordView", "Notes"));
+
+	if (layout->isRowVisible(mNotesRow)) {
+		mShowMoreButton->setText(QCoreApplication::translate("WordView", "Show Less"));
+	}
+	else {
+		mShowMoreButton->setText(QCoreApplication::translate("WordView", "Show More"));
+	}
+
+	mCopyButton->setText(QCoreApplication::translate("WordView", "Copy Word Info"));
+	m_createAnkiCardButton->setText(QCoreApplication::translate("WordView", "Create Anki Card"));
 }
 
 void WordView::onCreateAnkiCardButton()

@@ -19,6 +19,8 @@ public:
     ~CentralWidget();
 public:
     TextTree* mTextTree;
+signals:
+    void retranslateUI();
 private:
     Wordlists* mWordlists;
     DialogManager* mDlgMgr = nullptr;

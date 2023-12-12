@@ -1,5 +1,8 @@
 <RCC>
-    <qresource prefix="/res/translations">
-        <file>Translation_ja.qm</file>
+    <qresource prefix="/res">
+        <file>icons/KonPon_white.ico</file>
+        <file>icons/KonPon.ico</file>
+        <file>translations/Translation_ja.qm</file>
+        <file>translations/Translation_en.qm</file>
     </qresource>
 </RCC>

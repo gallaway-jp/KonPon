@@ -5,10 +5,10 @@
 #include "WordView.h"
 #include "TextView.h"
 
-#include <QDialog>
-#include <QFile>
-#include <QDir>
 #include <QByteArray>
+#include <QDialog>
+#include <QDir>
+#include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
 
@@ -81,10 +81,11 @@ void DialogManager::onViewTextClicked(int64_t textId)
 {
     if (mTextIds[textId].second == nullptr) {
         // Open the textview for the selected file
-        TextView* textView = new TextView(nullptr, textId, mSettings, mWordlists);
+        TextView* textView = new TextView(textId, mSettings, mWordlists);
         setTextOpen(textId, dynamic_cast<QDialog*>(textView));
         connect(textView, &TextView::closeDialog, this, [this, textId]() {setTextOpen(textId); });
         connect(textView, &TextView::viewWordClicked, this, &DialogManager::onViewWordClicked);
+        connect(this, &DialogManager::retranslateUI, textView, &TextView::onRetranslateUI);
     }
     mTextIds[textId].second->show();
     mTextIds[textId].second->raise();
@@ -122,6 +123,7 @@ void DialogManager::onViewWordClicked(const std::string& kana, const std::string
         connect(wordView, &WordView::closeDialog, this, [this, kana, kanji]() {setWordOpen(kana, kanji); });
         connect(wordView, &WordView::viewTextClicked, this, &DialogManager::onViewTextClicked);
         connect(this, &DialogManager::removeTextId, wordView, &WordView::onRemoveTextId);
+        connect(this, &DialogManager::retranslateUI, wordView, &WordView::onRetranslateUI);
     }
     mWordMap[{kana, kanji}]->show();
     mWordMap[{kana, kanji}]->raise();

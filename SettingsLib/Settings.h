@@ -3,16 +3,22 @@
 #include "settingslib_global.h"
 
 #include <QString>
+#include <QTranslator>
 
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
 class SETTINGSLIB_EXPORT Settings {
 public:
-	enum Theme {
+	enum class Theme {
 		Default,
 		Light,
 		Dark
+	};
+	enum class Language {
+		Default,
+		English,
+		Japanese
 	};
 private:
 	bool m_clearDataOnTermination = false;
@@ -38,9 +44,15 @@ private:
 		void setTheme(Settings::Theme theme);
 		Settings::Theme getTheme();
 		bool isDarkTheme();
+		void setLanguage(Settings::Language language);
+		Settings::Language getLanguage();
 	private:
 		bool m_isSystemDarkMode = false;
-		Settings::Theme m_theme = Default;
+		Settings::Theme m_theme = Theme::Default;
+
+		QTranslator m_translator;
+		Settings::Language m_systemLanguage;
+		Settings::Language m_language = Language::Default;
 	private:
 		void setPalette(Settings::Theme theme);
 		void ReadSettings();

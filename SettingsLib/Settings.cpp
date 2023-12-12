@@ -7,7 +7,7 @@
 #include <QStyleHints>
 #include <QPalette>
 #include <QDir>
-
+#include <QIcon>
 Settings::Settings() : mFile(), ui(), mParser() {}
 
 Settings::~Settings()
@@ -61,7 +61,7 @@ void Settings::File::WriteSettings()
 Settings::UI::UI()
 {
 	m_isSystemDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
-
+	m_systemLanguage = QLocale::system().language() == QLocale::Japanese ? Language::Japanese : Language::English;
 	ReadSettings();
 }
 
@@ -74,13 +74,17 @@ void Settings::UI::ReadSettings()
 {
 	QSettings settings;
 	settings.beginGroup("UI");
-	m_theme = static_cast<Theme>(settings.value("theme", static_cast<Theme>(Theme::Default)).toInt());
+	m_theme = static_cast<Theme>(settings.value("theme", static_cast<int>(Theme::Default)).toInt());
 	if (m_theme != Theme::Default) {
 		if ((m_isSystemDarkMode && m_theme != Theme::Dark)
 			|| (!m_isSystemDarkMode && m_theme == Theme::Dark)) {
 			setPalette(m_theme);
 		}
 	}
+	QGuiApplication::setWindowIcon(QIcon(isDarkTheme() ? ":/res/icons/KonPon_white.ico" : ":/res/icons/KonPon.ico"));
+
+	m_language = static_cast<Language>(settings.value("language", static_cast<int>(Language::Default)).toInt());
+	setLanguage(m_language);
 	settings.endGroup();
 }
 
@@ -89,6 +93,7 @@ void Settings::UI::WriteSettings()
 	QSettings settings;
 	settings.beginGroup("UI");
 	settings.setValue("theme", static_cast<int>(m_theme));
+	settings.setValue("language", static_cast<int>(m_language));
 	settings.endGroup();
 }
 
@@ -135,6 +140,7 @@ void Settings::UI::setPalette(Theme theme) {
 		palette.setColor(QPalette::Inactive, item.role, theme == Theme::Dark ? item.inactiveDarkColor : item.inactiveLightColor);
 	}
 	QGuiApplication::setPalette(palette);
+	QGuiApplication::setWindowIcon(QIcon(theme == Theme::Dark ? ":/res/icons/KonPon_white.ico" : ":/res/icons/KonPon.ico"));
 }
 
 Settings::Theme Settings::UI::getTheme()
@@ -147,11 +153,11 @@ void Settings::UI::setTheme(Settings::Theme theme)
 	if (m_theme != theme) {
 		switch (theme)
 		{
-		case Settings::Default:
-			setPalette(m_isSystemDarkMode ? Settings::Dark : Settings::Light);
+		case Settings::Theme::Default:
+			setPalette(m_isSystemDarkMode ? Settings::Theme::Dark : Settings::Theme::Light);
 			break;
-		case Settings::Light:
-		case Settings::Dark:
+		case Settings::Theme::Light:
+		case Settings::Theme::Dark:
 		default:
 			setPalette(theme);
 			break;
@@ -164,18 +170,59 @@ bool Settings::UI::isDarkTheme()
 {
 	switch (m_theme)
 	{
-	case Settings::Default:
+	case Settings::Theme::Default:
 		if (m_isSystemDarkMode) {
 			return true;
 		}
 		return false;
-	case Settings::Light:
+	case Settings::Theme::Light:
 		return false;
-	case Settings::Dark:
+	case Settings::Theme::Dark:
 		return true;
 	default:
 		return false;
 	}
+}
+
+Settings::Language Settings::UI::getLanguage()
+{
+	return m_language;
+}
+
+void Settings::UI::setLanguage(Settings::Language language)
+{
+	QCoreApplication::removeTranslator(&m_translator);
+	switch (language)
+	{
+	case Settings::Language::Default:
+		switch (m_systemLanguage)
+		{
+		case Settings::Language::Japanese:
+			if (m_translator.load(":/res/translations/Translation_ja.qm")) {
+				QCoreApplication::installTranslator(&m_translator);
+			}
+			break;
+		default:
+			if (m_translator.load(":/res/translations/Translation_en.qm")) {
+				QCoreApplication::installTranslator(&m_translator);
+			}
+			break;
+		}
+		break;
+	case Settings::Language::English:
+		if (m_translator.load(":/res/translations/Translation_en.qm")) {
+			QCoreApplication::installTranslator(&m_translator);
+		}
+		break;
+	case Settings::Language::Japanese:
+		if (m_translator.load(":/res/translations/Translation_ja.qm")) {
+			QCoreApplication::installTranslator(&m_translator);
+		}
+		break;
+	default:
+		break;
+	}
+	m_language = language;
 }
 
 Settings::Anki::Anki()

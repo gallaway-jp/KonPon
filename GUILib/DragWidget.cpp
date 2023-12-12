@@ -141,6 +141,5 @@ void DragWidget::mousePressEvent(QMouseEvent* event)
     else {
         child->show();
         child->setText(text);
-        //child->setPixmap(pixmap);
     }
 }
