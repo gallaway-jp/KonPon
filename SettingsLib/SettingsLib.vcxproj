@@ -90,9 +90,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="SettingsUtil.cpp" />
     <ClInclude Include="Settings.h" />
     <ClInclude Include="settingslib_global.h" />
     <ClCompile Include="Settings.cpp" />
+    <ClInclude Include="SettingsUtil.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

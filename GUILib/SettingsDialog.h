@@ -81,6 +81,7 @@ private:
     QLineEdit* mWorkspaceLineEdit = nullptr;
     QPushButton* m_changeWorkspaceButton = nullptr;
 private slots:
+    void onLeaveWorkspaceLineEdit();
     void onChangeWorkspaceButtonClicked();
 };
 

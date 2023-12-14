@@ -142,7 +142,7 @@ FileTab::FileTab(Settings* settings)
 	QHBoxLayout* workspaceLayout = new QHBoxLayout();
 	mWorkspaceLineEdit = new QLineEdit(settings->mFile.workspace);
 	m_changeWorkspaceButton = new QPushButton(tr("Specify Workspace"));
-	connect(mWorkspaceLineEdit, &QLineEdit::textChanged, this, &FileTab::onChange);
+	connect(mWorkspaceLineEdit, &QLineEdit::editingFinished, this, &FileTab::onLeaveWorkspaceLineEdit);
 	connect(m_changeWorkspaceButton, &QPushButton::clicked, this, &FileTab::onChangeWorkspaceButtonClicked);
 	
 	workspaceLayout->addWidget(mWorkspaceLineEdit);
@@ -151,12 +151,24 @@ FileTab::FileTab(Settings* settings)
 	layout->addLayout(workspaceLayout);	
 }
 
+void FileTab::onLeaveWorkspaceLineEdit()
+{
+	QDir dir(mWorkspaceLineEdit->text());
+	if (!dir.exists()) {
+		QMessageBox::warning(this, tr("Invalid Input"), tr("The entered path is not a valid directory!"));
+		mWorkspaceLineEdit->setText(mSettings->mFile.workspace);
+		return;
+	}
+	emit onChange();
+}
+
 void FileTab::onChangeWorkspaceButtonClicked()
 {
 	QFileDialog dialog;
 	QString directory = dialog.getExistingDirectory();
 	if (!directory.isEmpty()) {
 		mWorkspaceLineEdit->setText(directory);
+		emit onChange();
 	}
 }
 

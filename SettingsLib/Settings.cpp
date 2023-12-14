@@ -1,13 +1,16 @@
 #include "Settings.h"
 
+#include "SettingsUtil.h"
+
+#include <QCoreApplication>
+#include <QDir>
+#include <QGuiApplication>
+#include <QIcon>
+#include <QPalette>
 #include <QSettings>
 #include <QString>
-#include <QCoreApplication>
-#include <QGuiApplication>
 #include <QStyleHints>
-#include <QPalette>
-#include <QDir>
-#include <QIcon>
+
 Settings::Settings() : mFile(), ui(), mParser() {}
 
 Settings::~Settings()
@@ -38,7 +41,10 @@ Settings::File::~File()
 
 void Settings::File::setWorkspace(const QString& workspace)
 {
-	this->workspace = workspace;
+	if (workspace != this->workspace) {
+		MoveFolderContents(this->workspace, workspace);
+		this->workspace = workspace;
+	}
 }
 
 void Settings::File::ReadSettings()

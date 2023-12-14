@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnkiConnectLib", "AnkiConne
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnkiConnectTest", "AnkiConnectTest\AnkiConnectTest.vcxproj", "{40DB2F80-43D2-44B7-88FC-E8AC10877AE0}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MemoryMapLib", "MemoryMapLib\MemoryMapLib.vcxproj", "{03EA5637-4E8F-497A-B045-091A8F04C362}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -101,6 +103,14 @@ Global
 		{40DB2F80-43D2-44B7-88FC-E8AC10877AE0}.Release|x64.Build.0 = Release|x64
 		{40DB2F80-43D2-44B7-88FC-E8AC10877AE0}.Release|x86.ActiveCfg = Release|x64
 		{40DB2F80-43D2-44B7-88FC-E8AC10877AE0}.Release|x86.Build.0 = Release|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Debug|x64.ActiveCfg = Debug|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Debug|x64.Build.0 = Debug|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Debug|x86.ActiveCfg = Debug|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Debug|x86.Build.0 = Debug|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Release|x64.ActiveCfg = Release|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Release|x64.Build.0 = Release|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Release|x86.ActiveCfg = Release|x64
+		{03EA5637-4E8F-497A-B045-091A8F04C362}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
