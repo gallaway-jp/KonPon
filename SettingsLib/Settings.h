@@ -64,7 +64,11 @@ private:
 		Anki();
 		~Anki();
 		void setEnableAnkiConnectFeature(bool enable);
+		void setAddress(const QString& address);
+		void setPort(ushort port);
 		bool isAnkiConnectFeatureEnabled = true;
+		QString address;
+		ushort port = 8765;
 	private:
 		void ReadSettings();
 		void WriteSettings();

@@ -12,7 +12,11 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSpinBox>
 #include <QTabWidget>
+
+#define PORT_MIN 0
+#define PORT_MAX 65535
 
 SettingsDialog::SettingsDialog(Settings* settings)
 	: m_settings(settings),
@@ -257,12 +261,25 @@ AnkiTab::AnkiTab(Settings* settings)
 	mEnableAnkiConnectCheckbox->setChecked(mSettings->mAnki.isAnkiConnectFeatureEnabled);
 	connect(mEnableAnkiConnectCheckbox, &QCheckBox::stateChanged, this, &AnkiTab::onChange);
 
+	m_ankiConnectAddressLineEdit = new QLineEdit(mSettings->mAnki.address);
+	connect(m_ankiConnectAddressLineEdit, &QLineEdit::textChanged, this, &AnkiTab::onChange);
+
+	m_ankiConnectPortSpinbox = new QSpinBox();
+	m_ankiConnectPortSpinbox->setMinimum(PORT_MIN);
+	m_ankiConnectPortSpinbox->setMaximum(PORT_MAX);
+	m_ankiConnectPortSpinbox->setValue(mSettings->mAnki.port);
+	connect(m_ankiConnectPortSpinbox, &QSpinBox::valueChanged, this, &AnkiTab::onChange);
+
 	layout->addRow(mEnableAnkiConnectCheckbox);
+	layout->addRow(tr("Bind Address"), m_ankiConnectAddressLineEdit);
+	layout->addRow(tr("Bind Port"), m_ankiConnectPortSpinbox);
 }
 
 void AnkiTab::onApplySettings()
 {
 	mSettings->mAnki.setEnableAnkiConnectFeature(mEnableAnkiConnectCheckbox->isChecked());
+	mSettings->mAnki.setAddress(m_ankiConnectAddressLineEdit->text());
+	mSettings->mAnki.setPort(static_cast<ushort>(m_ankiConnectPortSpinbox->value()));
 }
 
 void AnkiTab::onRestoreDefaults()

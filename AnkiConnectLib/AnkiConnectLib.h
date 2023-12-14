@@ -35,7 +35,7 @@ class ANKICONNECTLIB_EXPORT AnkiConnect : public QObject
 {
 	Q_OBJECT
 public:
-	AnkiConnect();
+	AnkiConnect(const QString& address = "http://localhost", const QString& port = "8765");
 
 	void GetDeckNames(std::function<void(QStringList)>& slot);
 
@@ -63,6 +63,7 @@ signals:
 	void addNotesResponse(bool notesCreated);
 
 private:
+	QString m_hostName;
 	QMetaObject::Connection mGetDeckNamesConnect;
 	QMetaObject::Connection mCreateDeckConnect;
 	QMetaObject::Connection mGetModelNamesConnect;

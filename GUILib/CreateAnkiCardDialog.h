@@ -10,15 +10,19 @@
 
 #include <QTextEdit>
 
+QT_BEGIN_NAMESPACE
 class QToolBar;
+QT_END_NAMESPACE
+
 class AnkiCardEditor;
+class Settings;
 
 class CreateAnkiCardDialog :
     public QDialog
 {
     Q_OBJECT
 public:
-    CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji);
+    CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji, Settings* settings);
 public:
 signals:
     void updateDeckNames(const QStringList& decks);

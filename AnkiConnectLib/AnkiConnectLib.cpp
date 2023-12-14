@@ -5,8 +5,9 @@
 #include <QList>
 #include <QFuture>
 
-AnkiConnect::AnkiConnect()
-	: QObject(nullptr)
+AnkiConnect::AnkiConnect(const QString& address, const QString& port)
+	: m_hostName(address + ":" + port),
+	QObject(nullptr)
 {
 	;
 }
@@ -50,12 +51,12 @@ QString AnkiConnect::FormatRequest(const std::vector<std::pair<QString, QJsonObj
 
 void AnkiConnect::Invoke(RequestManager* requestManager, const QString& action, const QJsonObject& params)
 {
-	requestManager->POST("http://localhost:8765", FormatRequest(action, params));
+	requestManager->POST(m_hostName, FormatRequest(action, params));
 }
 
 void AnkiConnect::Invoke(RequestManager* requestManager, const std::vector<std::pair<QString, QJsonObject>>& actions)
 {
-	requestManager->POST("http://localhost:8765", FormatRequest(actions));
+	requestManager->POST(m_hostName, FormatRequest(actions));
 }
 
 /*!

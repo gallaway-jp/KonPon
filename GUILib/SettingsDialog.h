@@ -8,6 +8,7 @@ class QDialogButtonBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
+class QSpinBox;
 class QString;
 class QTabWidget;
 QT_END_NAMESPACE
@@ -122,4 +123,6 @@ public slots:
 private:
     Settings* mSettings = nullptr;
     QCheckBox* mEnableAnkiConnectCheckbox;
+    QLineEdit* m_ankiConnectAddressLineEdit;
+    QSpinBox* m_ankiConnectPortSpinbox;
 };

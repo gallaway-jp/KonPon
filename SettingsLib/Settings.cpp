@@ -246,11 +246,23 @@ void Settings::Anki::setEnableAnkiConnectFeature(bool enable)
 	isAnkiConnectFeatureEnabled = enable;
 }
 
+void Settings::Anki::setAddress(const QString& address)
+{
+	this->address = address;
+}
+
+void Settings::Anki::setPort(ushort port)
+{
+	this->port = port;
+}
+
 void Settings::Anki::ReadSettings()
 {
 	QSettings settings;
 	settings.beginGroup("Anki");
 	isAnkiConnectFeatureEnabled = settings.value("enableAnkiConnectFeature", true).toBool();
+	address = settings.value("address", "http://localhost").toString();
+	port = static_cast<ushort>(settings.value("port", 8765).toUInt());
 	settings.endGroup();
 }
 
@@ -259,6 +271,8 @@ void Settings::Anki::WriteSettings()
 	QSettings settings;
 	settings.beginGroup("Anki");
 	settings.setValue("enableAnkiConnectFeature", isAnkiConnectFeatureEnabled);
+	settings.setValue("address", address);
+	settings.setValue("port", port);
 	settings.endGroup();
 }
 

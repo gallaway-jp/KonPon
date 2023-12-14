@@ -150,7 +150,7 @@ void WordView::onRetranslateUI()
 
 void WordView::onCreateAnkiCardButton()
 {
-	CreateAnkiCardDialog dialog(this, mTextWord.getKana(), mTextWord.getKanji());
+	CreateAnkiCardDialog dialog(this, mTextWord.getKana(), mTextWord.getKanji(), mSettings);
 	dialog.exec();
 }
 

@@ -13,9 +13,10 @@
 
 #include "DragWidget.h"
 #include "AnkiCardEditor.h"
+#include "Settings.h"
 
-CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji)
-	: QDialog(parent), mKana(kana), mKanji(kanji)
+CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji, Settings* settings)
+	: QDialog(parent), mKana(kana), mKanji(kanji), mAnkiConnect(settings->mAnki.address, QString::number(settings->mAnki.port))
 {
 	setAcceptDrops(true);
 	QVBoxLayout* mainLayout = new QVBoxLayout(this);
