@@ -48,8 +48,7 @@ namespace MeCab {
         std::map<std::string, FeatureSet> cache_;
 
     public:
-        bool open(const char* filename,
-            Iconv* iconv = 0);
+        bool open();
         void clear();
         bool rewrite(const std::string& feature,
             std::string* ufeature,

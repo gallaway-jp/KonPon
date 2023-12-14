@@ -12,32 +12,11 @@
 #include <sstream>
 #include <iostream>
 
-MecabSlim::MecabSlim(const char *pDictionaryPath)
+MecabSlim::MecabSlim()
 {
-    bool bRet = false;
+    std::vector<const char*> argv = { "mecab-slim" };
 
-    std::string arg = "";
-    std::string system = "mecab-slim";
-
-    arg = system /*+ " -r " + mecabrc*/ + " -d " + pDictionaryPath + arg;
-
-    std::vector<std::string> strings;
-    std::istringstream f(arg);
-    std::string s;
-    while (getline(f, s, ' ')) {
-        std::cout << s << std::endl;
-        strings.push_back(s);
-    }
-    int argc = (int)strings.size();
-    //char** argv = new char*[argc * sizeof(char*)];
-    std::vector<const char*> argv;
-
-    for (int i = 0; i < argc; i++) {
-        const char* cstr = (strings.at(i).c_str());
-        argv.push_back(cstr);
-    }
-
-    mTagger = MeCab::Tagger::create(argc, (char**)argv.data());
+    mTagger = MeCab::Tagger::create(1, (char**)argv.data());
     
     if (!mTagger) {
         throw std::runtime_error("Failed to create tagger!");

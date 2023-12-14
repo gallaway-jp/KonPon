@@ -671,13 +671,6 @@ namespace MeCab {
         virtual const DictionaryInfo* dictionary_info() const = 0;
 
         /**
-         * Return transtion cost from rcAttr to lcAttr.
-         * @return transtion cost
-         */
-        virtual int transition_cost(unsigned short rcAttr,
-            unsigned short lcAttr) const = 0;
-
-        /**
          * perform common prefix search from the range [begin, end).
          * |lattice| takes the ownership of return value.
          * @return node linked list.

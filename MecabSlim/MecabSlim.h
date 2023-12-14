@@ -11,7 +11,7 @@ class MecabSlim
 private:
     MeCab::Tagger *mTagger;
 public:
-    MecabSlim(const char* pDictionaryPath);
+    MecabSlim();
     ~MecabSlim();
 
     const MeCab::Node* parse(const char* pText);

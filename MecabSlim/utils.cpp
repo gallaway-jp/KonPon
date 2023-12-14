@@ -100,107 +100,6 @@ namespace MeCab {
         return UTF8;  // default is UTF8
     }
 
-    std::string create_filename(const std::string& path,
-        const std::string& file) {
-        std::string s = path;
-#if defined(_WIN32) && !defined(__CYGWIN__)
-        if (s.size() && s[s.size() - 1] != '\\') s += '\\';
-#else
-        if (s.size() && s[s.size() - 1] != '/') s += '/';
-#endif
-        s += file;
-        return s;
-    }
-
-    void remove_filename(std::string* s) {
-        int len = static_cast<int>(s->size()) - 1;
-        bool ok = false;
-        for (; len >= 0; --len) {
-#if defined(_WIN32) && !defined(__CYGWIN__)
-            if ((*s)[len] == '\\') {
-                ok = true;
-                break;
-            }
-#else
-            if ((*s)[len] == '/') {
-                ok = true;
-                break;
-            }
-#endif
-        }
-        if (ok)
-            *s = s->substr(0, len);
-        else
-            *s = ".";
-    }
-
-    void remove_pathname(std::string* s) {
-        int len = static_cast<int>(s->size()) - 1;
-        bool ok = false;
-        for (; len >= 0; --len) {
-#if defined(_WIN32) && !defined(__CYGWIN__)
-            if ((*s)[len] == '\\') {
-                ok = true;
-                break;
-            }
-#else
-            if ((*s)[len] == '/') {
-                ok = true;
-                break;
-            }
-#endif
-        }
-        if (ok)
-            *s = s->substr(len + 1, s->size() - len);
-        else
-            *s = ".";
-    }
-
-    void replace_string(std::string* s,
-        const std::string& src,
-        const std::string& dst) {
-        const std::string::size_type pos = s->find(src);
-        if (pos != std::string::npos) {
-            s->replace(pos, src.size(), dst);
-        }
-    }
-
-    void enum_csv_dictionaries(const char* path,
-        std::vector<std::string>* dics) {
-        dics->clear();
-
-#if defined(_WIN32) && !defined(__CYGWIN__)
-        WIN32_FIND_DATAW wfd;
-        HANDLE hFind;
-        const std::wstring pat = Utf8ToWide(create_filename(path, "*.csv"));
-        hFind = ::FindFirstFileW(pat.c_str(), &wfd);
-        CHECK_DIE(hFind != INVALID_HANDLE_VALUE)
-            << "Invalid File Handle. Get Last Error reports";
-        do {
-            std::string tmp = create_filename(path, WideToUtf8(wfd.cFileName));
-            dics->push_back(tmp);
-        } while (::FindNextFileW(hFind, &wfd));
-        ::FindClose(hFind);
-#else
-        DIR* dir = opendir(path);
-        CHECK_DIE(dir) << "no such directory: " << path;
-
-        for (struct dirent* dp = readdir(dir);
-            dp;
-            dp = readdir(dir)) {
-            const std::string tmp = dp->d_name;
-            if (tmp.size() >= 5) {
-                std::string ext = tmp.substr(tmp.size() - 4, 4);
-                toLower(&ext);
-                if (ext == ".csv") {
-                    dics->push_back(create_filename(path, tmp));
-                }
-            }
-        }
-        closedir(dir);
-#endif
-    }
-
     bool toLower(std::string* s) {
         for (size_t i = 0; i < s->size(); ++i) {
             char c = (*s)[i];
@@ -224,29 +123,6 @@ namespace MeCab {
             *w = tmp;
         }
         return true;
-    }
-
-    int progress_bar(const char* message, size_t current, size_t total) {
-        static char bar[] = "###########################################";
-        static int scale = sizeof(bar) - 1;
-        static int prev = 0;
-
-        int cur_percentage = static_cast<int>(100.0 * current / total);
-        int bar_len = static_cast<int>(1.0 * current * scale / total);
-
-        if (prev != cur_percentage) {
-            printf("%s: %3d%% |%.*s%*s| ", message, cur_percentage,
-                bar_len, bar, scale - bar_len, "");
-            if (cur_percentage == 100)
-                printf("\n");
-            else
-                printf("\r");
-            fflush(stdout);
-        }
-
-        prev = cur_percentage;
-
-        return 1;
     }
 
     int load_request_type(const Param& param) {
@@ -293,11 +169,24 @@ namespace MeCab {
             dicdir = ".";  // current
         }
         param->set<std::string>("dicdir", dicdir, true);
-        dicdir = create_filename(dicdir, DICRC);
-
-        if (!param->load(dicdir.c_str())) {
-            return false;
-        }
+        param->set<std::string>("cost-factor", "700", false);
+        param->set<std::string>("bos-feature", "BOS/EOS,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*,*", false);
+        param->set<std::string>("eval-size", "10", false);
+        param->set<std::string>("unk-eval-size", "4", false);
+        param->set<std::string>("config-charset", "utf8", false);
+        param->set<std::string>("output-format-type", "unidic22", false);
+        param->set<std::string>("node-format-unidic22", "%m\\t%f[0],%f[1],%f[2],%f[3],%f[4],%f[5],%f[6],%f[7],%f[8],%f[9],%f[10],%f[11],%f[12],\"%f[13]\",\"%f[14]\",\"%f[15]\",\"%f[16]\",\"%f[17]\",\"%f[18]\",%f[19],%f[20],%f[21],%f[22],%f[23],\"%f[24]\",\"%f[25]\",\"%f[26]\",%f[27],%f[28]\\n", false);
+        param->set<std::string>("unk-format-unidic22", "%m\\t%f[0],%f[1],%f[2],%f[3],%f[4],%f[5]\\n", false);
+        param->set<std::string>("bos-format-unidic22", "", false);
+        param->set<std::string>("eos-format-unidic22", "EOS\\n", false);
+        param->set<std::string>("node-format-verbose", "surface:%m\\tpos1:%f[0]\\tpos2:%f[1]\\tpos3:%f[2]\\tpos4:%f[3]\\tcType:%f[4]\\tcForm:%f[5]\\tlForm:%f[6]\\tlemma:%f[7]\\torth:%f[8]\\tpron:%f[9]\\torthBase:%f[10]\\tpronBase:%f[11]\\tgoshu:%f[12]\\tiType:%f[13]\\tiForm:%f[14]\\tfType:%f[15]\\tfForm:%f[16]\\tiConType:%f[17]\\tfConType:%f[18]\\tlType:%f[19]\\tkana:%f[20]\\tkanaBase:%f[21]\\tform:%f[22]\\tformBase:%f[23]\\taType:%f[24]\\taConType:%f[25]\\taModType:%f[26]\\tlid:%f[27]\\tlemma_id:%f[28]\\n", false);
+        param->set<std::string>("unk-format-verbose", "surface:%m\\tpos1:%f[0]\\tpos2:%f[1]\\tpos3:%f[2]\\tpos4:%f[3]\\tcType:%f[4]\\tcForm:%f[5]\\n", false);
+        param->set<std::string>("bos-format-verbose", "", false);
+        param->set<std::string>("eos-format-verbose", "EOS\\n", false);
+        param->set<std::string>("node-format-chamame", "\\t%m\\t%f[9]\\t%f[6]\\t%f[7]\\t%F-[0,1,2,3]\\t%f[4]\\t%f[5]\\t%f[23]\\t%f[12]\\n\\n", false);
+        param->set<std::string>("unk-format-chamame", "\\t%m\\t\\t\\t%m\\t–¢’mŒê\\t\\t\\t\\t\\n", false);
+        param->set<std::string>("bos-format-chamame", "B", false);
+        param->set<std::string>("eos-format-chamame", "", false);
 
         return true;
     }

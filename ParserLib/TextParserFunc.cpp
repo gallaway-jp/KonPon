@@ -310,9 +310,7 @@ namespace ParserFunc {
     }
 
     std::pair<WordDict, LocationsDict> Tokenize(std::string const& folder, const char* pInputText, const std::string& fileId, Wordlist& outWordlist, Words& outWords) {
-        QByteArray dictionaryPathBA = QDir(folder.c_str()).absoluteFilePath("DictionaryData").toUtf8();
-
-        MecabSlim mcs = MecabSlim(dictionaryPathBA.data());
+        MecabSlim mcs = MecabSlim();
 
         auto results = mcs.parse(pInputText);
 

@@ -33,14 +33,6 @@ namespace MeCab {
         size_t left_size()  const { return static_cast<size_t>(lsize_); }
         size_t right_size() const { return static_cast<size_t>(rsize_); }
 
-        void set_left_size(size_t lsize);
-        void set_right_size(size_t rsize);
-
-        inline int transition_cost(unsigned short rcAttr,
-            unsigned short lcAttr) const {
-            return matrix_[rcAttr + lsize_ * lcAttr];
-        }
-
         inline int cost(const Node* lNode, const Node* rNode) const {
             return matrix_[lNode->rcAttr + lsize_ * rNode->lcAttr] + rNode->wcost;
         }
@@ -49,7 +41,6 @@ namespace MeCab {
         short* mutable_matrix() { return &matrix_[0]; }
         const short* matrix() const { return &matrix_[0]; }
 
-        bool openText(const char* filename);
         bool open(const char* filename, const char* mode = "r");
 
         bool is_valid(size_t lid, size_t rid) const {

@@ -110,20 +110,7 @@ namespace MeCab {
 
     bool escape_csv_element(std::string* w);
 
-    void enum_csv_dictionaries(const char* path,
-        std::vector<std::string>* dics);
-
-    int  progress_bar(const char* message, size_t current, size_t total);
-
     bool toLower(std::string*);
-
-    std::string create_filename(const std::string& path,
-        const std::string& file);
-    void remove_filename(std::string* s);
-    void remove_pathname(std::string* s);
-    void replace_string(std::string* s,
-        const std::string& src,
-        const std::string& dst);
 
     template <class Iterator>
     inline size_t tokenizeCSV(char* str,

@@ -37,12 +37,7 @@
 #define HAVE_WINDOWS_H 1
 #endif //#if defined(_WIN32) && !defined(__CYGWIN__)
 
-#define SYS_DIC_FILE            "sys.dic"
 #define UNK_DIC_FILE            "unk.dic"
-#define MATRIX_FILE             "matrix.bin"
-#define CHAR_PROPERTY_FILE      "char.bin"
-#define FEATURE_FILE            "feature.def"
-#define REWRITE_FILE            "rewrite.def"
 #define DICRC                   "dicrc"
 #define BOS_KEY                 "BOS/EOS"
 

@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/dictionary">
+        <file>unidic/char.bin</file>
+        <file>unidic/unk.dic</file>
+        <file>unidic/matrix.bin</file>
+        <file>unidic/sys.dic</file>
+    </qresource>
+</RCC>

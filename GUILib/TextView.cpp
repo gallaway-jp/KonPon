@@ -5,6 +5,7 @@
 #include "TextEdit.h"
 #include "Wordlists.h"
 
+#include <QCheckbox>
 #include <QCoreApplication>
 #include <QDir>
 #include <QFile>
@@ -15,11 +16,14 @@
 #include <QLabel>
 #include <QLineEdit>
 #include <QList>
+#include <QListWidget>
 #include <QPushButton>
+#include <QScrollArea>
 #include <QString>
 #include <QStringList>
 #include <QTextEdit>
 #include <QTextStream>
+#include <QToolTip>
 #include <QVBoxLayout>
 
 TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
@@ -91,9 +95,7 @@ TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
 
     setWindowTitle(tr("Text") + " - " + m_textName.c_str());
 }
-#include <QScrollArea>
-#include <QCheckbox>
-#include <QListWidget>
+
 void TextView::addWidgets()
 {
     //Create layouts and container widgets within layouts
@@ -309,7 +311,6 @@ void TextView::onSelectedWord(std::pair<std::string, std::string> word)
     emit viewWordClicked(word.first, word.second);
 }
 
-#include <QToolTip>
 void TextView::onHoveredWord(std::pair<std::string, std::string> word, const QPoint& globalPosition)
 {
     QString wordlistName;

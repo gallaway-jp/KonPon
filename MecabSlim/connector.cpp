@@ -15,8 +15,7 @@
 namespace MeCab {
 
     bool Connector::open(const Param& param) {
-        const std::string filename = create_filename
-        (param.get<std::string>("dicdir"), MATRIX_FILE);
+        const std::string filename = ":/dictionary/unidic/matrix.bin";
         return open(filename.c_str());
     }
 
@@ -44,30 +43,5 @@ namespace MeCab {
 
     void Connector::close() {
         cmmap_->close();
-    }
-
-    void Connector::set_left_size(size_t lsize)
-    {
-        lsize_ = Conversion::convertULongLongToUShort(lsize);
-    }
-    void Connector::set_right_size(size_t rsize)
-    {
-        rsize_ = Conversion::convertULongLongToUShort(rsize);
-    }
-
-    bool Connector::openText(const char* filename) {
-        std::ifstream ifs(WPATH(filename));
-        if (!ifs) {
-            WHAT << "no such file or directory: " << filename;
-            return false;
-        }
-        char* column[2];
-        scoped_fixed_array<char, BUF_SIZE> buf;
-        ifs.getline(buf.get(), buf.size());
-        CHECK_DIE(tokenize2(buf.get(), "\t ", column, 2) == 2)
-            << "format error: " << buf.get();
-        lsize_ = std::atoi(column[0]);
-        rsize_ = std::atoi(column[1]);
-        return true;
     }
 }

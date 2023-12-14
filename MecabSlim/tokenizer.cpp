@@ -107,15 +107,14 @@ namespace MeCab {
 
         const std::string prefix = param.template get<std::string>("dicdir");
 
-        CHECK_FALSE(unkdic_.open(create_filename
-        (prefix, UNK_DIC_FILE).c_str()))
+        CHECK_FALSE(unkdic_.open(":/dictionary/unidic/unk.dic"))
             << unkdic_.what();
         CHECK_FALSE(property_.open(param)) << property_.what();
 
         Dictionary* sysdic = new Dictionary;
 
         CHECK_FALSE(sysdic->open
-        (create_filename(prefix, SYS_DIC_FILE).c_str()))
+        (":/dictionary/unidic/sys.dic"))
             << sysdic->what();
 
         CHECK_FALSE(sysdic->type() == 0)

@@ -73,7 +73,7 @@ namespace MeCab {
 
     bool CharProperty::open(const Param& param) {
         const std::string prefix = param.get<std::string>("dicdir");
-        const std::string filename = create_filename(prefix, CHAR_PROPERTY_FILE);
+        const std::string filename = ":/dictionary/unidic/char.bin";
         return open(filename.c_str());
     }
 
