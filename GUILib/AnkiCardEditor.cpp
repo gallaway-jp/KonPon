@@ -1,4 +1,4 @@
-#include "AnkiCardEditor.h"
+﻿#include "AnkiCardEditor.h"
 #include "DragWidget.h"
 
 #include <QDialogButtonBox>
@@ -15,7 +15,7 @@
 #include <QColor>
 #include <QColorDialog>
 #include "ListDialog.h"
-
+#include <QCoreApplication>
 AnkiCardEditor::AnkiCardEditor()
 	: QWidget(nullptr)
 {
@@ -38,14 +38,11 @@ AnkiCardEditor::AnkiCardEditor()
 	mTagEdit = new QLineEdit();
 	QFormLayout* tagsLayout = new QFormLayout();
 	mLayout->addLayout(tagsLayout);
-	tagsLayout->addRow(tr("Tags"), mTagEdit);
+	tagsLayout->addRow(QCoreApplication::translate("AnkiCardEditor", "Tags"), mTagEdit);
 }
 
 void AnkiCardEditor::setTextWidth()
 {
-	/*QLabel* labeltest = new QLabel(mCurrentDeck);
-	mTextWidth = labeltest->width();
-	delete labeltest;*/
 	mTextWidth = 50;
 }
 
@@ -57,11 +54,11 @@ void AnkiCardEditor::createNoteDeckButtons()
 	QFormLayout* noteTypeLayout = new QFormLayout();
 	deckNoteLayout->addLayout(noteTypeLayout);
 	mNoteTypeButton = new QPushButton(mCurrentNoteType);
-	noteTypeLayout->addRow(tr("Note Type"), mNoteTypeButton);
+	noteTypeLayout->addRow(QCoreApplication::translate("AnkiCardEditor", "Note Type"), mNoteTypeButton);
 	QFormLayout* deckLayout = new QFormLayout();
 	deckNoteLayout->addLayout(deckLayout);
 	mDeckButton = new QPushButton(mCurrentDeck);
-	deckLayout->addRow(tr("Deck Type"), mDeckButton);
+	deckLayout->addRow(QCoreApplication::translate("AnkiCardEditor", "Deck Type"), mDeckButton);
 
 	connect(mNoteTypeButton, &QPushButton::clicked, this, &AnkiCardEditor::onNoteTypeButtonClicked);
 	connect(mDeckButton, &QPushButton::clicked, this, &AnkiCardEditor::onDeckButtonClicked);
@@ -75,7 +72,6 @@ void AnkiCardEditor::createFields()
 	mLayout->addWidget(scrollArea);
 
 	fieldsLayout = new QFormLayout();
-	//fieldsLayout->setSpacing(0);
 	fieldsLayout->setContentsMargins(0, 0, 0, 0);
 	scrollArea->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 	scrollArea->setWidgetResizable(true);
@@ -92,41 +88,42 @@ QToolBar* AnkiCardEditor::createEditToolbar()
 {
 	QToolBar* cardEditMenuBar = new QToolBar();
 	
-	QAction* boldAction = cardEditMenuBar->addAction("B", QKeySequence::Bold);
-	boldAction->setToolTip(tr("Bold"));
-	boldAction->setCheckable(true);
-	boldAction->setChecked(false);
-	QFont font = QFont(boldAction->font());
+	m_boldAction = cardEditMenuBar->addAction("B", QKeySequence::Bold);
+	m_boldAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Bold"));
+	m_boldAction->setCheckable(true);
+	m_boldAction->setChecked(false);
+	QFont font = QFont(m_boldAction->font());
 	font.setBold(true);
-	boldAction->setFont(font);
-	connect(boldAction, &QAction::toggled, this, &AnkiCardEditor::onBoldActionToggled);
+	m_boldAction->setFont(font);
+	connect(m_boldAction, &QAction::toggled, this, &AnkiCardEditor::onBoldActionToggled);
+	m_boldAction->setChecked(false);
 
-	QAction* italicAction = cardEditMenuBar->addAction("I", QKeySequence::Italic);
-	italicAction->setToolTip(tr("Italic"));
-	italicAction->setCheckable(true);
-	italicAction->setChecked(false);
+	m_italicAction = cardEditMenuBar->addAction("I", QKeySequence::Italic);
+	m_italicAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Italic"));
+	m_italicAction->setCheckable(true);
+	m_italicAction->setChecked(false);
 	font.setBold(false);
 	font.setItalic(true);
-	italicAction->setFont(font);
-	connect(italicAction, &QAction::toggled, this, &AnkiCardEditor::onItalicActionToggled);
+	m_italicAction->setFont(font);
+	connect(m_italicAction, &QAction::toggled, this, &AnkiCardEditor::onItalicActionToggled);
 
-	QAction* underlineAction = cardEditMenuBar->addAction("U", QKeySequence::Underline);
-	underlineAction->setToolTip(tr("Underline"));
-	underlineAction->setCheckable(true);
-	underlineAction->setChecked(false);
+	m_underlineAction = cardEditMenuBar->addAction("U", QKeySequence::Underline);
+	m_underlineAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Underline"));
+	m_underlineAction->setCheckable(true);
+	m_underlineAction->setChecked(false);
 	font.setItalic(false);
 	font.setUnderline(true);
-	underlineAction->setFont(font);
-	connect(underlineAction, &QAction::toggled, this, &AnkiCardEditor::onUnderlineActionToggled);
+	m_underlineAction->setFont(font);
+	connect(m_underlineAction, &QAction::toggled, this, &AnkiCardEditor::onUnderlineActionToggled);
 
-	QAction* strikeoutAction = cardEditMenuBar->addAction("S", Qt::Key_F7);
-	strikeoutAction->setToolTip(tr("Strikeout"));
-	strikeoutAction->setCheckable(true);
-	strikeoutAction->setChecked(false);
+	m_strikeoutAction = cardEditMenuBar->addAction("S", Qt::Key_F7);
+	m_strikeoutAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Strikeout"));
+	m_strikeoutAction->setCheckable(true);
+	m_strikeoutAction->setChecked(false);
 	font.setUnderline(false);
 	font.setStrikeOut(true);
-	strikeoutAction->setFont(font);
-	connect(strikeoutAction, &QAction::toggled, this, &AnkiCardEditor::onStrikeoutActionToggled);
+	m_strikeoutAction->setFont(font);
+	connect(m_strikeoutAction, &QAction::toggled, this, &AnkiCardEditor::onStrikeoutActionToggled);
 
 	cardEditMenuBar->addSeparator();
 
@@ -141,17 +138,23 @@ QToolBar* AnkiCardEditor::createEditToolbar()
 	painter.drawText(QPoint(5, 20), "A");
 	QIcon colorIcon(pixmap);
 
-	QAction* colorAction = cardEditMenuBar->addAction(colorIcon, "", Qt::Key_F8);
-	colorAction->setToolTip(tr("Text Color"));
-	connect(colorAction, &QAction::triggered, this, &AnkiCardEditor::onColorActionTriggered);
+	m_colorAction = cardEditMenuBar->addAction(colorIcon, "", Qt::Key_F8);
+	m_colorAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Text Color"));
+	connect(m_colorAction, &QAction::triggered, this, &AnkiCardEditor::onColorActionTriggered);
 
 	pixmap.fill(Qt::darkYellow);
 	painter.setPen(Qt::white);
 	painter.drawText(QPoint(5, 20), "A");
 	QIcon highlightIcon(pixmap);
-	QAction* highlightAction = cardEditMenuBar->addAction(highlightIcon, "", Qt::Key_F9);
-	colorAction->setToolTip(tr("Highlight Color"));
-	connect(highlightAction, &QAction::triggered, this, &AnkiCardEditor::onHighlightActionTriggered);
+	m_highlightAction = cardEditMenuBar->addAction(highlightIcon, "", Qt::Key_F9);
+	m_highlightAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Highlight Color"));
+	connect(m_highlightAction, &QAction::triggered, this, &AnkiCardEditor::onHighlightActionTriggered);
+
+	cardEditMenuBar->addSeparator();
+
+	m_resetAction = cardEditMenuBar->addAction("↺", Qt::Key_F12);
+	m_resetAction->setToolTip(QCoreApplication::translate("AnkiCardEditor", "Reset"));
+	connect(m_resetAction, &QAction::triggered, this, &AnkiCardEditor::onResetActionTriggered);
 
 	return cardEditMenuBar;
 }
@@ -256,6 +259,21 @@ void AnkiCardEditor::onHighlightActionTriggered(bool checked)
 		}
 	}
 }
+
+void AnkiCardEditor::onResetActionTriggered(bool checked)
+{
+	m_boldAction->setChecked(false);
+	m_italicAction->setChecked(false);
+	m_underlineAction->setChecked(false);
+	m_strikeoutAction->setChecked(false);
+
+	for (int i = 0; i < fieldsLayout->rowCount(); i++) {
+		QTextEdit* fieldEdit = dynamic_cast<QTextEdit*>(fieldsLayout->itemAt(i, QFormLayout::FieldRole)->widget());
+		fieldEdit->setCurrentCharFormat(QTextCharFormat());
+	}
+	
+}
+
 
 void AnkiCardEditor::onNoteTypeButtonClicked()
 {

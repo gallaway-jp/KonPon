@@ -55,6 +55,13 @@ private:
     QMap<QString, QStringList> mNoteTypes = { {"Default", {"Front", "Back"}}};
     QMap<QString, std::pair<QString, QString>> mNewNoteTypes;
     std::unordered_set <QString> mNewDecks;
+    QAction* m_boldAction = nullptr;
+    QAction* m_italicAction = nullptr;
+    QAction* m_underlineAction = nullptr;
+    QAction* m_strikeoutAction = nullptr;
+    QAction* m_colorAction = nullptr;
+    QAction* m_highlightAction = nullptr;
+    QAction* m_resetAction = nullptr;
 
 private slots:
     void onBoldActionToggled(bool checked);
@@ -63,6 +70,7 @@ private slots:
     void onStrikeoutActionToggled(bool checked);
     void onColorActionTriggered(bool checked);
     void onHighlightActionTriggered(bool checked);
+    void onResetActionTriggered(bool checked);
     void onNoteTypeButtonClicked();
     void onDeckButtonClicked();
 };

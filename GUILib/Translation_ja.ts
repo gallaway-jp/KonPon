@@ -57,44 +57,49 @@
         <translation>タグ</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="60"/>
+        <location filename="AnkiCardEditor.cpp" line="57"/>
         <source>Note Type</source>
         <translation>ノートタイプ</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="64"/>
+        <location filename="AnkiCardEditor.cpp" line="61"/>
         <source>Deck Type</source>
         <translation>デッキタイプ</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="96"/>
+        <location filename="AnkiCardEditor.cpp" line="92"/>
         <source>Bold</source>
         <translation>太字</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="105"/>
+        <location filename="AnkiCardEditor.cpp" line="102"/>
         <source>Italic</source>
         <translation>斜体</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="114"/>
+        <location filename="AnkiCardEditor.cpp" line="111"/>
         <source>Underline</source>
         <translation>下線</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="123"/>
+        <location filename="AnkiCardEditor.cpp" line="120"/>
         <source>Strikeout</source>
         <translation>取り消し線</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="145"/>
+        <location filename="AnkiCardEditor.cpp" line="142"/>
         <source>Text Color</source>
         <translation>テキストの色</translation>
     </message>
     <message>
-        <location filename="AnkiCardEditor.cpp" line="153"/>
+        <location filename="AnkiCardEditor.cpp" line="150"/>
         <source>Highlight Color</source>
         <translation>ハイライトの色</translation>
+    </message>
+    <message>
+        <location filename="AnkiCardEditor.cpp" line="156"/>
+        <source>Reset</source>
+        <translation>リセット</translation>
     </message>
 </context>
 <context>
