@@ -1,24 +1,33 @@
 #include "CreateAnkiCardDialog.h"
 
 #include <QDialogButtonBox>
-#include <QPushButton>
-#include <QVBoxLayout>
 #include <QFormLayout>
-#include <QTextEdit>
 #include <QLabel>
 #include <QLineEdit>
-#include <QToolBar>
-#include <QSizePolicy>
 #include <QMessageBox>
+#include <QPushButton>
+#include <QSizePolicy>
+#include <QTextEdit>
+#include <QToolBar>
+#include <QVBoxLayout>
 
-#include "DragWidget.h"
 #include "AnkiCardEditor.h"
+#include "ListDialog.h"
 #include "Settings.h"
+#include "Word.h"
 
-CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& kana, const std::string& kanji, Settings* settings)
-	: QDialog(parent), mKana(kana), mKanji(kanji), mAnkiConnect(settings->mAnki.address, QString::number(settings->mAnki.port))
+CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const Word& word, Settings* settings)
+	: QDialog(parent),
+	mKana(word.getKana()), mKanji(word.getKanji()),
+	mAnkiConnect(settings->mAnki.address, QString::number(settings->mAnki.port))
 {
-	setAcceptDrops(true);
+	if (!word.getPitchAccents().empty()) {
+		m_pitchAccents = std::to_string(*word.getPitchAccents().begin());
+		std::for_each(std::next(word.getPitchAccents().begin()), word.getPitchAccents().end(), [this](int val) {
+			m_pitchAccents.append(", ").append(std::to_string(val)); }
+		);
+	}
+	
 	QVBoxLayout* mainLayout = new QVBoxLayout(this);
 	QHBoxLayout* horizontalLayout = new QHBoxLayout();
 	mainLayout->addLayout(horizontalLayout);
@@ -28,35 +37,19 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	wordDataLayout->setHorizontalSpacing(layoutSpacing);
 	horizontalLayout->addLayout(wordDataLayout);
 
-	QLabel* kanaLabel = new QLabel(kana.c_str());
 	QPushButton* addKanaToFieldButton = new QPushButton(tr("Add to Field"));
 	connect(addKanaToFieldButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onAddKanaToFieldButtonClicked);
-	QWidget* kanaWidget = new QWidget();
-	QHBoxLayout* kanaLayout = new QHBoxLayout();
-	kanaLayout->addWidget(kanaLabel);
-	kanaLayout->addWidget(addKanaToFieldButton);
-	kanaWidget->setLayout(kanaLayout);
-
-	QLabel* kanjiLabel = new QLabel(kanji.c_str());
 	QPushButton* addKanjiToFieldButton = new QPushButton(tr("Add to Field"));
 	connect(addKanjiToFieldButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onAddKanjiToFieldButtonClicked);
-	QWidget* kanjiWidget = new QWidget();
-	QHBoxLayout* kanjiLayout = new QHBoxLayout();
-	kanjiLayout->addWidget(kanjiLabel);
-	kanjiLayout->addWidget(addKanjiToFieldButton);
-	kanjiWidget->setLayout(kanjiLayout);
 
-	wordDataLayout->addRow(tr("Kana"), kanaWidget);
-	wordDataLayout->addRow(tr("Kanji"), kanjiWidget);
-#if 0 //TODO Make word data draggable to each field
-	wordDataLayout->addWidget(new DragWidget());
-#endif
+	wordDataLayout->addRow(tr("Kana"), createWordInfoWidget(mKana, addKanaToFieldButton));
+	wordDataLayout->addRow(tr("Kanji"), createWordInfoWidget(mKanji, addKanjiToFieldButton));
 
-	std::function<void(QStringList)> getDeckNamesSlot = [this](QStringList decks) { onGetDeckNames(decks); };
-	mAnkiConnect.GetDeckNames(getDeckNamesSlot);
-
-	std::function<void(QStringList)> getModelNamesSlot = [this](QStringList models) { onGetModelNames(models); };
-	mAnkiConnect.getModelNames(getModelNamesSlot);
+	if (!m_pitchAccents.empty()) {
+		QPushButton* addPitchAccentsToFieldButton = new QPushButton(tr("Add to Field"));
+		connect(addPitchAccentsToFieldButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onAddPitchAccentsToFieldButtonClicked);
+		wordDataLayout->addRow(tr("Pitch Accents"), createWordInfoWidget(m_pitchAccents, addPitchAccentsToFieldButton));
+	}
 
 	mAnkiCardEditor = new AnkiCardEditor();
 	horizontalLayout->addWidget(mAnkiCardEditor);
@@ -64,12 +57,21 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	QPushButton* saveToLocalButton = new QPushButton(tr("Save to Local"));
 	saveToLocalButton->setDisabled(true);
 	connect(saveToLocalButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onSaveToLocalButtonClicked);
-	mSendToAnkiButton = new QPushButton(tr("Send to Anki"));
-	connect(mSendToAnkiButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onSendToAnkiButtonClicked);
 	QDialogButtonBox* buttonBox = new QDialogButtonBox(QDialogButtonBox::Cancel, Qt::Horizontal);
 	connect(buttonBox, &QDialogButtonBox::rejected, this, &QDialog::reject);
 	buttonBox->addButton(saveToLocalButton, QDialogButtonBox::ActionRole);
-	buttonBox->addButton(mSendToAnkiButton, QDialogButtonBox::ActionRole);
+
+	if (settings->mAnki.isAnkiConnectFeatureEnabled) {
+		std::function<void(QStringList)> getDeckNamesSlot = [this](QStringList decks) { onGetDeckNames(decks); };
+		mAnkiConnect.GetDeckNames(getDeckNamesSlot);
+
+		std::function<void(QStringList)> getModelNamesSlot = [this](QStringList models) { onGetModelNames(models); };
+		mAnkiConnect.getModelNames(getModelNamesSlot);
+
+		mSendToAnkiButton = new QPushButton(tr("Send to Anki"));
+		connect(mSendToAnkiButton, &QPushButton::clicked, this, &CreateAnkiCardDialog::onSendToAnkiButtonClicked);
+		buttonBox->addButton(mSendToAnkiButton, QDialogButtonBox::ActionRole);
+	}
 	mainLayout->addWidget(buttonBox);
 
 	connect(this, &CreateAnkiCardDialog::updateDeckNames, mAnkiCardEditor, &AnkiCardEditor::onUpdateDeckNames);
@@ -80,27 +82,44 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const std::string& k
 	mainLayout->setSizeConstraint(QLayout::SetFixedSize);
 }
 
-#include "ListDialog.h"
-void CreateAnkiCardDialog::onAddKanaToFieldButtonClicked()
+QWidget* CreateAnkiCardDialog::createWordInfoWidget(const std::string& data, QPushButton* addToFieldButton)
+{
+	QLabel* label = new QLabel(data.c_str());
+	QWidget* widget = new QWidget();
+	QHBoxLayout* kanaLayout = new QHBoxLayout();
+	kanaLayout->addWidget(label);
+	kanaLayout->addWidget(addToFieldButton);
+	widget->setLayout(kanaLayout);
+	return widget;
+}
+
+void CreateAnkiCardDialog::addWordInfoToField(const std::string& data)
 {
 	ListDialog dialog = ListDialog(this, ListDialogType::ListDialogTypeSelectField, mAnkiCardEditor->getFields().keys());
 	dialog.exec();
 	if (!dialog.result.isEmpty() && !dialog.result[0].isEmpty()) {
-		emit insertDataIntoField(mKana.c_str(), dialog.result[0]);
+		emit insertDataIntoField(data.c_str(), dialog.result[0]);
 	}
+}
+
+void CreateAnkiCardDialog::onAddKanaToFieldButtonClicked()
+{
+	addWordInfoToField(mKana);
 }
 
 void CreateAnkiCardDialog::onAddKanjiToFieldButtonClicked()
 {
-	ListDialog dialog = ListDialog(this, ListDialogType::ListDialogTypeSelectField, mAnkiCardEditor->getFields().keys());
-	dialog.exec();
-	if (!dialog.result.isEmpty() && !dialog.result[0].isEmpty()) {
-		emit insertDataIntoField(mKanji.c_str(), dialog.result[0]);
-	}
+	addWordInfoToField(mKanji);
+}
+
+void CreateAnkiCardDialog::onAddPitchAccentsToFieldButtonClicked()
+{
+	addWordInfoToField(m_pitchAccents);
 }
 
 void CreateAnkiCardDialog::onSaveToLocalButtonClicked()
 {
+	// TODO implement save to local
 	int a = 0;
 }
 

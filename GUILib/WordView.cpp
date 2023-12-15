@@ -51,11 +51,9 @@ WordView::WordView(const std::string& kana, const std::string& kanji, Settings* 
 	connect(mCopyButton, &QPushButton::clicked, this, &WordView::onCopyWordInfo);
 	layout->addRow(mCopyButton);
 
-	if (mSettings->mAnki.isAnkiConnectFeatureEnabled) {
-		m_createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
-		connect(m_createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
-		layout->addRow(m_createAnkiCardButton);
-	}
+	m_createAnkiCardButton = new QPushButton(tr("Create Anki Card"));
+	connect(m_createAnkiCardButton, &QPushButton::clicked, this, &WordView::onCreateAnkiCardButton);
+	layout->addRow(m_createAnkiCardButton);
 }
 
 void WordView::setDialogProperties()
@@ -150,7 +148,7 @@ void WordView::onRetranslateUI()
 
 void WordView::onCreateAnkiCardButton()
 {
-	CreateAnkiCardDialog dialog(this, mTextWord.getKana(), mTextWord.getKanji(), mSettings);
+	CreateAnkiCardDialog dialog(this, mTextWord, mSettings);
 	dialog.exec();
 }
 

@@ -100,10 +100,20 @@
 <context>
     <name>AnkiTab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="244"/>
-        <location filename="SettingsDialog.cpp" line="263"/>
+        <location filename="SettingsDialog.cpp" line="260"/>
+        <location filename="SettingsDialog.cpp" line="292"/>
         <source>Enable Anki Connect Feature</source>
         <translation>暗記コネクト機能を有効にする</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="274"/>
+        <source>Bind Address</source>
+        <translation>バインド アドレス</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="275"/>
+        <source>Bind Port</source>
+        <translation>バインド ポート</translation>
     </message>
 </context>
 <context>
@@ -168,48 +178,54 @@
 <context>
     <name>CreateAnkiCardDialog</name>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="31"/>
         <location filename="CreateAnkiCardDialog.cpp" line="40"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="42"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="49"/>
         <source>Add to Field</source>
         <translation>フィールドに追加</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="48"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="45"/>
         <source>Kana</source>
         <translation>かな</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="49"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="46"/>
         <source>Kanji</source>
         <translation>漢字</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="63"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="51"/>
+        <source>Pitch Accents</source>
+        <translation>高低アクセント</translation>
+    </message>
+    <message>
+        <location filename="CreateAnkiCardDialog.cpp" line="57"/>
         <source>Save to Local</source>
         <translation>ローカルに保存</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="66"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="71"/>
         <source>Send to Anki</source>
         <translation>暗記アプリに送信</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="154"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="174"/>
         <source>Could not create note</source>
         <translation>ノートを作成することが出来ませんでした</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="154"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="174"/>
         <source>Failed to create note!</source>
         <translation>ノートの作成に失敗しました！</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="161"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="181"/>
         <source>Could not create note type</source>
         <translation>ノートタイプを作成することが出来ませんでした</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="161"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="181"/>
         <source>Failed to create note type!</source>
         <translation>ノートタイプの作成に失敗しました！</translation>
     </message>
@@ -322,10 +338,20 @@
 <context>
     <name>FileTab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="144"/>
-        <location filename="SettingsDialog.cpp" line="175"/>
+        <location filename="SettingsDialog.cpp" line="148"/>
+        <location filename="SettingsDialog.cpp" line="191"/>
         <source>Specify Workspace</source>
         <translation>ワークスペースを指定</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="162"/>
+        <source>Invalid Input</source>
+        <translation>無効な入力</translation>
+    </message>
+    <message>
+        <location filename="SettingsDialog.cpp" line="162"/>
+        <source>The entered path is not a valid directory!</source>
+        <translation>入力されたパスは有効なディレクトリではない！</translation>
     </message>
 </context>
 <context>
@@ -494,56 +520,56 @@
 <context>
     <name>SettingsDialog</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="25"/>
-        <location filename="SettingsDialog.cpp" line="117"/>
+        <location filename="SettingsDialog.cpp" line="29"/>
+        <location filename="SettingsDialog.cpp" line="121"/>
         <source>General</source>
         <translation>全般</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="27"/>
-        <location filename="SettingsDialog.cpp" line="118"/>
+        <location filename="SettingsDialog.cpp" line="31"/>
+        <location filename="SettingsDialog.cpp" line="122"/>
         <source>File</source>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="31"/>
-        <location filename="SettingsDialog.cpp" line="119"/>
+        <location filename="SettingsDialog.cpp" line="35"/>
+        <location filename="SettingsDialog.cpp" line="123"/>
         <source>UI</source>
         <translation>見た目</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="36"/>
-        <location filename="SettingsDialog.cpp" line="120"/>
+        <location filename="SettingsDialog.cpp" line="40"/>
+        <location filename="SettingsDialog.cpp" line="124"/>
         <source>Anki</source>
         <translation>暗記アプリ</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="40"/>
-        <location filename="SettingsDialog.cpp" line="121"/>
+        <location filename="SettingsDialog.cpp" line="44"/>
+        <location filename="SettingsDialog.cpp" line="125"/>
         <source>Clear Data</source>
         <translation>データをクリア</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="69"/>
-        <location filename="SettingsDialog.cpp" line="116"/>
+        <location filename="SettingsDialog.cpp" line="73"/>
+        <location filename="SettingsDialog.cpp" line="120"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="93"/>
         <location filename="SettingsDialog.cpp" line="97"/>
+        <location filename="SettingsDialog.cpp" line="101"/>
         <source>Clearing Data</source>
         <translation>データのクリア中</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="94"/>
+        <location filename="SettingsDialog.cpp" line="98"/>
         <source>You are about to clear all data including
 imported texts, word lists, and settings.
 Are you sure?</source>
         <translation>インポートされたテキストや言葉リストや設定などを含める\n全てのデータをクリアしようとしています。\n宜しいですか。</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="97"/>
+        <location filename="SettingsDialog.cpp" line="101"/>
         <source>Data will be cleared when KonPon is closed.</source>
         <translation>KonPonを終了する際に、データがクリアされます。</translation>
     </message>
@@ -602,51 +628,51 @@ Are you sure?</source>
 <context>
     <name>TextView</name>
     <message>
-        <location filename="TextView.cpp" line="75"/>
-        <location filename="TextView.cpp" line="322"/>
+        <location filename="TextView.cpp" line="96"/>
+        <location filename="TextView.cpp" line="340"/>
         <source>Text</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="88"/>
-        <location filename="TextView.cpp" line="324"/>
+        <location filename="TextView.cpp" line="107"/>
+        <location filename="TextView.cpp" line="342"/>
         <source>Highlight Unknown Words</source>
         <translation>新規の言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="90"/>
-        <location filename="TextView.cpp" line="325"/>
+        <location filename="TextView.cpp" line="109"/>
+        <location filename="TextView.cpp" line="343"/>
         <source>Highlight Known Words</source>
         <translation>習得した言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="92"/>
-        <location filename="TextView.cpp" line="326"/>
+        <location filename="TextView.cpp" line="111"/>
+        <location filename="TextView.cpp" line="344"/>
         <source>Highlight Words From Custom List</source>
         <translation>カスタムリストからの言葉をハイライト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="300"/>
+        <location filename="TextView.cpp" line="318"/>
         <source>Known Wordlist</source>
         <translation>習得言葉のリスト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="303"/>
+        <location filename="TextView.cpp" line="321"/>
         <source>Unknown Wordlist</source>
         <translation>新規言葉のリスト</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="314"/>
+        <location filename="TextView.cpp" line="332"/>
         <source>Kana: </source>
         <translation>かな：</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="314"/>
+        <location filename="TextView.cpp" line="332"/>
         <source>Kanji: </source>
         <translation>漢字：</translation>
     </message>
     <message>
-        <location filename="TextView.cpp" line="315"/>
+        <location filename="TextView.cpp" line="333"/>
         <source>Wordlist: </source>
         <translation>言葉リスト：</translation>
     </message>
@@ -654,34 +680,34 @@ Are you sure?</source>
 <context>
     <name>UITab</name>
     <message>
-        <location filename="SettingsDialog.cpp" line="186"/>
-        <location filename="SettingsDialog.cpp" line="194"/>
-        <location filename="SettingsDialog.cpp" line="223"/>
-        <location filename="SettingsDialog.cpp" line="231"/>
+        <location filename="SettingsDialog.cpp" line="202"/>
+        <location filename="SettingsDialog.cpp" line="210"/>
+        <location filename="SettingsDialog.cpp" line="239"/>
+        <location filename="SettingsDialog.cpp" line="247"/>
         <source>Default</source>
         <translation>既定</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="187"/>
-        <location filename="SettingsDialog.cpp" line="225"/>
+        <location filename="SettingsDialog.cpp" line="203"/>
+        <location filename="SettingsDialog.cpp" line="241"/>
         <source>Light</source>
         <translation>ライト</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="188"/>
-        <location filename="SettingsDialog.cpp" line="227"/>
+        <location filename="SettingsDialog.cpp" line="204"/>
+        <location filename="SettingsDialog.cpp" line="243"/>
         <source>Dark</source>
         <translation>ダーク</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="195"/>
-        <location filename="SettingsDialog.cpp" line="233"/>
+        <location filename="SettingsDialog.cpp" line="211"/>
+        <location filename="SettingsDialog.cpp" line="249"/>
         <source>English</source>
         <translation>英語</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="196"/>
-        <location filename="SettingsDialog.cpp" line="235"/>
+        <location filename="SettingsDialog.cpp" line="212"/>
+        <location filename="SettingsDialog.cpp" line="251"/>
         <source>Japanese</source>
         <translation>日本語</translation>
     </message>
@@ -698,14 +724,14 @@ Are you sure?</source>
         <translation type="vanished">大</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="200"/>
-        <location filename="SettingsDialog.cpp" line="221"/>
+        <location filename="SettingsDialog.cpp" line="216"/>
+        <location filename="SettingsDialog.cpp" line="237"/>
         <source>Theme</source>
         <translation>テーマ</translation>
     </message>
     <message>
-        <location filename="SettingsDialog.cpp" line="202"/>
-        <location filename="SettingsDialog.cpp" line="229"/>
+        <location filename="SettingsDialog.cpp" line="218"/>
+        <location filename="SettingsDialog.cpp" line="245"/>
         <source>Language</source>
         <translation>言語</translation>
     </message>
@@ -718,67 +744,67 @@ Are you sure?</source>
     <name>WordView</name>
     <message>
         <location filename="WordView.cpp" line="35"/>
-        <location filename="WordView.cpp" line="138"/>
+        <location filename="WordView.cpp" line="136"/>
         <source>Notes</source>
         <translation>ノート</translation>
     </message>
     <message>
         <location filename="WordView.cpp" line="50"/>
-        <location filename="WordView.cpp" line="147"/>
+        <location filename="WordView.cpp" line="145"/>
         <source>Copy Word Info</source>
         <translation>言葉情報をコピー</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="55"/>
-        <location filename="WordView.cpp" line="148"/>
+        <location filename="WordView.cpp" line="54"/>
+        <location filename="WordView.cpp" line="146"/>
         <source>Create Anki Card</source>
         <translation>暗記カードを作成</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="66"/>
-        <location filename="WordView.cpp" line="132"/>
+        <location filename="WordView.cpp" line="64"/>
+        <location filename="WordView.cpp" line="130"/>
         <source>Word Info</source>
         <oldsource>Word View</oldsource>
         <translation>言葉の情報</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="73"/>
-        <location filename="WordView.cpp" line="134"/>
+        <location filename="WordView.cpp" line="71"/>
+        <location filename="WordView.cpp" line="132"/>
         <source>Kana: </source>
         <translation>かな：</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="78"/>
-        <location filename="WordView.cpp" line="135"/>
+        <location filename="WordView.cpp" line="76"/>
+        <location filename="WordView.cpp" line="133"/>
         <source>Kanji: </source>
         <translation>漢字：</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="92"/>
-        <location filename="WordView.cpp" line="136"/>
+        <location filename="WordView.cpp" line="90"/>
+        <location filename="WordView.cpp" line="134"/>
         <source>Pitch Accents</source>
         <translation>高低アクセント</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="108"/>
-        <location filename="WordView.cpp" line="137"/>
+        <location filename="WordView.cpp" line="106"/>
+        <location filename="WordView.cpp" line="135"/>
         <source>Texts</source>
         <translation>テキスト</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="188"/>
+        <location filename="WordView.cpp" line="186"/>
         <source>Word info copied to clipboard.</source>
         <translation>クリップボードに言葉情報がコピーされました。</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="141"/>
-        <location filename="WordView.cpp" line="196"/>
+        <location filename="WordView.cpp" line="139"/>
+        <location filename="WordView.cpp" line="194"/>
         <source>Show Less</source>
         <translation>詳細を隠す</translation>
     </message>
     <message>
-        <location filename="WordView.cpp" line="144"/>
-        <location filename="WordView.cpp" line="202"/>
+        <location filename="WordView.cpp" line="142"/>
+        <location filename="WordView.cpp" line="200"/>
         <source>Show More</source>
         <translation>詳細を表示</translation>
     </message>
