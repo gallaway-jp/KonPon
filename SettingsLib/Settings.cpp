@@ -198,6 +198,7 @@ Settings::Language Settings::UI::getLanguage()
 void Settings::UI::setLanguage(Settings::Language language)
 {
 	QCoreApplication::removeTranslator(&m_translator);
+	QCoreApplication::removeTranslator(&m_translator2);
 	switch (language)
 	{
 	case Settings::Language::Default:
@@ -206,6 +207,9 @@ void Settings::UI::setLanguage(Settings::Language language)
 		case Settings::Language::Japanese:
 			if (m_translator.load(":/res/translations/Translation_ja.qm")) {
 				QCoreApplication::installTranslator(&m_translator);
+			}
+			if (m_translator2.load(":/res/translations/qt_ja.qm")) {
+				QCoreApplication::installTranslator(&m_translator2);
 			}
 			break;
 		default:
@@ -223,6 +227,9 @@ void Settings::UI::setLanguage(Settings::Language language)
 	case Settings::Language::Japanese:
 		if (m_translator.load(":/res/translations/Translation_ja.qm")) {
 			QCoreApplication::installTranslator(&m_translator);
+		}
+		if (m_translator2.load(":/res/translations/qt_ja.qm")) {
+			QCoreApplication::installTranslator(&m_translator2);
 		}
 		break;
 	default:

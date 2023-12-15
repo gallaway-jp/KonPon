@@ -21,6 +21,8 @@ CreateAnkiCardDialog::CreateAnkiCardDialog(QWidget* parent, const Word& word, Se
 	mKana(word.getKana()), mKanji(word.getKanji()),
 	mAnkiConnect(settings->mAnki.address, QString::number(settings->mAnki.port))
 {
+	setWindowTitle(tr("Anki Card Creation"));
+
 	if (!word.getPitchAccents().empty()) {
 		m_pitchAccents = std::to_string(*word.getPitchAccents().begin());
 		std::for_each(std::next(word.getPitchAccents().begin()), word.getPitchAccents().end(), [this](int val) {

@@ -51,6 +51,7 @@ private:
 		Settings::Theme m_theme = Theme::Default;
 
 		QTranslator m_translator;
+		QTranslator m_translator2;
 		Settings::Language m_systemLanguage;
 		Settings::Language m_language = Language::Default;
 	private:
