@@ -183,54 +183,59 @@
 <context>
     <name>CreateAnkiCardDialog</name>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="40"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="24"/>
+        <source>Anki Card Creation</source>
+        <translation>暗記カード作成</translation>
+    </message>
+    <message>
         <location filename="CreateAnkiCardDialog.cpp" line="42"/>
-        <location filename="CreateAnkiCardDialog.cpp" line="49"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="44"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="51"/>
         <source>Add to Field</source>
         <translation>フィールドに追加</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="45"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="47"/>
         <source>Kana</source>
         <translation>かな</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="46"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="48"/>
         <source>Kanji</source>
         <translation>漢字</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="51"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="53"/>
         <source>Pitch Accents</source>
         <translation>高低アクセント</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="57"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="59"/>
         <source>Save to Local</source>
         <translation>ローカルに保存</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="71"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="73"/>
         <source>Send to Anki</source>
         <translation>暗記アプリに送信</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="174"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="176"/>
         <source>Could not create note</source>
         <translation>ノートを作成することが出来ませんでした</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="174"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="176"/>
         <source>Failed to create note!</source>
         <translation>ノートの作成に失敗しました！</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="181"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="183"/>
         <source>Could not create note type</source>
         <translation>ノートタイプを作成することが出来ませんでした</translation>
     </message>
     <message>
-        <location filename="CreateAnkiCardDialog.cpp" line="181"/>
+        <location filename="CreateAnkiCardDialog.cpp" line="183"/>
         <source>Failed to create note type!</source>
         <translation>ノートタイプの作成に失敗しました！</translation>
     </message>

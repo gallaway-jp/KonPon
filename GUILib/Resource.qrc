@@ -4,5 +4,6 @@
         <file>icons/KonPon.ico</file>
         <file>translations/Translation_ja.qm</file>
         <file>translations/Translation_en.qm</file>
+        <file>translations/qt_ja.qm</file>
     </qresource>
 </RCC>

@@ -178,6 +178,9 @@ void WordlistsView::setCurrentList(QStackedWidget* stack, QComboBox* combobox)
 			
 			stack->addWidget(mCustomLists[currentText]);
 		}
+		if (stack->indexOf(mCustomLists[currentText]) == -1) {
+			stack->addWidget(mCustomLists[currentText]);
+		}
 		stack->setCurrentWidget(mCustomLists[currentText]);
 		break;
 	}
