@@ -123,6 +123,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KonPon.h" />
+    <ClInclude Include="resource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="KonPon.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\GUILib\icons\KonPon.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
