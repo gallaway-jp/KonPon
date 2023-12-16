@@ -25,8 +25,10 @@ SettingsDialog::SettingsDialog(Settings* settings)
 	setAttribute(Qt::WA_DeleteOnClose);
 
 	mTabWidget = new QTabWidget;
+#if 0
 	m_generalTab = new GeneralTab();
 	mTabWidget->addTab(m_generalTab, tr("General"));
+#endif
 	m_fileTab = new FileTab(settings);
 	mTabWidget->addTab(m_fileTab, tr("File"));
 	connect(m_fileTab, &FileTab::onChange, this, &SettingsDialog::onChange);
@@ -285,6 +287,8 @@ void AnkiTab::onApplySettings()
 void AnkiTab::onRestoreDefaults()
 {
 	mEnableAnkiConnectCheckbox->setChecked(true);
+	m_ankiConnectAddressLineEdit->setText("http://localhost");
+	m_ankiConnectPortSpinbox->setValue(8765);
 }
 
 void AnkiTab::onRetranslateUI()
