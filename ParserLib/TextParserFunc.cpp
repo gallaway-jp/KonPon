@@ -1,4 +1,5 @@
 #include "TextParserFunc.h"
+
 #include "MeCab.h"
 #include "MecabSlim.h"
 
@@ -6,12 +7,6 @@
 #include "Words.h"
 
 #include <string>
-#include <map>
-#include <set>
-
-#include <QString>
-#include <QDir>
-#include <QByteArray>
 
 namespace ParserFunc {
     namespace {

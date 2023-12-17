@@ -27,6 +27,12 @@ struct WORDLISTLIB_EXPORT WordListInfo {
     static const std::map<Color, std::pair<int, int>> Colors;
 };
 
+/*!
+    \class Wordlist
+
+    \brief The Wordlist class provides methods
+    to manage words in a list.
+*/
 class WORDLISTLIB_EXPORT Wordlist
 {
     using MultiMapType = std::multimap<std::string, std::string>;

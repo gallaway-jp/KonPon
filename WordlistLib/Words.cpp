@@ -4,6 +4,13 @@
 
 #include <QDirIterator>
 #include <QtConcurrent>
+
+/*!
+	\fn QString Words::getPath()
+
+	Formats an AnkiConnect request from one \a action with its \a params.
+	Returns a QString of the formatted request.
+*/
 QString Words::getPath()
 {
 	QDir dir = QDir(mWorkspace.c_str() + QString("/KonPonData") +
@@ -16,6 +23,11 @@ QString Words::getPath()
 	return dir.absolutePath();
 }
 
+/*!
+	\fn bool Words::insertWord(const Word& newWord)
+
+	Inserts \a newWord into Words object's map.
+*/
 bool Words::insertWord(const Word& newWord)
 {	
 	auto iter = mWords.find({ newWord.getKana(), newWord.getKanji() });
@@ -32,6 +44,11 @@ bool Words::insertWord(const Word& newWord)
 	return true;
 }
 
+/*!
+	\fn bool Words::setWorkspace(const std::string& workspace)
+
+	Sets the workspace of each word to \a workspace.
+*/
 bool Words::setWorkspace(const std::string& workspace)
 {
 	for (auto [key, val] : mWords) {
@@ -41,7 +58,13 @@ bool Words::setWorkspace(const std::string& workspace)
 	return true;
 }
 
-void Words::removeTextId(int64_t textId) {
+/*!
+	\fn void Words::removeTextId(int64_t textId)
+
+	Removes \a textId data from each word.
+*/
+void Words::removeTextId(int64_t textId)
+{
 	std::ignore = QtConcurrent::run([this, textId]()
 		{
 			QDirIterator it(getPath(), { "*.json" }, QDir::Files, QDirIterator::Subdirectories);

@@ -7,6 +7,7 @@
 #include <vector>
 
 #include <QMap>
+#include <QMetaObject>
 #include <QObject>
 #include <QString>
 

@@ -2,13 +2,13 @@
 
 #include <algorithm>
 
-#include <QString>
-#include <QFile>
 #include <QDir>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonArray>
+#include <QString>
 
 const std::map<WordListInfo::Color, std::pair<int, int>> WordListInfo::Colors = {
         {Color::NOCOLOR, {Qt::transparent, Qt::transparent}},
@@ -21,6 +21,13 @@ const std::map<WordListInfo::Color, std::pair<int, int>> WordListInfo::Colors = 
         {Color::MAGENTA, {Qt::magenta, Qt::darkMagenta}}
 };
 
+/*!
+    \fn Wordlist::Wordlist(const std::string& name, const std::string& workspace, bool isCustomList)
+
+    Constructs a Wordlist object with \a name.
+    \a isCustomList specifies if the list was created by the user.
+    \a workspace is used to load and save wordlist data.
+*/
 Wordlist::Wordlist(const std::string& name, const std::string& workspace, bool isCustomList)
 	: mName(name), mWorkspace(workspace), mIsCustomList(isCustomList),
     mWords(std::multimap<std::string, std::string>())
@@ -28,18 +35,32 @@ Wordlist::Wordlist(const std::string& name, const std::string& workspace, bool i
     readWords();
 }
 
-// For testing purposes
+/*!
+    \fn Wordlist::Wordlist()
+
+    Constructs a default Wordlist object.
+*/
 Wordlist::Wordlist()
     : Wordlist("", "")
 {
     ;
 }
 
+/*!
+    \fn WordListInfo::Color Wordlist::getColor() const
+
+    Returns the color associated with the word list.
+*/
 WordListInfo::Color Wordlist::getColor() const
 {
     return mColor;
 }
 
+/*!
+    \fn void Wordlist::setColor(WordListInfo::Color color)
+
+    Sets the color of the word list to \a color.
+*/
 void Wordlist::setColor(WordListInfo::Color color)
 {
     if (color != mColor) {
@@ -48,18 +69,31 @@ void Wordlist::setColor(WordListInfo::Color color)
     }
 }
 
-// Returns true if there are no words in list
+/*!
+    \fn bool Wordlist::empty()
+
+    Returns true if there are no words in list
+*/
 bool Wordlist::empty()
 {
     return mWords.empty();
 }
 
-// Returns count of word in list
+/*!
+    \fn size_t Wordlist::size()
+
+    Returns count of word in list
+*/
 size_t Wordlist::size()
 {
     return mWords.size();
 }
 
+/*!
+    \fn bool Wordlist::contains(const std::string& kana, const std::string& kanji) const
+
+    Returns true if word list contains the word of \a kana and \a kanji.
+*/
 bool Wordlist::contains(const std::string& kana, const std::string& kanji) const
 {
     auto i1 = mWords.equal_range(kana);
@@ -72,8 +106,12 @@ bool Wordlist::contains(const std::string& kana, const std::string& kanji) const
     return false;
 }
 
-// Rename wordlist, creates new file, and erases old file
-// Returns true if successful, otherwise reverts to old name and returns false
+/*!
+    \fn bool Wordlist::rename(const std::string& name)
+
+    Renames wordlist, creates new file, and erases old file
+    Returns true if successful, otherwise reverts to old name and returns false
+*/
 bool Wordlist::rename(const std::string& name)
 {
     bool result = false;
@@ -95,7 +133,11 @@ bool Wordlist::rename(const std::string& name)
     return result;
 }
 
-// Modifies newWords map to only contain unique items compared to this map
+/*!
+    \fn void Wordlist::getUniqueItems(Wordlist& newWords) const
+
+    Modifies \a newWords list to only contain unique items compared to this list.
+*/
 void Wordlist::getUniqueItems(Wordlist& newWords) const
 {
     std::multimap<std::string, std::string> temp;
@@ -106,7 +148,12 @@ void Wordlist::getUniqueItems(Wordlist& newWords) const
     newWords.mWords.swap(temp);
 }
 
-// Add word to this map
+/*!
+    \fn bool Wordlist::insertWord(const std::string& kana, const std::string& kanji)
+
+    Adds word of \a kana and \a kanji to this list.
+    Returns true if word was newly added, otherwise returns false.
+*/
 bool Wordlist::insertWord(const std::string& kana, const std::string& kanji)
 {
     auto i1 = mWords.equal_range(kana);
@@ -126,7 +173,11 @@ bool Wordlist::insertWord(const std::string& kana, const std::string& kanji)
     return true;
 }
 
-// Add words from newWords to this map
+/*!
+    \fn void Wordlist::insertWords(const Wordlist& newWords)
+
+    Adds words from \a newWords to this list.
+*/
 void Wordlist::insertWords(const Wordlist& newWords)
 {
     for (auto const& [kana, kanji] : newWords.mWords) {
@@ -135,7 +186,11 @@ void Wordlist::insertWords(const Wordlist& newWords)
     writeWords();
 }
 
-// removes word from this map
+/*!
+    \fn void Wordlist::removeWord(const std::string& kana, const std::string& kanji)
+
+    Removes word from this list. 
+*/
 void Wordlist::removeWord(const std::string& kana, const std::string& kanji)
 {
     auto i1 = mWords.equal_range(kana);
@@ -148,7 +203,11 @@ void Wordlist::removeWord(const std::string& kana, const std::string& kanji)
     }
 }
 
-// removes words in wordsToRemove from this map
+/*!
+    \fn void Wordlist::removeWords(const Wordlist& wordsToRemove)
+
+    Removes words in \a wordsToRemove from this list.
+*/
 void Wordlist::removeWords(const Wordlist& wordsToRemove)
 {
     for (auto const& [kana, kanji] : wordsToRemove.mWords) {
@@ -157,7 +216,12 @@ void Wordlist::removeWords(const Wordlist& wordsToRemove)
     writeWords();
 }
 
-// Delete wordlist file
+/*!
+    \fn bool Wordlist::erase()
+
+    Deletes wordlist file from storage.
+    Returns true if successful, otherwise returns false.
+*/
 bool Wordlist::erase()
 {
     if (mWorkspace.empty()) {
@@ -169,7 +233,11 @@ bool Wordlist::erase()
     ).absoluteFilePath(mName.c_str() + QString(".json")));
 }
 
-// get wordlist from file
+/*!
+    \fn void Wordlist::readWords()
+
+    Gets word list from storage.
+*/
 void Wordlist::readWords()
 {
     if (!mWords.empty()) {
@@ -234,6 +302,12 @@ void Wordlist::readWords()
     }
 }
 
+/*!
+    \fn bool Wordlist::writeWords()
+
+    Saves word list to storage.
+    Returns true if successful, otherwise returns false.
+*/
 bool Wordlist::writeWords()
 {
     bool result = false;

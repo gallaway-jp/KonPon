@@ -5,6 +5,12 @@
 #include <string>
 #include <map>
 
+/*!
+	\class Words
+
+	\brief The Words class provides methods
+	to edit info associated with a word.
+*/
 class WORDLISTLIB_EXPORT Words
 {
 	using MapType = std::map<std::pair<std::string, std::string>, Word>;

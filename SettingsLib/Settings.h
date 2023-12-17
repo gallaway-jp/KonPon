@@ -8,6 +8,12 @@
 QT_BEGIN_NAMESPACE
 QT_END_NAMESPACE
 
+/*!
+	\class Settings
+
+	\brief The Settings class provides methods
+	to load and save KonPon settings.
+*/
 class SETTINGSLIB_EXPORT Settings {
 public:
 	enum class Theme {

@@ -1,10 +1,18 @@
 #include "AnkiConnectLib.h"
 
+#include <unordered_set>
+
+#include <QFuture>
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QList>
-#include <QFuture>
 
+/*!
+	\fn AnkiConnect::AnkiConnect(const QString& address, const QString& port)
+
+	Constructs an AnkiConnect object with a host name of \a address : \a port.
+	The default \a address is http://localhost and the default \a port is 8765.
+*/
 AnkiConnect::AnkiConnect(const QString& address, const QString& port)
 	: m_hostName(address + ":" + port),
 	QObject(nullptr)
@@ -12,6 +20,12 @@ AnkiConnect::AnkiConnect(const QString& address, const QString& port)
 	;
 }
 
+/*!
+	\fn QString AnkiConnect::FormatRequest(const QString& action, const QJsonObject& params)
+
+	Formats an AnkiConnect request from one \a action with its \a params.
+	Returns a QString of the formatted request.
+*/
 QString AnkiConnect::FormatRequest(const QString& action, const QJsonObject& params)
 {
 	QJsonObject request
@@ -26,6 +40,13 @@ QString AnkiConnect::FormatRequest(const QString& action, const QJsonObject& par
 	return QJsonDocument(request).toJson(QJsonDocument::Compact);
 }
 
+/*!
+	\fn QString AnkiConnect::FormatRequest(const QString& action, const QJsonObject& params)
+
+	Formats an AnkiConnect request from multiple \a actions.
+	Each element in \a actions is a pair of an action and its params.
+	Returns a QString of the formatted request.
+*/
 QString AnkiConnect::FormatRequest(const std::vector<std::pair<QString, QJsonObject>>& actions)
 {
 	QJsonArray actionsArray;
@@ -49,11 +70,21 @@ QString AnkiConnect::FormatRequest(const std::vector<std::pair<QString, QJsonObj
 	return QJsonDocument(request).toJson(QJsonDocument::Compact);
 }
 
+/*!
+	\fn void AnkiConnect::Invoke(RequestManager* requestManager, const QString& action, const QJsonObject& params)
+
+	Invokes a request formed from an \a action and its \a params via the \a requestManager.
+*/
 void AnkiConnect::Invoke(RequestManager* requestManager, const QString& action, const QJsonObject& params)
 {
 	requestManager->POST(m_hostName, FormatRequest(action, params));
 }
 
+/*!
+	\fn void AnkiConnect::Invoke(RequestManager* requestManager, const std::vector<std::pair<QString, QJsonObject>>& actions)
+
+	Invokes a request formed from multiple \a actions via the \a requestManager.
+*/
 void AnkiConnect::Invoke(RequestManager* requestManager, const std::vector<std::pair<QString, QJsonObject>>& actions)
 {
 	requestManager->POST(m_hostName, FormatRequest(actions));
@@ -83,6 +114,12 @@ void AnkiConnect::GetDeckNames(std::function<void(QStringList)>& slot)
 	Invoke(requestManager, "deckNames", params);
 }
 
+/*!
+  \fn void AnkiConnect::onGetDeckNamesResponse(QString data)
+
+  An intermediate slot for GetDeckNames that parses a JSON response contained in \a data.
+  Emits the getDeckNamesResponse signal which then triggers a call to the slot passed to GetDeckNames.
+*/
 void AnkiConnect::onGetDeckNamesResponse(QString data)
 {
 	QStringList decks;
@@ -130,6 +167,12 @@ void AnkiConnect::createDeck(QString deckName, std::function<void(bool)>& slot)
 	Invoke(requestManager, "createDeck", params);
 }
 
+/*!
+  \fn void AnkiConnect::onCreateDeckResponse(QString data)
+
+  An intermediate slot for createDeck that parses a JSON response contained in \a data.
+  Emits the createDeckResponse signal which then triggers a call to the slot passed to createDeck.
+*/
 void AnkiConnect::onCreateDeckResponse(QString data)
 {
 	bool deckCreated = false;
@@ -170,6 +213,12 @@ void AnkiConnect::getModelNames(std::function<void(QStringList)>& slot)
 	Invoke(requestManager, "modelNames", params);
 }
 
+/*!
+  \fn void AnkiConnect::onGetModelNamesResponse(QString data)
+
+  An intermediate slot for getModelNames that parses a JSON response contained in \a data.
+  Emits the getModelNamesResponse signal which then triggers a call to the slot passed to getModelNames.
+*/
 void AnkiConnect::onGetModelNamesResponse(QString data)
 {
 	QStringList models;
@@ -216,6 +265,12 @@ void AnkiConnect::getModelFieldNames(QString modelName, std::function<void(QStri
 	Invoke(requestManager, "modelFieldNames", params);
 }
 
+/*!
+  \fn void AnkiConnect::onGetModelFieldNamesResponse(QString data)
+
+  An intermediate slot for getModelFieldNames that parses a JSON response contained in \a data.
+  Emits the getModelFieldNamesResponse signal which then triggers a call to the slot passed to getModelFieldNames.
+*/
 void AnkiConnect::onGetModelFieldNamesResponse(QString data)
 {
 	QStringList fields;
@@ -262,6 +317,12 @@ void AnkiConnect::getModelsFieldNames(QStringList modelNames, std::function<void
 	Invoke(requestManager, actions);
 }
 
+/*!
+  \fn void AnkiConnect::onGetModelsFieldNamesResponse(QString data)
+
+  An intermediate slot for getModelsFieldNames that parses a JSON response contained in \a data.
+  Emits the getModelsFieldNamesResponse signal which then triggers a call to the slot passed to getModelsFieldNames.
+*/
 void AnkiConnect::onGetModelsFieldNamesResponse(QString data)
 {
 	QList<QStringList> fieldsLists;
@@ -329,6 +390,12 @@ void AnkiConnect::createModel(QString modelName, NewCardTypeData newCardTypeData
 	Invoke(requestManager, "createModel", params);
 }
 
+/*!
+  \fn void AnkiConnect::onCreateModelResponse(QString data)
+
+  An intermediate slot for createModel that parses a JSON response contained in \a data.
+  Emits the createModelResponse signal which then triggers a call to the slot passed to createModel.
+*/
 void AnkiConnect::onCreateModelResponse(QString data)
 {
 	bool modelCreated = false;
@@ -357,8 +424,16 @@ void AnkiConnect::addNote(QString deckName, QString modelName, std::vector<std::
 	addNotes({ { deckName, modelName, fields, tags } }, slot);
 }
 
-#include <unordered_set>
-void AnkiConnect::addNotes( const std::vector<NoteData>& notesData, std::function<void(bool)>& slot)
+/*!
+  \fn void AnkiConnect::addNotes(const std::vector<NoteData>& notesData, std::function<void(bool)>& slot)
+
+  Creates new notes from \a notesData vector.
+  and returns whether the notes were successfully created
+  in the bool parameter of \a slot.
+  The \a notesData vector consists of NoteData elements which contain
+  deckName, modelName, fields, and tags note info.
+*/
+void AnkiConnect::addNotes(const std::vector<NoteData>& notesData, std::function<void(bool)>& slot)
 {
 	while (mAddNotesConnect) {
 		QCoreApplication::processEvents();
@@ -366,12 +441,10 @@ void AnkiConnect::addNotes( const std::vector<NoteData>& notesData, std::functio
 
 	QJsonArray notes;
 	std::unordered_set<QString> uniqueDecks;
-	//std::unordered_map<QString, std::unordered_set<QString>> uniqueNoteTypes;
 	for (auto& noteData : notesData) {
 		QJsonObject fields;
 		for(const auto& [fieldName, fieldContent] : noteData.fields) {
 			fields[fieldName] = fieldContent;
-			//uniqueNoteTypes[noteData.modelName].insert(fieldName);
 		}
 
 		QJsonArray tags;
@@ -393,17 +466,6 @@ void AnkiConnect::addNotes( const std::vector<NoteData>& notesData, std::functio
 	for (const auto& uniqueDeck : uniqueDecks) {
 		actions.push_back({ "createDeck", {{"deck", uniqueDeck}} });
 	}
-	/*for (const auto& [modelName, fieldNames] : uniqueNoteTypes) {
-		QJsonArray fieldNamesArray;
-		for (const auto& fieldName : fieldNames) {
-			fieldNamesArray.append(fieldName);
-		}
-		actions.push_back({ "createModel",
-			{{"modelName", modelName},
-			{"inOrderFields", fieldNamesArray},
-			{"cardTemplates",QJsonArray()}}
-			});
-	}*/
 	actions.push_back({ "addNotes", {{"notes", notes}} });
 
 	RequestManager* requestManager = new RequestManager;
@@ -414,6 +476,12 @@ void AnkiConnect::addNotes( const std::vector<NoteData>& notesData, std::functio
 	Invoke(requestManager, actions);
 }
 
+/*!
+  \fn void AnkiConnect::onAddNotesResponse(QString data)
+
+  An intermediate slot for addNotes that parses a JSON response contained in \a data.
+  Emits the addNotesResponse signal which then triggers a call to the slot passed to addNotes.
+*/
 void AnkiConnect::onAddNotesResponse(QString data)
 {
 	bool notesAdded = false;

@@ -11,8 +11,19 @@
 #include <QString>
 #include <QStyleHints>
 
+/*!
+	\fn Settings::Settings()
+
+	Constructs a Settings object and initializes its mFile, ui, and mParser members.
+*/
 Settings::Settings() : mFile(), ui(), mParser() {}
 
+/*!
+	\fn Settings::~Settings()
+
+	Will clear KonPon data on destruction of Settings object if
+	Clear Data button had been pressed.
+*/
 Settings::~Settings()
 {
 	if (m_clearDataOnTermination) {
@@ -22,11 +33,23 @@ Settings::~Settings()
 	}
 }
 
+/*!
+	\fn void Settings::clearDataOnTermination()
+
+	Sets the m_clearDataOnTermination flag to true.
+	KonPon data will be cleared upon destruction of Settings object.
+*/
 void Settings::clearDataOnTermination()
 {
 	m_clearDataOnTermination = true;
 }
 
+/*!
+	\fn Settings::File::File()
+
+	Constructs a File object that manages File-related settings
+	and reads settings from storage.
+*/
 Settings::File::File()
 {
 	defaultWorkspace = QCoreApplication::applicationDirPath();
@@ -34,11 +57,22 @@ Settings::File::File()
 	ReadSettings();
 }
 
+/*!
+	\fn Settings::File::~File()
+
+	Writes settings to storage upon destruction of File object.
+*/
 Settings::File::~File()
 {
 	WriteSettings();
 }
 
+/*!
+	\fn void Settings::File::setWorkspace(const QString& workspace)
+
+	Sets workspace settings to \a workspace and moves KonPon data
+	from the old workspace to the new workspace.
+*/
 void Settings::File::setWorkspace(const QString& workspace)
 {
 	if (workspace != this->workspace) {
@@ -47,6 +81,11 @@ void Settings::File::setWorkspace(const QString& workspace)
 	}
 }
 
+/*!
+	\fn void Settings::File::ReadSettings()
+
+	Reads the File-related settings from storage.
+*/
 void Settings::File::ReadSettings()
 {
 	QSettings settings;
@@ -56,6 +95,11 @@ void Settings::File::ReadSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn void Settings::File::WriteSettings()
+
+	Reads the File-related settings from storage.
+*/
 void Settings::File::WriteSettings()
 {
 	QSettings settings;
@@ -64,6 +108,12 @@ void Settings::File::WriteSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn Settings::UI::UI()
+
+	Constructs a UI object that manages UI-related settings
+	and reads settings from storage.
+*/
 Settings::UI::UI()
 {
 	m_isSystemDarkMode = QGuiApplication::styleHints()->colorScheme() == Qt::ColorScheme::Dark;
@@ -71,11 +121,21 @@ Settings::UI::UI()
 	ReadSettings();
 }
 
+/*!
+	\fn Settings::UI::~UI()
+
+	Writes settings to storage upon destruction of UI object.
+*/
 Settings::UI::~UI()
 {
 	WriteSettings();
 }
 
+/*!
+	\fn void Settings::UI::ReadSettings()
+
+	Reads the UI-related settings from storage.
+*/
 void Settings::UI::ReadSettings()
 {
 	QSettings settings;
@@ -94,6 +154,11 @@ void Settings::UI::ReadSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn void Settings::UI::WriteSettings()
+
+	Reads the UI-related settings from storage.
+*/
 void Settings::UI::WriteSettings()
 {
 	QSettings settings;
@@ -103,7 +168,14 @@ void Settings::UI::WriteSettings()
 	settings.endGroup();
 }
 
-void Settings::UI::setPalette(Theme theme) {
+/*!
+	\fn void Settings::UI::setPalette(Theme theme)
+
+	Updates the UI's palette to be \a theme.
+	Also sets the window icon based on \a theme.
+*/
+void Settings::UI::setPalette(Theme theme)
+{
 	struct PaletteItem {
 		QPalette::ColorRole role;
 		unsigned int activeDarkColor;
@@ -149,11 +221,21 @@ void Settings::UI::setPalette(Theme theme) {
 	QGuiApplication::setWindowIcon(QIcon(theme == Theme::Dark ? ":/res/icons/KonPon_white.ico" : ":/res/icons/KonPon.ico"));
 }
 
+/*!
+	\fn Settings::Theme Settings::UI::getTheme()
+
+	Returns the current theme.
+*/
 Settings::Theme Settings::UI::getTheme()
 {
 	return m_theme;
 }
 
+/*!
+	\fn void Settings::UI::setTheme(Settings::Theme theme)
+
+	Sets the current theme to \a theme and updates the current palette.
+*/
 void Settings::UI::setTheme(Settings::Theme theme)
 {
 	if (m_theme != theme) {
@@ -172,6 +254,11 @@ void Settings::UI::setTheme(Settings::Theme theme)
 	}
 }
 
+/*!
+	\fn bool Settings::UI::isDarkTheme()
+
+	Returns true if current theme is dark, otherwise returns false.
+*/
 bool Settings::UI::isDarkTheme()
 {
 	switch (m_theme)
@@ -190,11 +277,21 @@ bool Settings::UI::isDarkTheme()
 	}
 }
 
+/*!
+	\fn Settings::Language Settings::UI::getLanguage()
+
+	Returns the current language.
+*/
 Settings::Language Settings::UI::getLanguage()
 {
 	return m_language;
 }
 
+/*!
+	\fn void Settings::UI::setLanguage(Settings::Language language)
+
+	Sets the current language to \a language and updates the UI.
+*/
 void Settings::UI::setLanguage(Settings::Language language)
 {
 	QCoreApplication::removeTranslator(&m_translator);
@@ -238,31 +335,62 @@ void Settings::UI::setLanguage(Settings::Language language)
 	m_language = language;
 }
 
+/*!
+	\fn Settings::Anki::Anki()
+
+	Constructs an Anki object that manages Anki-related settings
+	and reads settings from storage.
+*/
 Settings::Anki::Anki()
 {
 	ReadSettings();
 }
 
+/*!
+	\fn Settings::Anki::~Anki()
+
+	Writes settings to storage upon destruction of Anki object.
+*/
 Settings::Anki::~Anki()
 {
 	WriteSettings();
 }
 
+/*!
+	\fn void Settings::Anki::setEnableAnkiConnectFeature(bool enable)
+
+	Sets the isAnkiConnectFeatureEnabled setting to \a enable.
+*/
 void Settings::Anki::setEnableAnkiConnectFeature(bool enable)
 {
 	isAnkiConnectFeatureEnabled = enable;
 }
 
+/*!
+	\fn void Settings::Anki::setAddress(const QString& address)
+
+	Sets the address setting to \a address.
+*/
 void Settings::Anki::setAddress(const QString& address)
 {
 	this->address = address;
 }
 
+/*!
+	\fn void Settings::Anki::setPort(ushort port)
+
+	Sets the port setting to \a port.
+*/
 void Settings::Anki::setPort(ushort port)
 {
 	this->port = port;
 }
 
+/*!
+	\fn void Settings::Anki::ReadSettings()
+
+	Reads the Anki-related settings from storage.
+*/
 void Settings::Anki::ReadSettings()
 {
 	QSettings settings;
@@ -273,6 +401,11 @@ void Settings::Anki::ReadSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn void Settings::Anki::WriteSettings()
+
+	Reads the Anki-related settings from storage.
+*/
 void Settings::Anki::WriteSettings()
 {
 	QSettings settings;
@@ -283,11 +416,22 @@ void Settings::Anki::WriteSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn Settings::Parser::Parser()
+
+	Constructs a Parser object that manages Parser-related settings
+	and reads settings from storage.
+*/
 Settings::Parser::Parser()
 {
 	ReadSettings();
 }
 
+/*!
+	\fn void Settings::Parser::ReadSettings()
+
+	Reads the Parser-related settings from storage.
+*/
 void Settings::Parser::ReadSettings()
 {
 	QSettings settings;
@@ -295,6 +439,11 @@ void Settings::Parser::ReadSettings()
 	settings.endGroup();
 }
 
+/*!
+	\fn void Settings::Parser::WriteSettings()
+
+	Reads the Parser-related settings from storage.
+*/
 void Settings::Parser::WriteSettings()
 {
 	QSettings settings;

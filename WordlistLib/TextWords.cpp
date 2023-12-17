@@ -1,13 +1,19 @@
 #include "TextWords.h"
 
-#include <QFile>
-#include <QString>
+
 #include <QDir>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
-#include <QJsonArray>
+#include <QString>
 
+/*!
+    \fn TextWords::TextWords(size_t fileId, const std::string& workspace)
 
+    Constructs a TextWords object based on text data in \a workspace
+    /KonPonData/Texts/ \a fileId / \a wordlist.json.
+*/
 TextWords::TextWords(size_t fileId, const std::string& workspace)
     : mFileId(fileId), mWorkspace(workspace), mWords(), mLocations()
 {
@@ -20,7 +26,11 @@ std::pair<std::string, std::string> TextWords::getWordAt(size_t location)
     return {};
 }
 
-// get wordlist from file
+/*!
+    \fn void TextWords::readWords()
+
+    Gets wordlist data from file.
+*/
 void TextWords::readWords()
 {
     if (!mWords.empty()) {

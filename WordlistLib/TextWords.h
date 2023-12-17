@@ -2,10 +2,16 @@
 
 #include "wordlistlib_global.h"
 
-#include <string>
 #include <map>
 #include <set>
+#include <string>
 
+/*!
+	\class TextWords
+
+	\brief The TextWords class provides methods
+	manage word info related to a text.
+*/
 class WORDLISTLIB_EXPORT TextWords
 {
 	using Locations = std::map<size_t, uint8_t>; //value is length of word at location

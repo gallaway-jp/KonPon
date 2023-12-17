@@ -3,9 +3,16 @@
 #include "wordlistlib_global.h"
 #include <QString>
 
-#include <string>
 #include <set>
+#include <string>
 
+
+/*!
+	\class Word
+
+	\brief The Word class provides methods
+	load and save word data.
+*/
 class WORDLISTLIB_EXPORT Word
 {
 public: //interface methods

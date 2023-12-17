@@ -1,19 +1,32 @@
 #include "Word.h"
 
-#include <QString>
-#include <QFile>
 #include <QDir>
+#include <QFile>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
-#include <QJsonArray>
+#include <QString>
 
+/*!
+    \fn Word::Word(const std::string& kana, const std::string& kanji, const std::string& workspace)
+
+    Constructs a Word object from \a kana and \a kanji
+    and reads word info from file \a workspace.
+*/
 Word::Word(const std::string& kana, const std::string& kanji, const std::string& workspace)
 	: mKana(kana), mKanji(kanji), mWorkspace(workspace)
 {
     readWord();
 }
 
+/*!
+    \fn bool Word::addTextId(int64_t textId)
+
+    Adds \a textId to the word info and writes to storage.
+    Returns true if \a textId was not already in word info,
+    otherwise returns false;
+*/
 bool Word::addTextId(int64_t textId)
 {
     auto [iter, result] = mTextIds.insert(textId);
@@ -23,6 +36,12 @@ bool Word::addTextId(int64_t textId)
     return result;
 }
 
+/*!
+    \fn bool Word::removeTextId(int64_t textId)
+
+    Removes \a textId from the word info and writes to storage.
+    Returns true if erased, otherwise returns false;
+*/
 bool Word::removeTextId(int64_t textId)
 {
     if (mTextIds.erase(textId) != 0) {
@@ -31,6 +50,13 @@ bool Word::removeTextId(int64_t textId)
     return false;
 }
 
+/*!
+    \fn bool Word::addPitchAccent(uint8_t pitchAccent)
+
+    Adds \a pitchAccent to the word info and writes to storage.
+    Returns true if \a pitchAccent was not already in word info,
+    otherwise returns false.
+*/
 bool Word::addPitchAccent(uint8_t pitchAccent)
 {
     auto [iter, result] = mPitchAccents.insert(pitchAccent);
@@ -40,6 +66,12 @@ bool Word::addPitchAccent(uint8_t pitchAccent)
     return result;
 }
 
+/*!
+    \fn void Word::setWorkspace(const std::string& workspace)
+
+    Sets the workspace to \a workspace, reads in word data from storage,
+    and writes word data to storage.
+*/
 void Word::setWorkspace(const std::string& workspace)
 {
     mWorkspace = workspace;
@@ -47,36 +79,73 @@ void Word::setWorkspace(const std::string& workspace)
     writeWord();
 }
 
+/*!
+    \fn const std::string& Word::getKana() const
+
+    Returns kana of word.
+*/
 const std::string& Word::getKana() const
 {
     return mKana;
 }
+
+/*!
+    \fn const std::string& Word::getKanji() const
+
+    Returns kanji of word.
+*/
 const std::string& Word::getKanji() const
 {
     return mKanji;
 }
 
+/*!
+    \fn const std::set<int64_t>& Word::getTextIds() const
+
+    Returns text ids of texts associated with word.
+*/
 const std::set<int64_t>& Word::getTextIds() const
 {
     return mTextIds;
 }
 
+/*!
+    \fn const std::set<uint8_t>& Word::getPitchAccents() const
+
+    Returns pitch accents of word.
+*/
 const std::set<uint8_t>& Word::getPitchAccents() const
 {
     return mPitchAccents;
 }
 
+/*!
+    \fn const std::string& Word::getNotes() const
+
+    Returns notes associated with word.
+*/
 const std::string& Word::getNotes() const
 {
     return mNotes;
 }
 
+/*!
+    \fn void Word::setNotes(const std::string& notes)
+
+    Sets notes data to \a notes.
+*/
 void Word::setNotes(const std::string& notes)
 {
     mNotes = notes;
     writeWord();
 }
 
+/*!
+    \fn bool Word::erase()
+
+    Deletes word data from storage.
+    Returns true if successful, otherwise returns false.
+*/
 bool Word::erase()
 {
     if (mWorkspace.empty())
@@ -87,7 +156,11 @@ bool Word::erase()
     return QFile::remove(getFilePath());
 }
 
-// get word from file
+/*!
+    \fn void Word::readWord()
+
+    Retrieves word data from storage.
+*/
 void Word::readWord()
 {
     if (mWorkspace.empty()) {
@@ -135,6 +208,11 @@ void Word::readWord()
     }
 }
 
+/*!
+    \fn bool Word::writeWord()
+
+    Writes word data to storage.
+*/
 bool Word::writeWord()
 {
     bool result = false;
@@ -180,6 +258,11 @@ bool Word::writeWord()
     return result;
 }
 
+/*!
+    \fn QString Word::getFilePath()
+
+    Returns path to word data file.
+*/
 QString Word::getFilePath()
 {
     QDir dir = QDir(mWorkspace.c_str() + QString("/KonPonData") +

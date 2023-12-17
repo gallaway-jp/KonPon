@@ -1,10 +1,11 @@
 #include "RequestManager.h"
+ 
+/*!
+    \fn RequestManager::RequestManager(QObject* parent)
 
-///
-/// RequestManager constructor
-///
-/// Description: sets up a network access manager that
-///              abstract the HTTP/TCP protocol
+    Sets up a network access manager and connects the finished signal
+    emitted when a response is received to the handleFinished slot.
+*/
 RequestManager::RequestManager(QObject* parent) : QObject(parent)
 {
     // create network manager
@@ -12,19 +13,22 @@ RequestManager::RequestManager(QObject* parent) : QObject(parent)
     connect(networkManager, &QNetworkAccessManager::finished, this, &RequestManager::handleFinished);
 }
 
-/// Destructor
-/// \brief RequestManager::~RequestManager
-///
+/*!
+    \fn RequestManager::~RequestManager()
+
+    Deletes networkManager upon destruction of a RequestManager object.
+*/
 RequestManager::~RequestManager()
 {
     delete networkManager;
 }
 
-/// Create a HTTP POST request and setup signals/slots
-/// \brief RequestManager::POST
-/// \param hostName
-/// \param data
-///
+/*!
+    \fn void RequestManager::POST(const QString hostName, const QString& data)
+
+    Creates an HTTP POST request that includes JSON \a data and then posts to \a hostName.
+    Response is processed in the handleFinished slot.
+*/
 void RequestManager::POST(const QString hostName, const QString& data)
 {
     QNetworkRequest request = QNetworkRequest(hostName);
@@ -32,15 +36,12 @@ void RequestManager::POST(const QString hostName, const QString& data)
     networkManager->post(request, data.toUtf8());
 }
 
-/*
- *
- * SIGNALS/SLOTS
- *
+ /*!
+     \fn void RequestManager::handleFinished(QNetworkReply* networkReply)
+
+     A slot trgiggered when an HTTP network request has finished.
+     Emits the sendSignal signal that includes the response string.
  */
- /// HTTP network request has finished
- /// \brief RequestManager::handleFinished
- /// \param networkReply
- ///
 void RequestManager::handleFinished(QNetworkReply* networkReply)
 {
     QString result;

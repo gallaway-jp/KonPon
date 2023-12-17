@@ -1,14 +1,24 @@
 #include "MemoryMapLib.h"
 
 #include <QFile>
+
+/*!
+	\fn MemoryMapLib::MemoryMapLib()
+
+	Constructs an MemoryMapLib object and initializes the DictRes resource.
+*/
 MemoryMapLib::MemoryMapLib()
 {
 	Q_INIT_RESOURCE(DictRes);
 }
 
-// Opens a file with the Qt API
-// Returns an int-based handle to the opened file on success
-// Returns -1 on failure
+/*!
+	\fn int MemoryMapLib::open(const char* filePath)
+
+	Opens a file from \a filePath with the Qt API.
+	Returns an int-based handle to the opened file on success.
+	Returns -1 on failure.
+*/
 int MemoryMapLib::open(const char* filePath)
 {
 	QFile* file = new QFile(filePath);
@@ -28,7 +38,11 @@ int MemoryMapLib::open(const char* filePath)
 	return fileHandles.size() - 1;
 }
 
-// Returns size of opened file
+/*!
+	\fn size_t MemoryMapLib::size(int handle)
+
+	Returns size of opened file by passing its \a handle.
+*/
 size_t MemoryMapLib::size(int handle)
 {
 	if (handle < fileHandles.size() && handle >= 0
@@ -39,7 +53,11 @@ size_t MemoryMapLib::size(int handle)
 	return 0;
 }
 
-// Closes opened file
+/*!
+	\fn void MemoryMapLib::size(int handle)
+
+	Closes opened file by passing its \a handle.
+*/
 void MemoryMapLib::close(int handle)
 {
 	if (handle < fileHandles.size() && handle >= 0
@@ -52,9 +70,13 @@ void MemoryMapLib::close(int handle)
 	}
 }
 
-// Maps opened file to memory
-// Returns address to beginning of map on success
-// Returns nullptr on failure
+/*!
+	\fn char* MemoryMapLib::map(int handle)
+
+	Maps opened file to memory by passing its \a handle.
+	Returns address to beginning of map on success.
+	Returns nullptr on failure.
+*/
 char* MemoryMapLib::map(int handle)
 {
 	if (handle < fileHandles.size() && handle >= 0
@@ -71,7 +93,11 @@ char* MemoryMapLib::map(int handle)
 	return nullptr;
 }
 
-// Unmaps memory mapped file
+/*!
+	\fn void MemoryMapLib::unmap(int handle)
+
+	Unmaps memory mapped file by passing its \a handle.
+*/
 void MemoryMapLib::unmap(int handle)
 {
 	if (handle < fileHandles.size() && handle >= 0
@@ -85,6 +111,11 @@ void MemoryMapLib::unmap(int handle)
 	}
 }
 
+/*!
+	\fn MemoryMapLib::~MemoryMapLib()
+
+	Closes any opened files and destroys MemoryMapLib object.
+*/
 MemoryMapLib::~MemoryMapLib()
 {
 	for (int i = 0; i < fileHandles.size(); i++) {

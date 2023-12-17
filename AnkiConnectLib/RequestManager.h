@@ -1,22 +1,21 @@
-#ifndef REQUESTMANAGER_H
-#define REQUESTMANAGER_H
+#pragma once
 
 #include "ankiconnectlib_global.h"
 
 #include <QtCore>
 #include <QObject>
 #include <QString>
-#include <QtNetwork/QTcpSocket>
-#include <QIODevice>
-#include <QByteArray>
-#include <QMap>
-#include <QMetaObject>
 #include <QtNetwork/QNetworkAccessManager>
 #include <QtNetwork/QNetworkReply>
 #include <QtNetwork/QNetworkRequest>
-#include <QtNetwork/QHttpMultiPart>
 #include <QUrl>
 
+/*!
+    \class RequestManager
+
+    \brief The RequestManager class provides methods
+    to send requests to a host. Responses are processed in the handleFinished slot.
+*/
 class /*ANKICONNECTLIB_EXPORT*/ RequestManager : public QObject
 {
     Q_OBJECT
@@ -34,5 +33,3 @@ public slots:
 private:
     QNetworkAccessManager* networkManager;
 };
-
-#endif // REQUESTMANAGER_H

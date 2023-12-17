@@ -1,8 +1,15 @@
 #pragma once
 
 #include <vector>
-//#include "memorymaplib_global.h"
+
 #define MEMORYMAPLIB_EXPORT
+
+/*!
+    \class MemoryMapLib
+
+    \brief The MemoryMapLib class provides methods
+    for loading files into memory.
+*/
 class MEMORYMAPLIB_EXPORT MemoryMapLib
 {
 public:

@@ -1,21 +1,25 @@
 #include "TextParser.h"
-#include "TextParserFunc.h"
+
 #include "MeCab.h"
 #include "MecabSlim.h"
+#include "TextParserFunc.h"
 
-#include <string>
-#include <map>
 #include <filesystem>
+#include <string>
 
 #include <QString>
 #include <QDir>
-#include <QByteArray>
 #include <QJsonDocument>
-#include <QVariantMap>
 #include <QJsonObject>
 #include <QJsonArray>
 
 namespace {
+/*!
+	\fn bool outputToJsonFile(const char* path, const WordDict& wordDictionary, const LocationsDict& locationsDictionary)
+
+	Outputs the \a wordDictionary and \a locationsDictionary to a JSON file located at \a path.
+	Returns true if write to file is successful, otherwise false.
+*/
 	bool outputToJsonFile(const char* path, const WordDict& wordDictionary, const LocationsDict& locationsDictionary)
 	{
 		QFile file(path);
@@ -71,6 +75,14 @@ namespace {
 	}
 }
 
+/*!
+	\fn int64_t Parser::TokenizeText(std::string const& folder, std::string const& name, const char *pInputText,
+	const std::string& fileId, Wordlist& outWordlist, Words& outWords)
+
+	Tokenizes the \a pInputText and outputs the word data to \a outWordlist and \a outWords
+	with an associated id of \a fileId and name of \a name. Word data will also be output to a JSON file
+	located at \a folder /KonPonData /Texts.
+*/
 int64_t Parser::TokenizeText(std::string const& folder, std::string const& name, const char *pInputText,
 	const std::string& fileId, Wordlist& outWordlist, Words& outWords)
 {

@@ -6,6 +6,12 @@
 #include <string>
 #include <vector>
 
+/*!
+    \class Wordlists
+
+    \brief The Wordlists class provides methods
+    to manage unknown, known, and custom word lists.
+*/
 class WORDLISTLIB_EXPORT Wordlists
 {
 public: // interface methods
