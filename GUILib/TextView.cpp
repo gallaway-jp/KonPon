@@ -32,6 +32,9 @@ TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
     QDialog(nullptr)
 {
 	setAttribute(Qt::WA_DeleteOnClose);
+    setWindowFlag(Qt::WindowMaximizeButtonHint);
+    setWindowFlag(Qt::WindowMinimizeButtonHint);
+
 	QFile file(QDir(settings->mFile.workspace + QString("/KonPonData") + QString("/Texts") + QString("/") + QString::number(fileId)).absoluteFilePath("text.txt"));
 	if (!file.open(QFile::ReadOnly | QFile::Text)) {
 		QDialog::close();
@@ -56,13 +59,14 @@ TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
     m_list = new TextDataList();
     QStringList* stringList = new QStringList();
 
-    QString* tempString = new QString();
+    QString tempString;
     uint uLineCount = 0;
     int64_t charCountPrev = 0;
     int64_t charCountCurrent = 0;
-    while (ReadFile.readLineInto(tempString) != false) {
+    while (ReadFile.readLineInto(&tempString) != false) {
         uLineCount++;
-        charCountCurrent += tempString->length() + 1; //+1 for newline character
+        charCountCurrent += tempString.length() + 1; //+1 for newline character
+        stringList->append(tempString);
         if (uLineCount % 50 == 0) {
             //0 character offset for first page
             int64_t offset = 0;
@@ -73,12 +77,10 @@ TextView::TextView(uint64_t fileId, Settings* settings, Wordlists& wordlists)
             m_list->append({ stringList, offset });
             stringList = new QStringList();
         }
-        stringList->append(*tempString);
     }
     if (!stringList->isEmpty()) {
         m_list->append({ stringList, charCountPrev });
     }
-    delete tempString;
     file.close();
 
     if (m_list->length() <= 0) {
@@ -269,7 +271,7 @@ void TextView::highlightWords(const Wordlist& words, bool setHighlight)
                 }
                 const auto& wordsDict = mTextWords.getWords();
                 uint8_t length = wordsDict.at(kana).at(kanji).at(location);
-                int64_t position = location - mOffset + ((m_currentPage==0)?0:1);
+                int64_t position = location - mOffset;
                 cursor.setPosition(position, QTextCursor::MoveAnchor);
                 cursor.setPosition(position + length, QTextCursor::KeepAnchor);
                 cursor.setCharFormat(fmt);

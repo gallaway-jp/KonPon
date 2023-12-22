@@ -40,7 +40,7 @@ std::pair<std::string, std::string> TextEdit::getWordAtPosition(int wordPosition
 {
 	std::pair<std::string, std::string> result;
 	const auto& locations = mTextWords.getLocations();
-	int64_t location = wordPosition + mOffset - ((mCurrentPage == 0) ? 0 : 1);
+	int64_t location = wordPosition + mOffset;
 	auto it = locations.lower_bound(location);
 
 	if (it == locations.end()) {
