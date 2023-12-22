@@ -231,7 +231,7 @@ void TextTree::MakeJson(
 
 bool TextTree::TextTreeWriteToJsonFile()
 {
-    QFile file(QDir(QCoreApplication::applicationDirPath() + QString("/KonPonData")).absoluteFilePath("TextTree.json"));
+    QFile file(QDir(_mSettings->mFile.workspace + QString("/KonPonData")).absoluteFilePath("TextTree.json"));
     if (!file.open(QIODevice::WriteOnly)) {
         return false;
     }
