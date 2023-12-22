@@ -21,6 +21,7 @@ public:
     TextTree* mTextTree;
 signals:
     void retranslateUI();
+    void viewWordLists();
 private:
     Wordlists* mWordlists;
     DialogManager* mDlgMgr = nullptr;

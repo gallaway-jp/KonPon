@@ -39,7 +39,6 @@ private:
     void onDeleteFolderClicked();
     void onDeleteFileClicked();
     void onViewTextClicked();
-    void onViewWordlistsClicked();
 signals:
     void tokenizeText(const QString& workspace);
     void deleteFolderClicked();
@@ -50,5 +49,6 @@ signals:
     void textsTokenized();
     void retranslateUI();
 public slots:
+    void onViewWordlistsClicked();
     void onRetranslateUI();
 };

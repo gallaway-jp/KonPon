@@ -63,7 +63,7 @@ QList<QAction*>* Menubar::createFileActions()
         PASS_METHOD(onImportTextAudio), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DriveCDIcon)));
     retActions->append(m_importTextAudioAction);
     m_viewWordListsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&View Word Lists"),
-        PASS_METHOD(onViewWordLists), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_FileDialogContentsView)));
+        PASS_METHOD(onViewWordLists), Qt::CTRL | Qt::Key_W, &(tmpIcon = GET_STANDARD_ICON(SP_FileDialogContentsView)));
     retActions->append(m_viewWordListsAction);
     m_exitAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Exit"),
         PASS_METHOD(onExit), Qt::CTRL | Qt::Key_Q, &(tmpIcon = GET_STANDARD_ICON(SP_DialogCloseButton)));
@@ -147,7 +147,7 @@ void Menubar::onImportTextAudio()
 
 void Menubar::onViewWordLists()
 {
-    ;
+    emit viewWordLists();
 }
 
 void Menubar::onExit()

@@ -24,6 +24,7 @@ inline MainWindow::MainWindow(QWidget* parent)
 
     Menubar* menubar = new Menubar(QApplication::style(), mSettings, centralWidget->mTextTree);
     connect(menubar, &Menubar::restranslateUI, centralWidget, &CentralWidget::retranslateUI);
+    connect(menubar, &Menubar::viewWordLists, centralWidget, &CentralWidget::viewWordLists);
     setMenuBar(menubar);
     setCentralWidget(centralWidget);
 }

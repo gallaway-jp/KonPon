@@ -70,6 +70,7 @@ private:
 signals:
     void tokenizeText(const QString& workspace);
     void restranslateUI();
+    void viewWordLists();
 private slots:
     void onRetranslateUI();
 };
