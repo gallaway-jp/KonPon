@@ -29,6 +29,13 @@ Settings::~Settings()
 	if (m_clearDataOnTermination) {
 		QSettings settings;
 		settings.clear();
+#ifdef Q_OS_WIN
+		QSettings windowsSettings = QSettings("HKEY_CURRENT_USER\\Software\\" + QCoreApplication::organizationName(),
+			QSettings::NativeFormat);
+		if (windowsSettings.childKeys().isEmpty()) {
+			windowsSettings.remove("");
+		}
+#endif // Q_OS_WIN
 		QDir(mFile.workspace + QString("/KonPonData")).removeRecursively();
 	}
 }
@@ -42,6 +49,9 @@ Settings::~Settings()
 void Settings::clearDataOnTermination()
 {
 	m_clearDataOnTermination = true;
+	mAnki.clearDataOnTermination();
+	mFile.clearDataOnTermination();
+	ui.clearDataOnTermination();
 }
 
 /*!
@@ -64,7 +74,20 @@ Settings::File::File()
 */
 Settings::File::~File()
 {
-	WriteSettings();
+	if (!m_clearDataOnTermination) {
+		WriteSettings();
+	}
+}
+
+/*!
+	\fn void Settings::File::clearDataOnTermination()
+
+	Sets the m_clearDataOnTermination flag to true.
+	KonPon data will be cleared upon destruction of Settings object.
+*/
+void Settings::File::clearDataOnTermination()
+{
+	m_clearDataOnTermination = true;
 }
 
 /*!
@@ -128,7 +151,20 @@ Settings::UI::UI()
 */
 Settings::UI::~UI()
 {
-	WriteSettings();
+	if (!m_clearDataOnTermination) {
+		WriteSettings();
+	}
+}
+
+/*!
+	\fn void Settings::UI::clearDataOnTermination()
+
+	Sets the m_clearDataOnTermination flag to true.
+	KonPon data will be cleared upon destruction of Settings object.
+*/
+void Settings::UI::clearDataOnTermination()
+{
+	m_clearDataOnTermination = true;
 }
 
 /*!
@@ -353,7 +389,20 @@ Settings::Anki::Anki()
 */
 Settings::Anki::~Anki()
 {
-	WriteSettings();
+	if (!m_clearDataOnTermination) {
+		WriteSettings();
+	}
+}
+
+/*!
+	\fn void Settings::Anki::clearDataOnTermination()
+
+	Sets the m_clearDataOnTermination flag to true.
+	KonPon data will be cleared upon destruction of Settings object.
+*/
+void Settings::Anki::clearDataOnTermination()
+{
+	m_clearDataOnTermination = true;
 }
 
 /*!

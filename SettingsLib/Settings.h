@@ -33,11 +33,12 @@ private:
 	public:
 		File();
 		~File();
+		void clearDataOnTermination();
 		void setWorkspace(const QString& workspace);
 		QString workspace;
 		QString defaultWorkspace;
 	private:
-		
+		bool m_clearDataOnTermination = false;
 	private:
 		void ReadSettings();
 		void WriteSettings();
@@ -47,12 +48,14 @@ private:
 	public:
 		UI();
 		~UI();
+		void clearDataOnTermination();
 		void setTheme(Settings::Theme theme);
 		Settings::Theme getTheme();
 		bool isDarkTheme();
 		void setLanguage(Settings::Language language);
 		Settings::Language getLanguage();
 	private:
+		bool m_clearDataOnTermination = false;
 		bool m_isSystemDarkMode = false;
 		Settings::Theme m_theme = Theme::Default;
 
@@ -70,6 +73,7 @@ private:
 	public:
 		Anki();
 		~Anki();
+		void clearDataOnTermination();
 		void setEnableAnkiConnectFeature(bool enable);
 		void setAddress(const QString& address);
 		void setPort(ushort port);
@@ -77,6 +81,7 @@ private:
 		QString address;
 		ushort port = 8765;
 	private:
+		bool m_clearDataOnTermination = false;
 		void ReadSettings();
 		void WriteSettings();
 	};
