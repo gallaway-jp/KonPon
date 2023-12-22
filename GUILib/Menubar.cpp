@@ -95,7 +95,7 @@ QList<QAction*>* Menubar::createHelpActions()
         PASS_METHOD(onReleaseNotes), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DialogApplyButton)));
     retActions->append(m_releaseNotesAction);
     m_videoTutorialsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Video Tutorials"),
-        PASS_METHOD(onVideoTutorials), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_MediaPlay)));
+        PASS_METHOD(onVideoTutorials), Qt::CTRL | Qt::Key_V, &(tmpIcon = GET_STANDARD_ICON(SP_MediaPlay)));
     retActions->append(m_videoTutorialsAction);
     m_keyboardShortcutsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Keyboard Shortcuts"),
         PASS_METHOD(onKeyboardShortcuts), Qt::CTRL | Qt::Key_K, &(tmpIcon = GET_STANDARD_ICON(SP_MediaSkipForward)));
@@ -185,7 +185,7 @@ void Menubar::onReleaseNotes()
 
 void Menubar::onVideoTutorials()
 {
-    QDesktopServices::openUrl(QUrl("https://google.com/"));
+    QDesktopServices::openUrl(QUrl("https://github.com/gallaway-jp/KonPon/wiki/Tutorials"));
 }
 
 void Menubar::onKeyboardShortcuts()
