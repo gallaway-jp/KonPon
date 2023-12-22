@@ -23,6 +23,7 @@ BottomMenu::BottomMenu(QWidget* parent, TextTree* textTree, Settings* settings, 
     m_addFolderButton = new QPushButton(tr("Add Folder"));
 
     m_addTextButton = new QToolButton();
+    m_addTextButton->setSizePolicy(QSizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed));
     m_addTextButton->setPopupMode(QToolButton::MenuButtonPopup);
     m_addTextButton->setText(tr("Add Text"));
     m_addAudioAction = m_addTextButton->addAction(tr("Add Audio"));
