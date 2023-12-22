@@ -76,7 +76,7 @@ Settings::File::~File()
 void Settings::File::setWorkspace(const QString& workspace)
 {
 	if (workspace != this->workspace) {
-		MoveFolderContents(this->workspace, workspace);
+		MoveFolderContents(this->workspace + QString("/KonPonData"), workspace + QString("/KonPonData"));
 		this->workspace = workspace;
 	}
 }
