@@ -60,7 +60,7 @@ QList<QAction*>* Menubar::createFileActions()
         PASS_METHOD(onImportAudio), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_A*/, &(tmpIcon = GET_STANDARD_ICON(SP_MediaVolume)));
     retActions->append(m_importAudioAction);
     m_importTextAudioAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Import Text && Audio"),
-        PASS_METHOD(onImportTextAudio), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DriveCDIcon)));
+        PASS_METHOD(onImportTextAudio), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_B*/, &(tmpIcon = GET_STANDARD_ICON(SP_DriveCDIcon)));
     retActions->append(m_importTextAudioAction);
     m_viewWordListsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&View Word Lists"),
         PASS_METHOD(onViewWordLists), Qt::CTRL | Qt::Key_W, &(tmpIcon = GET_STANDARD_ICON(SP_FileDialogContentsView)));
@@ -76,7 +76,7 @@ QList<QAction*>* Menubar::createToolsActions()
     QList<QAction*>* retActions = new QList<QAction*>();
     QIcon tmpIcon;
     m_syncAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Sync"),
-        PASS_METHOD(onSync), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DriveNetIcon)));
+        PASS_METHOD(onSync), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_Y*/, &(tmpIcon = GET_STANDARD_ICON(SP_DriveNetIcon)));
     retActions->append(m_syncAction);
     m_settingsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Settings"),
         PASS_METHOD(onSettings), Qt::CTRL | Qt::Key_T, &(tmpIcon = GET_STANDARD_ICON(SP_ComputerIcon)));
@@ -89,10 +89,10 @@ QList<QAction*>* Menubar::createHelpActions()
     QList<QAction*>* retActions = new QList<QAction*>();
     QIcon tmpIcon;
     m_manualAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Manual"),
-        PASS_METHOD(onManual), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DialogHelpButton)));
+        PASS_METHOD(onManual), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_M*/, &(tmpIcon = GET_STANDARD_ICON(SP_DialogHelpButton)));
     retActions->append(m_manualAction);
     m_releaseNotesAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Release Notes"),
-        PASS_METHOD(onReleaseNotes), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_DialogApplyButton)));
+        PASS_METHOD(onReleaseNotes), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_N*/, &(tmpIcon = GET_STANDARD_ICON(SP_DialogApplyButton)));
     retActions->append(m_releaseNotesAction);
     m_videoTutorialsAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Video Tutorials"),
         PASS_METHOD(onVideoTutorials), Qt::CTRL | Qt::Key_V, &(tmpIcon = GET_STANDARD_ICON(SP_MediaPlay)));
@@ -104,7 +104,7 @@ QList<QAction*>* Menubar::createHelpActions()
         PASS_METHOD(onViewGithub), Qt::CTRL | Qt::Key_H, &(tmpIcon = GET_STANDARD_ICON(SP_MessageBoxInformation)));
     retActions->append(m_viewGithubAction);
     m_checkUpdatesAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&Check for Updates"),
-        PASS_METHOD(onCheckUpdates), QKeySequence::UnknownKey, &(tmpIcon = GET_STANDARD_ICON(SP_ArrowUp)));
+        PASS_METHOD(onCheckUpdates), QKeySequence::UnknownKey/*Qt::CTRL | Qt::Key_U*/, &(tmpIcon = GET_STANDARD_ICON(SP_ArrowUp)));
     retActions->append(m_checkUpdatesAction);
     m_aboutAction = createAction(QT_TRANSLATE_NOOP("Menubar", "&About"),
         PASS_METHOD(onAbout), Qt::CTRL | Qt::Key_I, &(tmpIcon = GET_STANDARD_ICON(SP_FileDialogInfoView)));
