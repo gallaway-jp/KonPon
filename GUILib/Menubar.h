@@ -13,12 +13,11 @@ class Menubar :
 {
     Q_OBJECT
 public:
-    Menubar(QStyle* style, Settings* settings, const TextTree* textTree);
+    Menubar(Settings* settings, const TextTree* textTree);
 
 public:
 
 private:
-    QStyle* mStyle;
     Settings* mSettings;
     bool mSettingsDialogOpened = false;
     bool mKeyboardShortcutsDialogOpened = false;

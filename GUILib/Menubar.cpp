@@ -6,6 +6,7 @@
 #include "TextTree.h"
 
 #include <QAction>
+#include <QApplication>
 #include <QCoreApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
@@ -15,11 +16,11 @@
 #include <QMessageBox>
 #include <QStyle>
 
-#define GET_STANDARD_ICON(icon) /*QApplication::*/mStyle->standardIcon(QStyle::StandardPixmap::##icon)
+#define GET_STANDARD_ICON(icon) QApplication::style()->standardIcon(QStyle::StandardPixmap::##icon)
 #define PASS_METHOD(method) [&](){method();}
 
-Menubar::Menubar(QStyle* style, Settings* settings, const TextTree* textTree)
-    : mStyle(style), mSettings(settings)
+Menubar::Menubar(Settings* settings, const TextTree* textTree)
+    : mSettings(settings)
 {
     addMenus();
     onRetranslateUI();
@@ -152,7 +153,7 @@ void Menubar::onViewWordLists()
 
 void Menubar::onExit()
 {
-    //QApplication::quit();
+    QApplication::quit();
 }
 
 void Menubar::onSync()
