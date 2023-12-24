@@ -1,6 +1,7 @@
 # KonPon
 A tool for learning Japanese written in C++
 Users can import Japanese texts and keep track of what words are not yet learned, in the process of learning, and already learned.
+<br>![KonPon_MainWindow](https://github.com/gallaway-jp/KonPon/assets/105543156/ae31e158-7731-4801-b88e-bdc7ead2d0fa)
 
 ## Installation
 1. Download the zip file under Assets from the latest release found [here](https://github.com/gallaway-jp/KonPon/releases).  
