@@ -4,8 +4,8 @@
 #include "Wordlist.h"
 #include "Words.h"
 
-#include <unordered_map>
 #include <string>
+#include <unordered_map>
 
 #include <QElapsedTimer>
 #include <QTreeView>
@@ -28,10 +28,25 @@ class TextTree : public QTreeView
     Q_OBJECT
 public:
     TextTree(QWidget* parent, Settings* settings, Wordlists* wordlists);
-    ~TextTree();
 
     void addFolder(const QString& folder);
     void removeFolder();
+signals:
+    void viewTextClicked(int64_t textId);
+    void addTextId(int64_t textId, const std::string& name);
+    void removeTextId(int64_t textId);
+    void textsTokenized();
+
+public slots:
+    void onShutdownApp();
+    void onTokenizeText(const QString& filePath);
+    void onDeleteFolderClicked();
+    void onDeleteFileClicked();
+    void onViewTextClicked();
+
+    void onTextTokenized(const QString name, qint64 fileId);
+    void onTextsTokenized();
+    void onRetranslateUI();
 private:
     Settings* _mSettings;
     QStandardItemModel* _mModel;
@@ -62,26 +77,7 @@ private:
     void mouseDoubleClickEvent(QMouseEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
     void mouseReleaseEvent(QMouseEvent* event) override;
-
-    void onChange();
 private: //Threads
     void tokenizeTexts(const QStringList filePaths, const QString workspace);
     std::pair<Wordlist, Words> tokenizeText(const QString filePath, const QString workspace, std::string fileId);
-
-signals:
-    void viewTextClicked(int64_t textId);
-    void addTextId(int64_t textId, const std::string& name);
-    void removeTextId(int64_t textId);
-    void textsTokenized();
-
-public slots:
-    //void onAddFolderClicked();
-    void onTokenizeText(const QString& filePath);
-    void onDeleteFolderClicked();
-    void onDeleteFileClicked();
-    void onViewTextClicked();
-
-    void onTextTokenized(const QString name, qint64 fileId);
-    void onTextsTokenized();
-    void onRetranslateUI();
 };

@@ -13,6 +13,8 @@ public:
     MainWindow(QWidget* parent = nullptr);
     ~MainWindow();
     void closeEvent(QCloseEvent* event);
+signals:
+    void shutdownApp();
 private:
     Settings* mSettings;
 };

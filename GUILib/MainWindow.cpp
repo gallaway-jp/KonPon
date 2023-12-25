@@ -23,6 +23,7 @@ inline MainWindow::MainWindow(QWidget* parent)
     CentralWidget *centralWidget = new CentralWidget(this, mSettings);
 
     Menubar* menubar = new Menubar(mSettings, centralWidget->mTextTree);
+    connect(this, &MainWindow::shutdownApp, centralWidget, &CentralWidget::shutdownApp);
     connect(menubar, &Menubar::restranslateUI, centralWidget, &CentralWidget::retranslateUI);
     connect(menubar, &Menubar::viewWordLists, centralWidget, &CentralWidget::viewWordLists);
     setMenuBar(menubar);
@@ -31,6 +32,7 @@ inline MainWindow::MainWindow(QWidget* parent)
 
 inline void MainWindow::closeEvent(QCloseEvent* event)
 {
+    emit shutdownApp();
     QApplication::closeAllWindows();
 }
 

@@ -1,28 +1,32 @@
 #include "TextTree.h"
 
+#include "DialogManager.h"
+#include "TextParser.h"
 #include "TextView.h"
 #include "Settings.h"
 #include "Wordlists.h"
-#include "DialogManager.h"
 
 #include <chrono>
 
-#include <QWidget>
-#include <QTreeView>
-#include <QStandardItemModel>
-#include <QStandardItem>
-#include <QDragEnterEvent>
-#include <QDropEvent>
-#include <QModelIndex>
-#include <QFileIconProvider>
-
-#include <QFile>
-#include <QJsonObject>
-#include <QJsonArray>
-#include <QJsonDocument>
+#include <QByteArray>
 #include <QCoreApplication>
 #include <QDir>
-#include <QByteArray>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QFile>
+#include <QFileDialog>
+#include <QFileIconProvider>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QMessageBox>
+#include <QModelIndex>
+#include <QStandardItem>
+#include <QStandardItemModel>
+#include <QtConcurrent>
+#include <QTextStream>
+#include <QTreeView>
+#include <QWidget>
 
 TextTree::TextTree(QWidget* parent, Settings* settings, Wordlists* wordlists)
     : _mSettings(settings), QTreeView(parent), mWordlists(*wordlists)
@@ -63,7 +67,6 @@ void TextTree::dropEvent(QDropEvent* event)
     if (item && isFolder(item)) {
         //If drop destination is a folder, add item to the folder
         QTreeView::dropEvent(event);
-        onChange();
         return;
     }
 
@@ -87,18 +90,16 @@ void TextTree::dropEvent(QDropEvent* event)
     if (!item) {
         // If drop destination is not an item, add to root
         _mModel->appendRow(dropSource);
-        onChange();
-        return;
     }
-
-    // If drop destination is a file, then add item to parent folder
-    QStandardItem* parent = item->parent();
-    if (!parent) {
-        // Treat root as parent
-        parent = _mModel->invisibleRootItem();
+    else {
+        // If drop destination is a file, then add item to parent folder
+        QStandardItem* parent = item->parent();
+        if (!parent) {
+            // Treat root as parent
+            parent = _mModel->invisibleRootItem();
+        }
+        parent->appendRow(dropSource);
     }
-    parent->appendRow(dropSource);
-    onChange();
 }
 
 void TextTree::parseElement(const QString& key, const QJsonValue& value, QStandardItem* currentFolder)
@@ -232,6 +233,9 @@ void TextTree::MakeJson(
 bool TextTree::TextTreeWriteToJsonFile()
 {
     QFile file(QDir(_mSettings->mFile.workspace + QString("/KonPonData")).absoluteFilePath("TextTree.json"));
+    if (file.exists()) {
+        file.remove();
+    }
     if (!file.open(QIODevice::WriteOnly)) {
         return false;
     }
@@ -252,10 +256,6 @@ bool TextTree::TextTreeWriteToJsonFile()
 
 void TextTree::addFolder(const QString& folder)
 {
-    if (!_mIsSaveNeeded) {
-        onChange();
-    }
-
     QModelIndex mi = QTreeView::selectionModel()->currentIndex();
     QStandardItem* item = _mModel->itemFromIndex(mi);
 
@@ -263,30 +263,26 @@ void TextTree::addFolder(const QString& folder)
     if (!item || isRoot(item)) {
         // Add to root of tree
         _mModel->appendRow(emptyFolder);
-        return;
     }
-
-    if (isFolder(item)) {
+    else if (isFolder(item)) {
         //Current item is a folder, so add folder in this folder;
         item->appendRow(emptyFolder);
-        return;
+    }
+    else {
+        //Current item is a file, so add folder to parent folder;
+        QStandardItem* parent = item->parent();
+        if (!parent) {
+            // Treat top as parent
+            parent = _mModel->invisibleRootItem();
+        }
+        parent->appendRow(emptyFolder);
     }
 
-    //Current item is a file, so add folder to parent folder;
-    QStandardItem* parent = item->parent();
-    if (!parent) {
-        // Treat top as parent
-        parent = _mModel->invisibleRootItem();
-    }
-    parent->appendRow(emptyFolder);
+    TextTreeWriteToJsonFile();
 }
 
 void TextTree::removeFolder()
 {
-    if (!_mIsSaveNeeded) {
-        onChange();
-    }
-
     QModelIndex mi = QTreeView::selectionModel()->currentIndex();
     QStandardItem* item = _mModel->itemFromIndex(mi);
 
@@ -313,6 +309,8 @@ void TextTree::removeFolder()
     }
     // Remove folder
     parent->removeRow(item->row());
+
+    TextTreeWriteToJsonFile();
 }
 
 QStandardItem* TextTree::createFolderNode(const QString& name)
@@ -335,10 +333,6 @@ void TextTree::createRootNode()
 
 void TextTree::removeFile()
 {
-    if (!_mIsSaveNeeded) {
-        onChange();
-    }
-
     QModelIndex mi = QTreeView::selectionModel()->currentIndex();
     QStandardItem* item = _mModel->itemFromIndex(mi);
 
@@ -366,6 +360,8 @@ void TextTree::removeFile()
     wordsInfo.removeTextId(fileId);
 
     emit removeTextId(fileId);
+
+    TextTreeWriteToJsonFile();
 }
 
 QStandardItem* TextTree::createFileNode(const QString& name, qint64 fileId)
@@ -378,11 +374,9 @@ QStandardItem* TextTree::createFileNode(const QString& name, qint64 fileId)
     return file;
 }
 
-TextTree::~TextTree()
+void TextTree::onShutdownApp()
 {
-    if (_mIsSaveNeeded) {
-        TextTreeWriteToJsonFile();
-    }
+    TextTreeWriteToJsonFile();
 }
 
 void TextTree::keyPressEvent(QKeyEvent* event)
@@ -426,18 +420,6 @@ void TextTree::mouseReleaseEvent(QMouseEvent* event)
     QTreeView::mouseReleaseEvent(event);
 }
 
-void TextTree::onChange()
-{
-    _mIsSaveNeeded = true;
-}
-
-#include "TextParser.h"
-#include <QFile>
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QTextStream>
-#include <QByteArray>
-#include <QtConcurrent>
 void TextTree::tokenizeTexts(const QStringList filePaths, const QString workspace)
 {
     std::vector<QFuture<std::pair<Wordlist, Words>>> promises;
@@ -505,10 +487,6 @@ void TextTree::onTokenizeText(const QString& workspace)
 
 void TextTree::onTextTokenized(const QString name, qint64 fileId)
 {
-    if (!_mIsSaveNeeded) {
-        onChange();
-    }
-
     //Add file to tree
     QStandardItem* file = createFileNode(name, fileId);
     _mModel->appendRow(file);
@@ -520,12 +498,9 @@ void TextTree::onTextTokenized(const QString name, qint64 fileId)
 
 void TextTree::onTextsTokenized()
 {
-    if (!_mIsSaveNeeded) {
-        onChange();
-    }
-
     //TODO enable buttons again
     
+    TextTreeWriteToJsonFile();
 }
 
 void TextTree::onDeleteFolderClicked()

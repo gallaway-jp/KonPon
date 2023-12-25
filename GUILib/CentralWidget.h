@@ -20,6 +20,7 @@ public:
 public:
     TextTree* mTextTree;
 signals:
+    void shutdownApp();
     void retranslateUI();
     void viewWordLists();
 private:
