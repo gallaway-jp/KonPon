@@ -396,14 +396,14 @@
         <translation type="vanished">指定したテキストを分析し、テキストと言葉を本アプリに追加する</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="56"/>
-        <location filename="Menubar.cpp" line="222"/>
+        <location filename="Menubar.cpp" line="57"/>
+        <location filename="Menubar.cpp" line="223"/>
         <source>&amp;Import Text</source>
         <translation>&amp;テキストをインポート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="59"/>
-        <location filename="Menubar.cpp" line="223"/>
+        <location filename="Menubar.cpp" line="60"/>
+        <location filename="Menubar.cpp" line="224"/>
         <source>&amp;Import Audio</source>
         <translation>&amp;オーディオをインポート</translation>
     </message>
@@ -412,117 +412,117 @@
         <translation type="vanished">&amp;テキストとオーディオをインポート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="62"/>
-        <location filename="Menubar.cpp" line="224"/>
+        <location filename="Menubar.cpp" line="63"/>
+        <location filename="Menubar.cpp" line="225"/>
         <source>&amp;Import Text &amp;&amp; Audio</source>
         <translation>&amp;テキストとオーディオをインポート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="65"/>
-        <location filename="Menubar.cpp" line="225"/>
+        <location filename="Menubar.cpp" line="66"/>
+        <location filename="Menubar.cpp" line="226"/>
         <source>&amp;View Word Lists</source>
         <translation>&amp;言葉リストを閲覧</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="68"/>
-        <location filename="Menubar.cpp" line="226"/>
+        <location filename="Menubar.cpp" line="69"/>
+        <location filename="Menubar.cpp" line="227"/>
         <source>&amp;Exit</source>
         <translation>&amp;終了</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="78"/>
-        <location filename="Menubar.cpp" line="229"/>
+        <location filename="Menubar.cpp" line="79"/>
+        <location filename="Menubar.cpp" line="230"/>
         <source>&amp;Sync</source>
         <translation>&amp;同期</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="81"/>
-        <location filename="Menubar.cpp" line="230"/>
+        <location filename="Menubar.cpp" line="82"/>
+        <location filename="Menubar.cpp" line="231"/>
         <source>&amp;Settings</source>
         <translation>&amp;設定</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="91"/>
-        <location filename="Menubar.cpp" line="233"/>
+        <location filename="Menubar.cpp" line="92"/>
+        <location filename="Menubar.cpp" line="234"/>
         <source>&amp;Manual</source>
         <translation>&amp;マニュアル</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="94"/>
-        <location filename="Menubar.cpp" line="234"/>
+        <location filename="Menubar.cpp" line="95"/>
+        <location filename="Menubar.cpp" line="235"/>
         <source>&amp;Release Notes</source>
         <translation>&amp;リリースノート</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="97"/>
-        <location filename="Menubar.cpp" line="235"/>
+        <location filename="Menubar.cpp" line="98"/>
+        <location filename="Menubar.cpp" line="236"/>
         <source>&amp;Video Tutorials</source>
         <translation>&amp;ビデオ チュートリアル</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="100"/>
-        <location filename="Menubar.cpp" line="236"/>
+        <location filename="Menubar.cpp" line="101"/>
+        <location filename="Menubar.cpp" line="237"/>
         <source>&amp;Keyboard Shortcuts</source>
         <translation>&amp;キーボード ショートカット</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="103"/>
-        <location filename="Menubar.cpp" line="237"/>
+        <location filename="Menubar.cpp" line="104"/>
+        <location filename="Menubar.cpp" line="238"/>
         <source>&amp;View Github</source>
         <translation>&amp;Githubを閲覧</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="106"/>
-        <location filename="Menubar.cpp" line="238"/>
+        <location filename="Menubar.cpp" line="107"/>
+        <location filename="Menubar.cpp" line="239"/>
         <source>&amp;Check for Updates</source>
         <translation>&amp;更新を確認</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="109"/>
-        <location filename="Menubar.cpp" line="239"/>
+        <location filename="Menubar.cpp" line="110"/>
+        <location filename="Menubar.cpp" line="240"/>
         <source>&amp;About</source>
         <translation>&amp;アプリについて</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="118"/>
-        <location filename="Menubar.cpp" line="221"/>
+        <location filename="Menubar.cpp" line="119"/>
+        <location filename="Menubar.cpp" line="222"/>
         <source>&amp;File</source>
         <translation>&amp;ファイル</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="123"/>
-        <location filename="Menubar.cpp" line="228"/>
+        <location filename="Menubar.cpp" line="124"/>
+        <location filename="Menubar.cpp" line="229"/>
         <source>&amp;Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="128"/>
-        <location filename="Menubar.cpp" line="232"/>
+        <location filename="Menubar.cpp" line="129"/>
+        <location filename="Menubar.cpp" line="233"/>
         <source>&amp;Help</source>
         <translation>&amp;ヘルプ</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="140"/>
+        <location filename="Menubar.cpp" line="141"/>
         <source>Open Audio</source>
         <translation>オーディオを開く</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="140"/>
+        <location filename="Menubar.cpp" line="141"/>
         <source>Audio Files (*.mp3)</source>
         <translation>オーディオ ファイル (*.mp3)</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="215"/>
+        <location filename="Menubar.cpp" line="216"/>
         <source>About</source>
         <translation>アプリについて</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="215"/>
+        <location filename="Menubar.cpp" line="216"/>
         <source>Made by Colin Gallaway.</source>
         <translation>Colin Gallawayにより作成された。</translation>
     </message>
     <message>
-        <location filename="Menubar.cpp" line="216"/>
+        <location filename="Menubar.cpp" line="217"/>
         <source>About Qt</source>
         <translation>Qtについて</translation>
     </message>
@@ -576,7 +576,9 @@
         <source>You are about to clear all data including
 imported texts, word lists, and settings.
 Are you sure?</source>
-        <translation>インポートされたテキストや言葉リストや設定などを含める\n全てのデータをクリアしようとしています。\n宜しいですか。</translation>
+        <translation>インポートされたテキストや言葉リストや設定などを含める
+全てのデータをクリアしようとしています。
+宜しいですか。</translation>
     </message>
     <message>
         <location filename="SettingsDialog.cpp" line="103"/>
@@ -587,104 +589,104 @@ Are you sure?</source>
 <context>
     <name>ShortcutsDialog</name>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="53"/>
-        <location filename="ShortcutsDialog.cpp" line="190"/>
+        <location filename="ShortcutsDialog.cpp" line="50"/>
+        <location filename="ShortcutsDialog.cpp" line="187"/>
         <source>File</source>
         <translation>ファイル</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="60"/>
-        <location filename="ShortcutsDialog.cpp" line="191"/>
+        <location filename="ShortcutsDialog.cpp" line="57"/>
+        <location filename="ShortcutsDialog.cpp" line="188"/>
         <source>Import Text</source>
         <translation>テキストをインポート</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="65"/>
-        <location filename="ShortcutsDialog.cpp" line="192"/>
+        <location filename="ShortcutsDialog.cpp" line="62"/>
+        <location filename="ShortcutsDialog.cpp" line="189"/>
         <source>Import Audio</source>
         <translation>オーディオをインポート</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="72"/>
-        <location filename="ShortcutsDialog.cpp" line="193"/>
+        <location filename="ShortcutsDialog.cpp" line="69"/>
+        <location filename="ShortcutsDialog.cpp" line="190"/>
         <source>Import Text &amp; Audio</source>
         <translation>テキストとオーディオをインポート</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="79"/>
-        <location filename="ShortcutsDialog.cpp" line="194"/>
+        <location filename="ShortcutsDialog.cpp" line="76"/>
+        <location filename="ShortcutsDialog.cpp" line="191"/>
         <source>View Word Lists</source>
         <translation>言葉リストを閲覧</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="84"/>
-        <location filename="ShortcutsDialog.cpp" line="195"/>
+        <location filename="ShortcutsDialog.cpp" line="81"/>
+        <location filename="ShortcutsDialog.cpp" line="192"/>
         <source>Exit</source>
         <translation>終了</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="97"/>
-        <location filename="ShortcutsDialog.cpp" line="197"/>
+        <location filename="ShortcutsDialog.cpp" line="94"/>
+        <location filename="ShortcutsDialog.cpp" line="194"/>
         <source>Tools</source>
         <translation>ツール</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="104"/>
-        <location filename="ShortcutsDialog.cpp" line="198"/>
+        <location filename="ShortcutsDialog.cpp" line="101"/>
+        <location filename="ShortcutsDialog.cpp" line="195"/>
         <source>Sync</source>
         <translation>同期</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="111"/>
-        <location filename="ShortcutsDialog.cpp" line="199"/>
+        <location filename="ShortcutsDialog.cpp" line="108"/>
+        <location filename="ShortcutsDialog.cpp" line="196"/>
         <source>Settings</source>
         <translation>設定</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="124"/>
-        <location filename="ShortcutsDialog.cpp" line="201"/>
+        <location filename="ShortcutsDialog.cpp" line="121"/>
+        <location filename="ShortcutsDialog.cpp" line="198"/>
         <source>Help</source>
         <translation>ヘルプ</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="131"/>
-        <location filename="ShortcutsDialog.cpp" line="202"/>
+        <location filename="ShortcutsDialog.cpp" line="128"/>
+        <location filename="ShortcutsDialog.cpp" line="199"/>
         <source>Manual</source>
         <translation>マニュアル</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="138"/>
-        <location filename="ShortcutsDialog.cpp" line="203"/>
+        <location filename="ShortcutsDialog.cpp" line="135"/>
+        <location filename="ShortcutsDialog.cpp" line="200"/>
         <source>Release Notes</source>
         <translation>リリースノート</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="145"/>
-        <location filename="ShortcutsDialog.cpp" line="204"/>
+        <location filename="ShortcutsDialog.cpp" line="142"/>
+        <location filename="ShortcutsDialog.cpp" line="201"/>
         <source>Video Tutorials</source>
         <translation>ビデオ チュートリアル</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="150"/>
-        <location filename="ShortcutsDialog.cpp" line="205"/>
+        <location filename="ShortcutsDialog.cpp" line="147"/>
+        <location filename="ShortcutsDialog.cpp" line="202"/>
         <source>Keyboard Shortcuts</source>
         <translation>キーボード ショートカット</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="155"/>
-        <location filename="ShortcutsDialog.cpp" line="206"/>
+        <location filename="ShortcutsDialog.cpp" line="152"/>
+        <location filename="ShortcutsDialog.cpp" line="203"/>
         <source>View Github</source>
         <translation>Githubを閲覧</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="160"/>
-        <location filename="ShortcutsDialog.cpp" line="207"/>
+        <location filename="ShortcutsDialog.cpp" line="157"/>
+        <location filename="ShortcutsDialog.cpp" line="204"/>
         <source>Check for Updates</source>
         <translation>更新を確認</translation>
     </message>
     <message>
-        <location filename="ShortcutsDialog.cpp" line="167"/>
-        <location filename="ShortcutsDialog.cpp" line="208"/>
+        <location filename="ShortcutsDialog.cpp" line="164"/>
+        <location filename="ShortcutsDialog.cpp" line="205"/>
         <source>About</source>
         <translation>アプリについて</translation>
     </message>
@@ -692,23 +694,23 @@ Are you sure?</source>
 <context>
     <name>TextTree</name>
     <message>
-        <location filename="TextTree.cpp" line="330"/>
-        <location filename="TextTree.cpp" line="555"/>
+        <location filename="TextTree.cpp" line="328"/>
+        <location filename="TextTree.cpp" line="530"/>
         <source>Root</source>
         <translation>ルート</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="470"/>
+        <location filename="TextTree.cpp" line="452"/>
         <source>Error</source>
         <translation>エラー</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="502"/>
+        <location filename="TextTree.cpp" line="484"/>
         <source>Open Text</source>
         <translation>テキストを開く</translation>
     </message>
     <message>
-        <location filename="TextTree.cpp" line="502"/>
+        <location filename="TextTree.cpp" line="484"/>
         <source>Text Files (*.txt)</source>
         <translation>テキスト ファイル (*.txt)</translation>
     </message>
