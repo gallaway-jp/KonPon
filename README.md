@@ -2,6 +2,8 @@
 A tool for learning Japanese written in C++
 Users can import Japanese texts and keep track of what words are not yet learned, in the process of learning, and already learned.
 <br>![KonPon_MainWindow](https://github.com/gallaway-jp/KonPon/assets/105543156/ae31e158-7731-4801-b88e-bdc7ead2d0fa)
+![image](https://github.com/gallaway-jp/KonPon/assets/105543156/84c83917-d706-4ff2-b9b8-5eb0dff58d93)
+
 
 ## Installation
 1. Download the zip file under Assets from the latest release found [here](https://github.com/gallaway-jp/KonPon/releases).  
@@ -11,7 +13,8 @@ Users can import Japanese texts and keep track of what words are not yet learned
 Plain text files (.txt) that contain Japanese text can be imported into KonPon in order to view the text in the app and add words parsed from the text to the unknown word list.  
 Words can then be organized into different word lists, such as the unknown and known word lists or into custom-made word lists.  
 When viewing a text, words will be highlighted based on their respective word lists' highlight color settings.  
-Anki cards can be created from word data by selecting a word either in an open text or from a word list (requires [Anki Connect plugin](https://ankiweb.net/shared/info/2055492159)).
+Anki cards can be created from word data by selecting a word either in an open text or from a word list (requires [Anki Connect plugin](https://ankiweb.net/shared/info/2055492159)).  
+To get started using KonPon, have a look at the [Tutorials Wiki Page](https://github.com/gallaway-jp/KonPon/wiki/).
 
 ## Building
 The following packages are required to build KonPon:  
